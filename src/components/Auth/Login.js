@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
-import firebase from "../../Firebase";
+import firebase from "../../../Firebase";
 
 export default class Login extends React.Component {
   state = { email: "", password: "", errorMessage: null };

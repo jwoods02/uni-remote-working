@@ -7,46 +7,74 @@ import {
   TextInput
 } from "react-native";
 import { Button } from "react-native-elements";
-import firebase from "../../Firebase";
+import firebase from "../../../Firebase";
 
-class AddBoardScreen extends Component {
+class EditBoardScreen extends Component {
   static navigationOptions = {
-    title: "Add Board"
+    title: "Edit Board"
   };
   constructor() {
     super();
-    this.ref = firebase.firestore().collection("boards");
     this.state = {
+      key: "",
+      isLoading: true,
       title: "",
       description: "",
-      author: "",
-      isLoading: false
+      author: ""
     };
   }
+  componentDidMount() {
+    const { navigation } = this.props;
+    const ref = firebase
+      .firestore()
+      .collection("boards")
+      .doc(JSON.parse(navigation.getParam("boardkey")));
+    ref.get().then(doc => {
+      if (doc.exists) {
+        const board = doc.data();
+        this.setState({
+          key: doc.id,
+          title: board.title,
+          description: board.description,
+          author: board.author,
+          isLoading: false
+        });
+      } else {
+        console.log("No such document!");
+      }
+    });
+  }
+
   updateTextInput = (text, field) => {
     const state = this.state;
     state[field] = text;
     this.setState(state);
   };
 
-  saveBoard() {
+  updateBoard() {
     this.setState({
       isLoading: true
     });
-    this.ref
-      .add({
+    const { navigation } = this.props;
+    const updateRef = firebase
+      .firestore()
+      .collection("boards")
+      .doc(this.state.key);
+    updateRef
+      .set({
         title: this.state.title,
         description: this.state.description,
         author: this.state.author
       })
       .then(docRef => {
         this.setState({
+          key: "",
           title: "",
           description: "",
           author: "",
           isLoading: false
         });
-        this.props.navigation.goBack();
+        this.props.navigation.navigate("Board");
       })
       .catch(error => {
         console.error("Error adding document: ", error);
@@ -92,9 +120,9 @@ class AddBoardScreen extends Component {
         <View style={styles.button}>
           <Button
             large
-            leftIcon={{ name: "save" }}
-            title="Save"
-            onPress={() => this.saveBoard()}
+            leftIcon={{ name: "update" }}
+            title="Update"
+            onPress={() => this.updateBoard()}
           />
         </View>
       </ScrollView>
@@ -125,4 +153,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default AddBoardScreen;
+export default EditBoardScreen;
