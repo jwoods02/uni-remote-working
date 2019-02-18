@@ -10,10 +10,10 @@ The following issues have been address:
 
 ## Running the app
 
-1. Make sure you're in the RemoteWorkingSkeletonApp/ directory:
+1. Make sure you're in the remote-working/ directory:
 
     ```sh
-    $ cd RemoteWorkingSkeletonApp/
+    $ cd remote-working/
     ```
 
 2. Run the following command to install all the required node nodules:
