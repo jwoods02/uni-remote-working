@@ -3,7 +3,7 @@ module.exports = {
     browser: true,
     es6: true
   },
-  extends: ["react-app", "plugin:prettier/recommended"],
+  extends: ["react-app", "prettier"],
   globals: {
     Atomics: "readonly",
     SharedArrayBuffer: "readonly"
