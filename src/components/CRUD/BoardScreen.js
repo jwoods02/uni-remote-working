@@ -7,7 +7,7 @@ import {
   Text
 } from "react-native";
 import { List, ListItem, Button, Icon } from "react-native-elements";
-import firebase from "../../Firebase";
+import firebase from "firebase";
 
 class BoardScreen extends Component {
   static navigationOptions = ({ navigation }) => {
