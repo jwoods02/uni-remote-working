@@ -7,8 +7,8 @@ import { StyleSheet, Platform, Image, Text, View } from "react-native";
 // import { StyleSheet, Text, View } from "react-native";
 import {
   createStackNavigator,
-  createAppContainer
-  // createBottomTabNavigator
+  createAppContainer,
+  createBottomTabNavigator
 } from "react-navigation";
 
 import BoardScreen from "./src/components/CRUD/BoardScreen";
@@ -20,11 +20,11 @@ import SignUp from "./src/components/Auth/SignUp";
 import Login from "./src/components/Auth/Login";
 import Main from "./src/components/Auth/Main";
 
-// const Tab = createBottomTabNavigator({
-//   Home: {
-//     screen: BoardScreen
-//   }
-// });
+const Tab = createBottomTabNavigator({
+  Home: {
+    screen: BoardScreen
+  }
+});
 // const RootStack = createStackNavigator({
 //   Home1: {
 //     screen: Tab
