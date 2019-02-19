@@ -6,7 +6,8 @@ import { StyleSheet, Platform, Image, Text, View } from "react-native";
 
 // import { StyleSheet, Text, View } from "react-native";
 import {
-  createStackNavigator
+  createStackNavigator,
+  createAppContainer
   // createBottomTabNavigator
 } from "react-navigation";
 
@@ -56,9 +57,11 @@ const RootStack = createStackNavigator(
   }
 );
 
+const AppContainer = createAppContainer(RootStack);
+
 export default class App extends React.Component {
   render() {
-    return <RootStack />;
+    return <AppContainer />;
   }
 }
 
