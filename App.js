@@ -19,6 +19,8 @@ import Loading from "./src/components/Auth/Loading";
 import SignUp from "./src/components/Auth/SignUp";
 import Login from "./src/components/Auth/Login";
 import Main from "./src/components/Auth/Main";
+import Maps from "./src/components/Maps/Maps";
+
 import setupFirebase from "./Firebase";
 
 const Tab = createBottomTabNavigator({
@@ -41,7 +43,8 @@ const RootStack = createStackNavigator(
     Main: Main,
     Loading: Loading,
     SignUp: SignUp,
-    Login: Login
+    Login: Login,
+    Maps: Maps
   },
   {
     initialRouteName: "Loading",
