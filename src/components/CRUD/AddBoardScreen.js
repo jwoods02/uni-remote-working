@@ -7,7 +7,7 @@ import {
   TextInput
 } from "react-native";
 import { Button } from "react-native-elements";
-import firebase from "../../../Firebase";
+import firebase from "firebase";
 
 class AddBoardScreen extends Component {
   static navigationOptions = {

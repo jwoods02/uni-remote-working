@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, ScrollView, ActivityIndicator, View } from "react-native";
 import { List, ListItem, Text, Card, Button } from "react-native-elements";
-import firebase from "../../../Firebase";
+import firebase from "firebase";
 
 class BoardDetailScreen extends Component {
   static navigationOptions = {

@@ -19,6 +19,7 @@ import Loading from "./src/components/Auth/Loading";
 import SignUp from "./src/components/Auth/SignUp";
 import Login from "./src/components/Auth/Login";
 import Main from "./src/components/Auth/Main";
+import setupFirebase from "./Firebase";
 
 const Tab = createBottomTabNavigator({
   Home: {
@@ -56,6 +57,8 @@ const RootStack = createStackNavigator(
     }
   }
 );
+
+setupFirebase();
 
 const AppContainer = createAppContainer(RootStack);
 
