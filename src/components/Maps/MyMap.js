@@ -28,6 +28,22 @@ const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
+let defaultRegion = {
+  latitude: 51.481583,
+  longitude: -3.17909,
+  latitudeDelta: 0.04864195044303443,
+  longitudeDelta: 0.040142817690068
+};
+
+export const getCurrentLocation = () => {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      position => resolve(position),
+      e => reject(e)
+    );
+  });
+};
+
 export default class MyMap extends Component {
   state = {
     markers: [
@@ -77,12 +93,7 @@ export default class MyMap extends Component {
         image: Images[0]
       }
     ],
-    region: {
-      latitude: 45.52220671242907,
-      longitude: -122.6653281029795,
-      latitudeDelta: 0.04864195044303443,
-      longitudeDelta: 0.040142817690068
-    }
+    region: defaultRegion
   };
 
   componentWillMount() {
@@ -117,6 +128,21 @@ export default class MyMap extends Component {
         }
       }, 10);
     });
+
+    getCurrentLocation().then(position => {
+      if (position) {
+        console.log("POSITION");
+        console.log(position);
+        this.setState({
+          region: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: 0.03,
+            longitudeDelta: 0.03
+          }
+        });
+      }
+    });
   }
 
   render() {
@@ -142,8 +168,14 @@ export default class MyMap extends Component {
     return (
       <View style={styles.container}>
         <MapView
+          showsUserLocation={true}
           ref={map => (this.map = map)}
-          initialRegion={this.state.region}
+          region={{
+            latitude: this.state.region.latitude,
+            longitude: this.state.region.longitude,
+            latitudeDelta: this.state.region.latitudeDelta,
+            longitudeDelta: this.state.region.longitudeDelta
+          }}
           style={styles.container}
         >
           {this.state.markers.map((marker, index) => {
