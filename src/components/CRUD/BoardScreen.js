@@ -36,6 +36,7 @@ class BoardScreen extends Component {
   componentDidMount() {
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
+
   onCollectionUpdate = querySnapshot => {
     const boards = [];
     querySnapshot.forEach(doc => {
@@ -52,6 +53,7 @@ class BoardScreen extends Component {
       boards,
       isLoading: false
     });
+    // console.log(boards);
   };
 
   signOutUser = async () => {
