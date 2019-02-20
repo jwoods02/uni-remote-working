@@ -6,6 +6,7 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
+  TextInput,
   View,
   ScrollView,
   Animated,
@@ -15,6 +16,8 @@ import {
 } from "react-native";
 
 import MapView from "react-native-maps";
+import calloutSearch from "react-native-maps";
+import { Callout } from "react-native-maps";
 
 const Images = [
   { uri: "https://i.imgur.com/sNam9iJ.jpg" },
@@ -199,6 +202,12 @@ export default class MyMap extends Component {
             );
           })}
         </MapView>
+
+        <Callout>
+          <View style={styles.calloutView}>
+            <TextInput style={styles.calloutSearch} placeholder={"Search"} />
+          </View>
+        </Callout>
         <Animated.ScrollView
           horizontal
           scrollEventThrottle={1}
@@ -307,6 +316,23 @@ const styles = StyleSheet.create({
     position: "absolute",
     borderWidth: 1,
     borderColor: "rgba(130,4,150, 0.5)"
+  },
+  calloutView: {
+    flexDirection: "row",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    borderRadius: 10,
+    width: "40%",
+    marginLeft: "30%",
+    marginRight: "30%",
+    marginTop: 20
+  },
+  calloutSearch: {
+    borderColor: "transparent",
+    marginLeft: 10,
+    width: "90%",
+    marginRight: 10,
+    height: 40,
+    borderWidth: 0.0
   }
 });
 
