@@ -16,8 +16,8 @@ export default class LandingPage extends React.Component {
             <View style={styles.container}>
                 <Text>This is the top text for the view</Text>
                 <ImageSlider images={carouselImages} style={{ height: 300, flex: 0 }} />
-                <AwesomeButton backgroundColor={"#42a7f4"}>Get Started</AwesomeButton>
-                <AwesomeButton backgroundColor={"#42a7f4"}>Login</AwesomeButton>
+                <AwesomeButton backgroundColor={"#42a7f4"} onPress={() => this.props.navigation.navigate("SignUp")}>Get Started</AwesomeButton>
+                <AwesomeButton backgroundColor={"#42a7f4"} onPress={() => this.props.navigation.navigate("Login")}>Login</AwesomeButton>
             </View>
         );
     }
