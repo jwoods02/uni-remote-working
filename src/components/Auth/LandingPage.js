@@ -14,10 +14,14 @@ export default class LandingPage extends React.Component {
 
         return (
             <View style={styles.container}>
-                <Text>This is the top text for the view</Text>
+                <Text style={styles.title}>This is the top text for the view</Text>
                 <ImageSlider images={carouselImages} style={{ height: 300, flex: 0 }} />
-                <AwesomeButton backgroundColor={"#42a7f4"} onPress={() => this.props.navigation.navigate("SignUp")}>Get Started</AwesomeButton>
-                <AwesomeButton backgroundColor={"#42a7f4"} onPress={() => this.props.navigation.navigate("Login")}>Login</AwesomeButton>
+                <View style={styles.registerBtn}>
+                    <AwesomeButton backgroundColor={"#42a7f4"} width={100} onPress={() => this.props.navigation.navigate("SignUp")}>Get Started</AwesomeButton>
+                </View>
+                <View style={styles.loginBtn}>
+                    <AwesomeButton backgroundColor={"#42a7f4"} width={100} onPress={() => this.props.navigation.navigate("Login")}>Login</AwesomeButton>
+                </View>
             </View>
         );
     }
@@ -26,7 +30,19 @@ export default class LandingPage extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
+        justifyContent: "center"
+    },
+    title: {
         alignItems: "center"
+    },
+    loginBtn: {
+        position: "absolute",
+        bottom: 10,
+        right: 10
+    },
+    registerBtn: {
+        position: "absolute",
+        bottom: 10,
+        left: 10
     }
 });
