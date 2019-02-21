@@ -19,6 +19,7 @@ import Loading from "./src/components/Auth/Loading";
 import SignUp from "./src/components/Auth/SignUp";
 import Login from "./src/components/Auth/Login";
 import Main from "./src/components/Auth/Main";
+import LandingPage from "./src/components/Auth/LandingPage";
 import setupFirebase from "./Firebase";
 
 const Tab = createBottomTabNavigator({
@@ -26,6 +27,7 @@ const Tab = createBottomTabNavigator({
     screen: BoardScreen
   }
 });
+
 // const RootStack = createStackNavigator({
 //   Home1: {
 //     screen: Tab
@@ -41,7 +43,8 @@ const RootStack = createStackNavigator(
     Main: Main,
     Loading: Loading,
     SignUp: SignUp,
-    Login: Login
+    Login: Login,
+    LandingPage: LandingPage,
   },
   {
     initialRouteName: "Loading",
