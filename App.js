@@ -1,5 +1,5 @@
 import React from "react";
-
+import axios from "axios";
 import { StyleSheet, Platform, Image, Text, View } from "react-native";
 
 // import the different screens
@@ -20,17 +20,13 @@ import SignUp from "./src/components/Auth/SignUp";
 import Login from "./src/components/Auth/Login";
 import Main from "./src/components/Auth/Main";
 import setupFirebase from "./Firebase";
+import Payment from "./src/components/Payment/Payment";
 
 const Tab = createBottomTabNavigator({
   Home: {
     screen: BoardScreen
   }
 });
-// const RootStack = createStackNavigator({
-//   Home1: {
-//     screen: Tab
-//   }
-// });
 
 const RootStack = createStackNavigator(
   {
@@ -41,7 +37,8 @@ const RootStack = createStackNavigator(
     Main: Main,
     Loading: Loading,
     SignUp: SignUp,
-    Login: Login
+    Login: Login,
+    Payment: Payment
   },
   {
     initialRouteName: "Loading",
@@ -58,6 +55,7 @@ const RootStack = createStackNavigator(
   }
 );
 
+axios.defaults.baseURL = "http://192.168.0.10:4000";
 setupFirebase();
 
 const AppContainer = createAppContainer(RootStack);
