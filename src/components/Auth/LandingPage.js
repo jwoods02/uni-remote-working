@@ -14,8 +14,12 @@ export default class LandingPage extends React.Component {
 
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>This is the top text for the view</Text>
-                <ImageSlider images={carouselImages} style={{ height: 300, flex: 0 }} />
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>This is the top text for the view</Text>
+                </View>
+                <View style={styles.carousel}>
+                    <ImageSlider images={carouselImages} style={{ height: 300, flex: 0 }} />
+                </View>
                 <View style={styles.registerBtn}>
                     <AwesomeButton backgroundColor={"#42a7f4"} width={100} onPress={() => this.props.navigation.navigate("SignUp")}>Get Started</AwesomeButton>
                 </View>
@@ -30,10 +34,20 @@ export default class LandingPage extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center"
+    },
+    titleContainer: {
+        alignItems: "center",
     },
     title: {
-        alignItems: "center"
+        fontSize: 30,
+        fontWeight: "bold",
+        top: 10
+    },
+    carousel: {
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        justifyContent: "center"
     },
     loginBtn: {
         position: "absolute",
