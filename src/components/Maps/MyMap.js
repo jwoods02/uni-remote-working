@@ -21,24 +21,11 @@ import calloutSearch from "react-native-maps";
 import { Callout } from "react-native-maps";
 import firebase from "firebase";
 
-const Images = [
-  { uri: "https://i.imgur.com/sNam9iJ.jpg" },
-  { uri: "https://i.imgur.com/N7rlQYt.jpg" },
-  { uri: "https://i.imgur.com/UDrH0wm.jpg" },
-  { uri: "https://i.imgur.com/Ka8kNST.jpg" }
-];
 
 const { width, height } = Dimensions.get("window");
-
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
-let defaultRegion = {
-  latitude: 51.481583,
-  longitude: -3.17909,
-  latitudeDelta: 0.04864195044303443,
-  longitudeDelta: 0.040142817690068
-};
 
 export const getCurrentLocation = () => {
   return new Promise((resolve, reject) => {
@@ -49,6 +36,7 @@ export const getCurrentLocation = () => {
   });
 };
 
+
 export default class MyMap extends Component {
   constructor() {
     super();
@@ -56,66 +44,28 @@ export default class MyMap extends Component {
     this.unsubscribe = null;
     this.state = {
       isLoading: true,
-      markers2: []
+      markers2: [],
+      region: {
+        latitude: 51.481583,
+        longitude: -3.17909,
+        latitudeDelta: 0.04864195044303443,
+        longitudeDelta: 0.040142817690068
+      }
     };
+
+    console.log("\n\nTHE STATE: " + this.state);
   }
-  // state = {
-  //   markers2: [
-  //     {
-  //       coordinate: {
-  //         latitude: 51.481523,
-  //         longitude: -3.17979
-  //       },
-  //       title: "Best Place",
-  //       description: "This is the best place in Portland",
-  //       image: Images[0]
-  //     },
-  //     {
-  //       coordinate: {
-  //         latitude: 51.481383,
-  //         longitude: -3.17409
-  //       },
-  //       title: "Second Best Place",
-  //       description: "This is the second best place in Portland",
-  //       image: Images[1]
-  //     },
-  //     {
-  //       coordinate: {
-  //         latitude: 51.481283,
-  //         longitude: -3.17109
-  //       },
-  //       title: "Third Best Place",
-  //       description: "This is the third best place in Portland",
-  //       image: Images[2]
-  //     },
-  //     {
-  //       coordinate: {
-  //         latitude: 51.481523,
-  //         longitude: -3.17509
-  //       },
-  //       title: "Fourth Best Place",
-  //       description: "This is the fourth best place in Portland",
-  //       image: Images[3]
-  //     },
-  //     {
-  //       coordinate: {
-  //         latitude: 51.481583,
-  //         longitude: -3.17909
-  //       },
-  //       title: "Cardiff",
-  //       description: "This place isn't in Portland",
-  //       image: Images[0]
-  //     }
-  //   ],
-  //   region: defaultRegion
-  // };
+ 
+  componentWillUnmount() {} //empty for now
 
   componentWillMount() {
     this.index = 0;
     this.animation = new Animated.Value(0);
   }
   componentDidMount() {
-    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+    this.state = this.unsubscribe = this.ref.onSnapshot(
+      this.onCollectionUpdate
+    );
 
     // We should detect when scrolling has stopped then animate
     // We should just debounce the event listener here
@@ -239,8 +189,6 @@ export default class MyMap extends Component {
             return (
               <MapView.Marker
                 key={index}
-                // coordinate={{latitude : marker.coordinate.GeoPoint._lat,{longitude:marker.coordinate.GeoPoint._lat}}
-
                 coordinate={marker.coordinate}
               >
                 <Animated.View style={[styles.markerWrap, opacityStyle]}>
