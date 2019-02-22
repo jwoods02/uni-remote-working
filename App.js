@@ -19,11 +19,9 @@ import Loading from "./src/components/Auth/Loading";
 import SignUp from "./src/components/Auth/SignUp";
 import Login from "./src/components/Auth/Login";
 import Main from "./src/components/Auth/Main";
-import Maps from "./src/components/Maps/Maps";
 
 import setupFirebase from "./Firebase";
-import MyMap from "./src/components/Maps/MyMap";
-import ThirdMap from "./src/components/Maps/ThirdMap";
+import LocationMap from "./src/components/Maps/LocationMap";
 
 const Tab = createBottomTabNavigator({
   Home: {
@@ -46,9 +44,7 @@ const RootStack = createStackNavigator(
     Loading: Loading,
     SignUp: SignUp,
     Login: Login,
-    Maps: Maps,
-    MyMap: MyMap,
-    ThirdMap: ThirdMap
+    LocationMap: LocationMap
   },
   {
     initialRouteName: "Loading",

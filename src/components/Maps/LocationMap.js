@@ -21,11 +21,9 @@ import calloutSearch from "react-native-maps";
 import { Callout } from "react-native-maps";
 import firebase from "firebase";
 
-
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
-
 
 export const getCurrentLocation = () => {
   return new Promise((resolve, reject) => {
@@ -36,8 +34,7 @@ export const getCurrentLocation = () => {
   });
 };
 
-
-export default class MyMap extends Component {
+export default class LocationMap extends Component {
   constructor() {
     super();
     this.ref = firebase.firestore().collection("locations");
@@ -55,7 +52,7 @@ export default class MyMap extends Component {
 
     console.log("\n\nTHE STATE: " + this.state);
   }
- 
+
   componentWillUnmount() {} //empty for now
 
   componentWillMount() {
@@ -187,10 +184,7 @@ export default class MyMap extends Component {
               opacity: interpolations[index].opacity
             };
             return (
-              <MapView.Marker
-                key={index}
-                coordinate={marker.coordinate}
-              >
+              <MapView.Marker key={index} coordinate={marker.coordinate}>
                 <Animated.View style={[styles.markerWrap, opacityStyle]}>
                   <Animated.View style={[styles.ring, scaleStyle]} />
                   <View style={styles.marker} />
@@ -333,4 +327,4 @@ const styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent("MyMap", () => MyMap);
+AppRegistry.registerComponent("LocationMap", () => LocationMap);
