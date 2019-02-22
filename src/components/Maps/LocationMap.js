@@ -1,4 +1,4 @@
-// https://codedaily.io/tutorials/9/Build-a-Map-with-Custom-Animated-markers2-and-Region-Focus-when-Content-is-Scrolled-in-React-Native
+// https://codedaily.io/tutorials/9/Build-a-Map-with-Custom-Animated-markers-and-Region-Focus-when-Content-is-Scrolled-in-React-Native
 // https://github.com/browniefed/map_animated_scrollview/blob/master/index.ios.js
 
 import React, { Component } from "react";
@@ -41,7 +41,7 @@ export default class LocationMap extends Component {
     this.unsubscribe = null;
     this.state = {
       isLoading: true,
-      markers2: [],
+      markers: [],
       region: {
         latitude: 51.481583,
         longitude: -3.17909,
@@ -68,8 +68,8 @@ export default class LocationMap extends Component {
     // We should just debounce the event listener here
     this.animation.addListener(({ value }) => {
       let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
-      if (index >= this.state.markers2.length) {
-        index = this.state.markers2.length - 1;
+      if (index >= this.state.markers.length) {
+        index = this.state.markers.length - 1;
       }
       if (index <= 0) {
         index = 0;
@@ -79,7 +79,7 @@ export default class LocationMap extends Component {
       this.regionTimeout = setTimeout(() => {
         if (this.index !== index) {
           this.index = index;
-          const { coordinate } = this.state.markers2[index];
+          const { coordinate } = this.state.markers[index];
           this.map.animateToRegion(
             {
               ...coordinate,
@@ -109,10 +109,10 @@ export default class LocationMap extends Component {
   }
 
   onCollectionUpdate = querySnapshot => {
-    const markers2 = [];
+    const markers = [];
     querySnapshot.forEach(doc => {
       const { title, description, image, coordinate } = doc.data();
-      markers2.push({
+      markers.push({
         key: doc.id,
         // doc, // DocumentSnapshot
         title,
@@ -122,17 +122,17 @@ export default class LocationMap extends Component {
       });
     });
     this.setState({
-      markers2,
+      markers,
       isLoading: false
     });
-    console.log("TITLE: " + markers2.title);
-    console.log("DESCRIPTION: " + markers2.description);
-    console.log("IMAGE" + markers2.image);
-    console.log("COORDINATE" + markers2.coordinate);
+    console.log("TITLE: " + markers.title);
+    console.log("DESCRIPTION: " + markers.description);
+    console.log("IMAGE" + markers.image);
+    console.log("COORDINATE" + markers.coordinate);
   };
 
   render() {
-    console.log(this.state.markers2);
+    console.log(this.state.markers);
     if (this.state.isLoading) {
       return (
         <View style={styles.activity}>
@@ -140,7 +140,7 @@ export default class LocationMap extends Component {
         </View>
       );
     }
-    const interpolations = this.state.markers2.map((marker, index) => {
+    const interpolations = this.state.markers.map((marker, index) => {
       const inputRange = [
         (index - 1) * CARD_WIDTH,
         index * CARD_WIDTH,
@@ -172,7 +172,7 @@ export default class LocationMap extends Component {
           }}
           style={styles.container}
         >
-          {this.state.markers2.map((marker, index) => {
+          {this.state.markers.map((marker, index) => {
             const scaleStyle = {
               transform: [
                 {
@@ -219,7 +219,7 @@ export default class LocationMap extends Component {
           style={styles.scrollView}
           contentContainerStyle={styles.endPadding}
         >
-          {this.state.markers2.map((marker, index) => (
+          {this.state.markers.map((marker, index) => (
             <View style={styles.card} key={index}>
               <Image
                 source={{ uri: marker.image }}
