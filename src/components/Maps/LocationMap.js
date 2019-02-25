@@ -20,6 +20,9 @@ import MapView from "react-native-maps";
 import calloutSearch from "react-native-maps";
 import { Callout } from "react-native-maps";
 import firebase from "firebase";
+import ScrollviewItems from "./Map Components/ScrollviewItems";
+import MapSearch from "./Map Components/MapSearch";
+import MapViewItems from "./Map Components/MapViewItems";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
@@ -49,8 +52,6 @@ export default class LocationMap extends Component {
         longitudeDelta: 0.040142817690068
       }
     };
-
-    console.log("\n\nTHE STATE: " + this.state);
   }
 
   componentWillUnmount() {} //empty for now
@@ -66,36 +67,35 @@ export default class LocationMap extends Component {
 
     // We should detect when scrolling has stopped then animate
     // We should just debounce the event listener here
-    this.animation.addListener(({ value }) => {
-      let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
-      if (index >= this.state.markers.length) {
-        index = this.state.markers.length - 1;
-      }
-      if (index <= 0) {
-        index = 0;
-      }
 
-      clearTimeout(this.regionTimeout);
-      this.regionTimeout = setTimeout(() => {
-        if (this.index !== index) {
-          this.index = index;
-          const { coordinate } = this.state.markers[index];
-          this.map.animateToRegion(
-            {
-              ...coordinate,
-              latitudeDelta: this.state.region.latitudeDelta,
-              longitudeDelta: this.state.region.longitudeDelta
-            },
-            350
-          );
-        }
-      }, 10);
-    });
+    // this.animation.addListener(({ value }) => {
+    //   let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+    //   if (index >= this.state.markers.length) {
+    //     index = this.state.markers.length - 1;
+    //   }
+    //   if (index <= 0) {
+    //     index = 0;
+    //   }
+
+    //   clearTimeout(this.regionTimeout);
+    //   this.regionTimeout = setTimeout(() => {
+    //     if (this.index !== index) {
+    //       this.index = index;
+    //       const { coordinate } = this.state.markers[index];
+    //       this.map.animateToRegion(
+    //         {
+    //           ...coordinate,
+    //           latitudeDelta: this.state.region.latitudeDelta,
+    //           longitudeDelta: this.state.region.longitudeDelta
+    //         },
+    //         350
+    //       );
+    //     }
+    //   }, 10);
+    // });
 
     getCurrentLocation().then(position => {
       if (position) {
-        console.log("POSITION");
-        console.log(position);
         this.setState({
           region: {
             latitude: position.coords.latitude,
@@ -125,10 +125,6 @@ export default class LocationMap extends Component {
       markers,
       isLoading: false
     });
-    console.log("TITLE: " + markers.title);
-    console.log("DESCRIPTION: " + markers.description);
-    console.log("IMAGE" + markers.image);
-    console.log("COORDINATE" + markers.coordinate);
   };
 
   render() {
@@ -140,28 +136,33 @@ export default class LocationMap extends Component {
         </View>
       );
     }
-    const interpolations = this.state.markers.map((marker, index) => {
-      const inputRange = [
-        (index - 1) * CARD_WIDTH,
-        index * CARD_WIDTH,
-        (index + 1) * CARD_WIDTH
-      ];
-      const scale = this.animation.interpolate({
-        inputRange,
-        outputRange: [1, 2.5, 1],
-        extrapolate: "clamp"
-      });
-      const opacity = this.animation.interpolate({
-        inputRange,
-        outputRange: [0.35, 1, 0.35],
-        extrapolate: "clamp"
-      });
-      return { scale, opacity };
-    });
+    // const interpolations = this.state.markers.map((marker, index) => {
+    //   const inputRange = [
+    //     (index - 1) * CARD_WIDTH,
+    //     index * CARD_WIDTH,
+    //     (index + 1) * CARD_WIDTH
+    //   ];
+    //   const scale = this.animation.interpolate({
+    //     inputRange,
+    //     outputRange: [1, 2.5, 1],
+    //     extrapolate: "clamp"
+    //   });
+    //   const opacity = this.animation.interpolate({
+    //     inputRange,
+    //     outputRange: [0.35, 1, 0.35],
+    //     extrapolate: "clamp"
+    //   });
+    //   return { scale, opacity };
+    // });
 
     return (
       <View style={styles.container}>
-        <MapView
+        <MapViewItems
+          region={this.state.region}
+          markers={this.state.markers}
+          animation={this.animation}
+        />
+        {/* <MapView
           showsUserLocation={true}
           ref={map => (this.map = map)}
           region={{
@@ -192,12 +193,10 @@ export default class LocationMap extends Component {
               </MapView.Marker>
             );
           })}
-        </MapView>
+        </MapView> */}
 
         <Callout>
-          <View style={styles.calloutView}>
-            <TextInput style={styles.calloutSearch} placeholder={"Search"} />
-          </View>
+          <MapSearch />
         </Callout>
         <Animated.ScrollView
           horizontal
@@ -219,23 +218,7 @@ export default class LocationMap extends Component {
           style={styles.scrollView}
           contentContainerStyle={styles.endPadding}
         >
-          {this.state.markers.map((marker, index) => (
-            <View style={styles.card} key={index}>
-              <Image
-                source={{ uri: marker.image }}
-                style={styles.cardImage}
-                resizeMode="cover"
-              />
-              <View style={styles.textContent}>
-                <Text numberOfLines={1} style={styles.cardtitle}>
-                  {marker.title}
-                </Text>
-                <Text numberOfLines={1} style={styles.cardDescription}>
-                  {marker.description}
-                </Text>
-              </View>
-            </View>
-          ))}
+          <ScrollviewItems markers={this.state.markers} />
         </Animated.ScrollView>
       </View>
     );
@@ -256,38 +239,8 @@ const styles = StyleSheet.create({
   endPadding: {
     paddingRight: width - CARD_WIDTH
   },
-  card: {
-    padding: 10,
-    elevation: 2,
-    left: 100,
-    backgroundColor: "#FFF",
-    opacity: 0.85,
-    marginHorizontal: 10,
-    shadowColor: "#000",
-    shadowRadius: 5,
-    shadowOpacity: 0.9,
-    shadowOffset: { x: 2, y: -2 },
-    height: CARD_HEIGHT,
-    width: CARD_WIDTH,
-    overflow: "hidden"
-  },
-  cardImage: {
-    flex: 3,
-    width: "100%",
-    height: "100%",
-    alignSelf: "center"
-  },
   textContent: {
     flex: 1
-  },
-  cardtitle: {
-    fontSize: 12,
-    marginTop: 5,
-    fontWeight: "bold"
-  },
-  cardDescription: {
-    fontSize: 12,
-    color: "#444"
   },
   markerWrap: {
     alignItems: "center",
@@ -307,23 +260,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     borderWidth: 1,
     borderColor: "rgba(130,4,150, 0.5)"
-  },
-  calloutView: {
-    flexDirection: "row",
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    borderRadius: 10,
-    width: "40%",
-    marginLeft: "30%",
-    marginRight: "30%",
-    marginTop: 20
-  },
-  calloutSearch: {
-    borderColor: "transparent",
-    marginLeft: 10,
-    width: "90%",
-    marginRight: 10,
-    height: 40,
-    borderWidth: 0.0
   }
 });
 
