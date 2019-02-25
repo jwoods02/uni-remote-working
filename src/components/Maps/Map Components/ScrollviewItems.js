@@ -20,7 +20,7 @@ const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
-export default class ScrollviewItems extends Component {
+export default class ScrollViewItems extends Component {
   render() {
     return this.props.markers.map((marker, index) => (
       <View style={styles.card} key={index}>

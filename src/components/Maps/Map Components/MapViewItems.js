@@ -1,13 +1,6 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  Animated,
-  Dimensions
-} from "react-native";
+import { StyleSheet, View, Animated, Dimensions } from "react-native";
 import MapView from "react-native-maps";
-import { Callout } from "react-native-maps";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
@@ -17,12 +10,9 @@ export default class MapViewItems extends Component {
   componentWillMount() {
     this.index = 0;
     this.animation = this.props.animation;
-    console.log("WILLMOUNT");
   }
 
   componentDidMount() {
-    console.log("DIDMOUNT");
-
     // We should detect when scrolling has stopped then animate
     // We should just debounce the event listener here
     this.animation.addListener(({ value }) => {
@@ -70,6 +60,7 @@ export default class MapViewItems extends Component {
       });
       return { scale, opacity };
     });
+
     return (
       <MapView
         showsUserLocation={true}
