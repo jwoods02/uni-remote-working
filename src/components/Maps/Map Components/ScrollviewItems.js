@@ -1,20 +1,5 @@
-// https://codedaily.io/tutorials/9/Build-a-Map-with-Custom-Animated-markers-and-Region-Focus-when-Content-is-Scrolled-in-React-Native
-// https://github.com/browniefed/map_animated_scrollview/blob/master/index.ios.js
-
 import React, { Component } from "react";
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  ScrollView,
-  Animated,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  ActivityIndicator
-} from "react-native";
+import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
