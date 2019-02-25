@@ -48,15 +48,13 @@ export default class LocationMap extends Component {
     };
   }
 
-  componentWillUnmount() {} //empty for now
-
   componentWillMount() {
     this.index = 0;
     this.animation = new Animated.Value(0);
   }
   componentDidMount() {
     this.state = this.unsubscribe = this.ref.onSnapshot(
-      this.onCollectionUpdate //trigger snapshot and assign result (markers) to state
+      this.onCollectionUpdate
     );
 
     getCurrentLocation().then(position => {
@@ -79,7 +77,6 @@ export default class LocationMap extends Component {
       const { title, description, image, coordinate } = doc.data();
       markers.push({
         key: doc.id,
-        // doc, // DocumentSnapshot
         title,
         description,
         image,
@@ -93,7 +90,6 @@ export default class LocationMap extends Component {
   };
 
   render() {
-    console.log(this.state.markers);
     if (this.state.isLoading) {
       return (
         <View style={styles.activity}>
@@ -104,14 +100,17 @@ export default class LocationMap extends Component {
 
     return (
       <View style={styles.container}>
-        <MapViewItems
+        <MapViewItems //the map
           region={this.state.region}
           markers={this.state.markers}
           animation={this.animation}
+          navigation={this.props.navigation} // not sure why you have to pass navigation as prop to children components.
         />
         <Callout>
+          {/* search */}
           <MapSearch />
         </Callout>
+        {/* animation */}
         <Animated.ScrollView
           horizontal
           scrollEventThrottle={1}
@@ -132,7 +131,10 @@ export default class LocationMap extends Component {
           style={styles.scrollView}
           contentContainerStyle={styles.endPadding}
         >
-          <ScrollViewItems markers={this.state.markers} />
+          <ScrollViewItems
+            markers={this.state.markers}
+            navigation={this.props.navigation} //not sure why you have to pass navigation as prop to children components.
+          />
         </Animated.ScrollView>
       </View>
     );

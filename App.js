@@ -22,6 +22,7 @@ import Main from "./src/components/Auth/Main";
 
 import setupFirebase from "./Firebase";
 import LocationMap from "./src/components/Maps/LocationMap";
+import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
 
 const Tab = createBottomTabNavigator({
   Home: {
@@ -44,7 +45,8 @@ const RootStack = createStackNavigator(
     Loading: Loading,
     SignUp: SignUp,
     Login: Login,
-    LocationMap: LocationMap
+    LocationMap: LocationMap,
+    LocationDetailScreen: LocationDetailScreen
   },
   {
     initialRouteName: "Loading",

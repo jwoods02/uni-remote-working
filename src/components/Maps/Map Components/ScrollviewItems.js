@@ -1,11 +1,22 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  Button
+} from "react-native";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
 export default class ScrollViewItems extends Component {
+  componentDidMount() {
+    const { navigation } = this.props;
+  }
+
   render() {
     return this.props.markers.map((marker, index) => (
       <View style={styles.card} key={index}>
@@ -15,10 +26,26 @@ export default class ScrollViewItems extends Component {
           resizeMode="cover"
         />
         <View style={styles.textContent}>
-          <Text numberOfLines={1} style={styles.cardtitle}>
+          <Text
+            numberOfLines={1}
+            style={styles.cardtitle}
+            onPress={() => {
+              this.props.navigation.navigate("LocationDetailScreen", {
+                locationkey: `${JSON.stringify(marker.key)}`
+              });
+            }}
+          >
             {marker.title}
           </Text>
-          <Text numberOfLines={1} style={styles.cardDescription}>
+          <Text
+            numberOfLines={1}
+            style={styles.cardDescription}
+            onPress={() => {
+              this.props.navigation.navigate("LocationDetailScreen", {
+                locationkey: `${JSON.stringify(marker.key)}`
+              });
+            }}
+          >
             {marker.description}
           </Text>
         </View>
@@ -62,5 +89,3 @@ const styles = StyleSheet.create({
     color: "#444"
   }
 });
-
-// AppRegistry.registerComponent("LocationMap", () => LocationMap);

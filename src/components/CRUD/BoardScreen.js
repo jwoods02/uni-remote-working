@@ -53,7 +53,6 @@ class BoardScreen extends Component {
       boards,
       isLoading: false
     });
-    // console.log(boards);
   };
 
   signOutUser = async () => {

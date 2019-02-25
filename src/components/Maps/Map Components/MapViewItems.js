@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Animated, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Button,
+  Text,
+  View,
+  Animated,
+  Dimensions,
+  TouchableHighlight
+} from "react-native";
 import MapView from "react-native-maps";
 
 const { width, height } = Dimensions.get("window");
@@ -63,6 +71,7 @@ export default class MapViewItems extends Component {
 
     return (
       <MapView
+        showsTraffic={true}
         showsUserLocation={true}
         ref={map => (this.map = map)}
         region={{
@@ -90,6 +99,37 @@ export default class MapViewItems extends Component {
                 <Animated.View style={[styles.ring, scaleStyle]} />
                 <View style={styles.marker} />
               </Animated.View>
+              {/* <MapView.Callout tooltip>
+                <TouchableHighlight
+                  onPress={() => {
+                    this.props.navigation.navigate("LocationDetailScreen", {
+                      locationkey: `${JSON.stringify(marker.key)}`
+                    });
+                  }}
+                  underlayColor="#dddddd"
+                >
+                  <View>
+                    <View style={styles.detailButton}>
+                      <Button
+                        large
+                        backgroundColor={"#CCCCCC"}
+                        leftIcon={{ name: "edit" }}
+                        title="Edit"
+                        onPress={() => {
+                          this.props.navigation.navigate("EditBoard", {
+                            boardkey: `${JSON.stringify(this.state.key)}`
+                          });
+                        }}
+                      />
+                    </View>
+                    <Text>
+                      {marker.title}
+                      {"\n"}
+                      {marker.description}
+                    </Text>
+                  </View>
+                </TouchableHighlight>
+              </MapView.Callout> */}
             </MapView.Marker>
           );
         })}
@@ -121,5 +161,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     borderWidth: 1,
     borderColor: "rgba(130,4,150, 0.5)"
+  },
+  detailButton: {
+    marginTop: 10
   }
 });
