@@ -44,7 +44,7 @@ const RootStack = createStackNavigator(
     Loading: Loading,
     SignUp: SignUp,
     Login: Login,
-    LandingPage: LandingPage,
+    LandingPage: LandingPage
   },
   {
     initialRouteName: "Loading",
