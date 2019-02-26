@@ -21,8 +21,6 @@ export default class MapViewItems extends Component {
   }
 
   componentDidMount() {
-    // We should detect when scrolling has stopped then animate
-    // We should just debounce the event listener here
     this.animation.addListener(({ value }) => {
       let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
       if (index >= this.props.markers.length) {
@@ -99,37 +97,6 @@ export default class MapViewItems extends Component {
                 <Animated.View style={[styles.ring, scaleStyle]} />
                 <View style={styles.marker} />
               </Animated.View>
-              {/* <MapView.Callout tooltip>
-                <TouchableHighlight
-                  onPress={() => {
-                    this.props.navigation.navigate("LocationDetailScreen", {
-                      locationkey: `${JSON.stringify(marker.key)}`
-                    });
-                  }}
-                  underlayColor="#dddddd"
-                >
-                  <View>
-                    <View style={styles.detailButton}>
-                      <Button
-                        large
-                        backgroundColor={"#CCCCCC"}
-                        leftIcon={{ name: "edit" }}
-                        title="Edit"
-                        onPress={() => {
-                          this.props.navigation.navigate("EditBoard", {
-                            boardkey: `${JSON.stringify(this.state.key)}`
-                          });
-                        }}
-                      />
-                    </View>
-                    <Text>
-                      {marker.title}
-                      {"\n"}
-                      {marker.description}
-                    </Text>
-                  </View>
-                </TouchableHighlight>
-              </MapView.Callout> */}
             </MapView.Marker>
           );
         })}
