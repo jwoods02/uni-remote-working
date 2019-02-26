@@ -36,6 +36,7 @@ class BoardScreen extends Component {
   componentDidMount() {
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
+
   onCollectionUpdate = querySnapshot => {
     const boards = [];
     querySnapshot.forEach(doc => {
@@ -86,6 +87,12 @@ class BoardScreen extends Component {
             />
           ))}
         </List>
+
+        <Button
+          style={{ top: 10, left: 0, right: 0, bottom: 0 }}
+          title=" Location Map"
+          onPress={() => this.props.navigation.navigate("LocationMap")}
+        />
 
         <Button
           style={{ top: 10, left: 0, right: 0, bottom: 0 }}
