@@ -1,6 +1,6 @@
 const express = require("express");
-const app = express();
 const bodyParser = require("body-parser");
+const app = express();
 const port = 4000;
 
 app.use(bodyParser.json());
@@ -11,7 +11,8 @@ app.get("/api/", function(req, res) {
 });
 
 app.post("/api/", function(req, res) {
-  res.send("Hello world!");
+  console.log(req.body.field1);
+  console.log(req.body.field2);
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
