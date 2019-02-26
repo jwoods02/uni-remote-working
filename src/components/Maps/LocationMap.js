@@ -13,9 +13,9 @@ import {
 
 import { Callout } from "react-native-maps";
 import firebase from "firebase";
-import ScrollViewItems from "./Map Components/ScrollViewItems";
-import MapSearch from "./Map Components/MapSearch";
-import MapViewItems from "./Map Components/MapViewItems";
+import ScrollViewItems from "./MapComponents/ScrollViewItems";
+import MapSearch from "./MapComponents/MapSearch";
+import MapViewItems from "./MapComponents/MapViewItems";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
