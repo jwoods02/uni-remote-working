@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Dimensions } from "react-native";
 import AwesomeButton from "react-native-really-awesome-button";
 import Swiper from "react-native-swiper";
-import CustomIcon from "../CustomIcon";
+import CustomIcon from "../../../assets/fonts/CustomIcon";
 import { Font, AppLoading } from "expo";
 
 const { height } = Dimensions.get("window");
