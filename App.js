@@ -11,6 +11,8 @@ import {
   createBottomTabNavigator
 } from "react-navigation";
 
+import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+
 import BoardScreen from "./src/components/CRUD/BoardScreen";
 import BoardDetailScreen from "./src/components/CRUD/BoardDetailScreen";
 import AddBoardScreen from "./src/components/CRUD/AddBoardScreen";
@@ -63,9 +65,19 @@ const RootStack = createStackNavigator(
   }
 );
 
+const MaterialBottomTabNavigator = createMaterialBottomTabNavigator(
+  {
+    Map: LocationMap,
+    Board: BoardScreen
+  },
+  {
+    shifting: true
+  }
+);
+
 setupFirebase();
 
-const AppContainer = createAppContainer(RootStack);
+const AppContainer = createAppContainer(MaterialBottomTabNavigator);
 
 export default class App extends React.Component {
   render() {
