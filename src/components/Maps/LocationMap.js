@@ -90,12 +90,12 @@ export default class LocationMap extends Component {
     });
   };
 
-  static navigationOptions = {
-    tabBarIcon: ({ focused }) => (
-      <Text style={focused ? { color: "#fff" } : { color: "#000" }}>Hi</Text>
-    ),
-    activeTintColor: "#fff"
-  };
+  // static navigationOptions = {
+  //   tabBarIcon: ({ focused }) => (
+  //     <Text style={focused ? { color: "#fff" } : { color: "#000" }}>Hi</Text>
+  //   ),
+  //   activeTintColor: "#fff"
+  // };
 
   render() {
     if (this.state.isLoading) {
