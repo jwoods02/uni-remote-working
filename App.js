@@ -142,7 +142,8 @@ const DashboardTabNavigator = createBottomTabNavigator(
     navigationOptions: ({ navigation }) => {
       const { routeName } = navigation.state.routes[navigation.state.index];
       return {
-        headerTitle: routeName
+        headerTitle: routeName,
+        headerBackTitle: "Back"
       };
     }
   }
@@ -154,14 +155,14 @@ const DashboardStackNavigator = createStackNavigator(
   {
     defaultNavigationOptions: ({ navigation }) => {
       return {
-        headerLeft: (
-          <Icon
-            style={{ paddingLeft: 10 }}
-            onPress={() => navigation.openDrawer()}
-            name="md-menu"
-            size={30}
-          />
-        )
+        // headerLeft: (
+        //   <Icon
+        //     style={{ paddingLeft: 10 }}
+        //     onPress={() => navigation.openDrawer()}
+        //     name="md-menu"
+        //     size={30}
+        //   />
+        // )
       };
     }
   }
@@ -174,8 +175,8 @@ const AppDrawerNavigator = createDrawerNavigator({
 });
 
 const AppSwitchNavigator = createSwitchNavigator({
-  Welcome: { screen: WelcomeScreen },
-  Dashboard: { screen: AppDrawerNavigator },
+  Welcome: WelcomeScreen,
+  Dashboard: AppDrawerNavigator,
   Board: BoardScreen,
   BoardDetails: BoardDetailScreen,
   AddBoard: AddBoardScreen,
