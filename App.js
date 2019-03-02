@@ -155,14 +155,14 @@ const DashboardStackNavigator = createStackNavigator(
   {
     defaultNavigationOptions: ({ navigation }) => {
       return {
-        // headerLeft: (
-        //   <Icon
-        //     style={{ paddingLeft: 10 }}
-        //     onPress={() => navigation.openDrawer()}
-        //     name="md-menu"
-        //     size={30}
-        //   />
-        // )
+        headerLeft: (
+          <Icon
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.goBack()}
+            name="arrow-round-back"
+            size={30}
+          />
+        )
       };
     }
   }
@@ -175,7 +175,7 @@ const AppDrawerNavigator = createDrawerNavigator({
 });
 
 const AppSwitchNavigator = createSwitchNavigator({
-  Welcome: WelcomeScreen,
+  SignUp: SignUp,
   Dashboard: AppDrawerNavigator,
   Board: BoardScreen,
   BoardDetails: BoardDetailScreen,
@@ -183,7 +183,7 @@ const AppSwitchNavigator = createSwitchNavigator({
   EditBoard: EditBoardScreen,
   Main: Main,
   Loading: Loading,
-  SignUp: SignUp,
+  // SignUp: SignUp,
   Login: Login,
   LocationMap: LocationMap,
   LocationDetailScreen: LocationDetailScreen
