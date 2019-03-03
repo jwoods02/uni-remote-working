@@ -29,7 +29,7 @@ export default class LandingPage extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.swiperContainer}>
-          <Swiper style={styles.wrapper} loop={false}>
+          <Swiper loop={false}>
             <View style={styles.slide}>
               <Text style={styles.title}>
                 Find a dedicated workspace, anywhere
@@ -81,9 +81,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  titleContainer: {
-    alignItems: "center"
-  },
   title: {
     fontSize: 30,
     fontWeight: "bold",
@@ -118,27 +115,10 @@ const styles = StyleSheet.create({
     position: "relative",
     bottom: 0
   },
-  wrapper: {},
   slide: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#9DD6EB"
-  },
-  slide2: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#97CAE5"
-  },
-  slide3: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#92BBD9"
-  },
-  text: {
-    color: "#fff",
-    fontSize: 30
+    backgroundColor: "#fff"
   }
 });
