@@ -8,6 +8,8 @@ import { Font, AppLoading } from "expo";
 const { height } = Dimensions.get("window");
 
 export default class LandingPage extends React.Component {
+  static navigationOptions = { header: null };
+
   async componentWillMount() {
     await Font.loadAsync({
       icomoon: require("../../../assets/fonts/icomoon.ttf")
@@ -79,7 +81,8 @@ export default class LandingPage extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    paddingTop: 100
   },
   title: {
     fontSize: 30,
