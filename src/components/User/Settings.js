@@ -43,12 +43,6 @@ class Settings extends Component {
             onPress={() => this.signOutUser()}
           />
         </List>
-
-        <Button
-          style={{ top: 10, left: 0, right: 0, bottom: 0 }}
-          title="logout"
-          onPress={() => this.signOutUser()}
-        />
       </ScrollView>
     );
   }
