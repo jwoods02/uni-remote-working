@@ -28,36 +28,6 @@ class Home extends Component {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
-          <View
-            style={{
-              height: this.startHeaderHeight,
-              backgroundColor: "white",
-              borderBottomWidth: 1,
-              borderBottomColor: "#dddddd"
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                padding: 10,
-                backgroundColor: "white",
-                marginHorizontal: 20,
-                shadowOffset: { width: 0, height: 0 },
-                shadowColor: "black",
-                shadowOpacity: 0.2,
-                elevation: 1,
-                marginTop: Platform.OS == "android" ? 30 : null
-              }}
-            >
-              <Icon name="ios-search" size={20} style={{ marginRight: 10 }} />
-              <TextInput
-                underlineColorAndroid="transparent"
-                placeholder="Try New Delhi"
-                placeholderTextColor="grey"
-                style={{ flex: 1, fontWeight: "700", backgroundColor: "white" }}
-              />
-            </View>
-          </View>
           <ScrollView scrollEventThrottle={16}>
             <View style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
               <Text
@@ -70,21 +40,21 @@ class Home extends Component {
                 Some of your favourites...
               </Text>
 
-              <View style={{ height: 130, marginTop: 20 }}>
+              <View style={{ height: 140, marginTop: 10 }}>
                 <ScrollView
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                 >
                   <Category
-                    imageUri={require("../../../assets/home.jpg")}
+                    imageUri={require("../../../assets/locationA.jpg")}
                     name="Location A"
                   />
                   <Category
-                    imageUri={require("../../../assets/experiences.jpg")}
+                    imageUri={require("../../../assets/locationB.jpg")}
                     name="Location B"
                   />
                   <Category
-                    imageUri={require("../../../assets/restaurant.jpg")}
+                    imageUri={require("../../../assets/locationC.jpg")}
                     name="Location C"
                   />
                 </ScrollView>
@@ -107,7 +77,7 @@ class Home extends Component {
                       borderWidth: 1,
                       borderColor: "#dddddd"
                     }}
-                    source={require("../../../assets/home.jpg")}
+                    source={require("../../../assets/locationD.jpg")}
                   />
                 </View>
               </View>

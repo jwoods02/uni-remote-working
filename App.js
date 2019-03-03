@@ -49,7 +49,6 @@ const HomeStack = createStackNavigator(
     Login: Login,
     LocationMap: LocationMap,
     LocationDetailScreen: LocationDetailScreen
-    // Settings: Settings
   },
   {
     defaultNavigationOptions: {
@@ -65,7 +64,7 @@ const HomeStack = createStackNavigator(
 const MapStack = createStackNavigator(
   {
     LocationMap: LocationMap,
-    Home: Home,
+    // Home: Home,
     Board: BoardScreen,
     BoardDetails: BoardDetailScreen,
     AddBoard: AddBoardScreen,
@@ -91,7 +90,10 @@ const MapStack = createStackNavigator(
 const SettingsStack = createStackNavigator(
   {
     //Defination of Navigaton from home screen
-    Settings: Settings
+    Settings: Settings,
+    Loading: Loading,
+    SignUp: SignUp,
+    Login: Login
   },
   {
     defaultNavigationOptions: {
