@@ -90,10 +90,10 @@ const MapStack = createStackNavigator(
 const SettingsStack = createStackNavigator(
   {
     //Defination of Navigaton from home screen
-    Settings: Settings,
-    Loading: Loading,
-    SignUp: SignUp,
-    Login: Login
+    Settings: Settings
+    // Loading: Loading,
+    // SignUp: SignUp,
+    // Login: Login
   },
   {
     defaultNavigationOptions: {
