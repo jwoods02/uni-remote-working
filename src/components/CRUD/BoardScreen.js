@@ -12,7 +12,7 @@ import firebase from "firebase";
 class BoardScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: "Board List",
+      title: "Home",
       headerRight: (
         <Button
           buttonStyle={{ padding: 0, backgroundColor: "transparent" }}
@@ -55,14 +55,6 @@ class BoardScreen extends Component {
     });
   };
 
-  signOutUser = async () => {
-    try {
-      await firebase.auth().signOut();
-      this.props.navigation.navigate("SignUp");
-    } catch (e) {
-      console.log(e);
-    }
-  };
   render() {
     if (this.state.isLoading) {
       return (
@@ -87,18 +79,6 @@ class BoardScreen extends Component {
             />
           ))}
         </List>
-
-        <Button
-          style={{ top: 10, left: 0, right: 0, bottom: 0 }}
-          title=" Location Map"
-          onPress={() => this.props.navigation.navigate("LocationMap")}
-        />
-
-        <Button
-          style={{ top: 10, left: 0, right: 0, bottom: 0 }}
-          title="logout"
-          onPress={() => this.signOutUser()}
-        />
       </ScrollView>
     );
   }

@@ -4,6 +4,10 @@ import { List, ListItem, Text, Card, Button } from "react-native-elements";
 import firebase from "firebase";
 
 class LocationDetailScreen extends Component {
+  static navigationOptions = {
+    title: "Edit Board"
+  };
+
   constructor() {
     super();
     this.state = {

@@ -1,99 +1,23 @@
-// import React from "react";
+//This is an example code for Bottom Navigation//
+import React from "react";
+//import react in our code.
 
-// import { StyleSheet, Platform, Image, Text, View } from "react-native";
+import { Button, Text, View, TouchableOpacity, StyleSheet } from "react-native";
+//import all the basic component we have used
 
-// // import the different screens
+import { Ionicons } from "react-native-vector-icons";
+//import Ionicons to show the icon for bottom options
 
-// // import { StyleSheet, Text, View } from "react-native";
-// import {
-//   createStackNavigator,
-//   createAppContainer,
-//   createBottomTabNavigator
-// } from "react-navigation";
+//For React Navigation 2.+ import following
+//import {createStackNavigator,createBottomTabNavigator} from 'react-navigation';
 
-// import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
-
-// import BoardScreen from "./src/components/CRUD/BoardScreen";
-// import BoardDetailScreen from "./src/components/CRUD/BoardDetailScreen";
-// import AddBoardScreen from "./src/components/CRUD/AddBoardScreen";
-// import EditBoardScreen from "./src/components/CRUD/EditBoardScreen";
-// import Loading from "./src/components/Auth/Loading";
-// import SignUp from "./src/components/Auth/SignUp";
-// import Login from "./src/components/Auth/Login";
-// import Main from "./src/components/Auth/Main";
-
-// import setupFirebase from "./Firebase";
-// import LocationMap from "./src/components/Maps/LocationMap";
-// import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
-
-// const RootStack = createStackNavigator(
-//   {
-// Board: BoardScreen,
-// BoardDetails: BoardDetailScreen,
-// AddBoard: AddBoardScreen,
-// EditBoard: EditBoardScreen,
-// Main: Main,
-// Loading: Loading,
-// SignUp: SignUp,
-// Login: Login,
-// LocationMap: LocationMap,
-// LocationDetailScreen: LocationDetailScreen
-//   },
-//   {
-//     initialRouteName: "Loading",
-//     navigationOptions: {
-//       headerStyle: {
-//         backgroundColor: "#777777"
-//       },
-//       headerTintColor: "#fff",
-//       headerTitleStyle: {
-//         fontWeight: "bold"
-//       },
-//       headerBackTitle: null
-//     }
-//   }
-// );
-
-// const MaterialBottomTabNavigator = createMaterialBottomTabNavigator(
-//   {
-//     Map: LocationMap,
-//     Board: BoardScreen
-//   },
-//   {
-//     shifting: true
-//   }
-// );
-
-// setupFirebase();
-
-// const AppContainer = createAppContainer(MaterialBottomTabNavigator);
-
-// export default class App extends React.Component {
-//   render() {
-//     return <AppContainer />;
-//   }
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center"
-//   }
-// });
-
-import React, { Component } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
-import Icon from "@expo/vector-icons/Ionicons";
-
+//For React Navigation 3.+ import following
 import {
-  createSwitchNavigator,
-  createAppContainer,
-  createDrawerNavigator,
+  createStackNavigator,
   createBottomTabNavigator,
-  createStackNavigator
+  createAppContainer
 } from "react-navigation";
+//import createStackNavigator, createBottomTabNavigator, createAppContainer in our project
 
 import BoardScreen from "./src/components/CRUD/BoardScreen";
 import BoardDetailScreen from "./src/components/CRUD/BoardDetailScreen";
@@ -111,93 +35,108 @@ import LocationDetailScreen from "./src/components/Locations/LocationDetailScree
 
 setupFirebase();
 
-class App extends Component {
-  render() {
-    return <AppContainer />;
-  }
-}
-export default App;
-
-class WelcomeScreen extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Button
-          title="Login"
-          onPress={() => this.props.navigation.navigate("Dashboard")}
-        />
-        <Button title="Sign Up" onPress={() => alert("button pressed")} />
-      </View>
-    );
-  }
-}
-
-const DashboardTabNavigator = createBottomTabNavigator(
+const HomeStack = createStackNavigator(
   {
-    BoardScreen,
-    LocationMap,
-    Settings
+    Board: BoardScreen,
+    BoardDetails: BoardDetailScreen,
+    AddBoard: AddBoardScreen,
+    EditBoard: EditBoardScreen,
+    Main: Main,
+    Loading: Loading,
+    SignUp: SignUp,
+    Login: Login,
+    LocationMap: LocationMap,
+    LocationDetailScreen: LocationDetailScreen
+    // Settings: Settings
   },
   {
-    navigationOptions: ({ navigation }) => {
-      const { routeName } = navigation.state.routes[navigation.state.index];
-      return {
-        headerTitle: routeName,
-        headerTitleStyle: {
-          // fontWeight: "bold"
-        },
-        headerBackTitle: null
-      };
-    }
-  }
-);
-const DashboardStackNavigator = createStackNavigator(
-  {
-    DashboardTabNavigator: DashboardTabNavigator
-  },
-  {
-    defaultNavigationOptions: ({ navigation }) => {
-      return {
-        headerLeft: (
-          <Icon
-            style={{ paddingLeft: 10 }}
-            onPress={() => navigation.goBack()}
-            name="md-menu"
-            size={30}
-          />
-        )
-      };
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: "rgba(130,4,150, 0.4)"
+      },
+      headerTintColor: "#FFFFFF",
+      title: "Home"
     }
   }
 );
 
-const AppDrawerNavigator = createDrawerNavigator({
-  Dashboard: {
-    screen: DashboardStackNavigator
+const MapStack = createStackNavigator(
+  {
+    LocationMap: LocationMap,
+    Board: BoardScreen,
+    BoardDetails: BoardDetailScreen,
+    AddBoard: AddBoardScreen,
+    EditBoard: EditBoardScreen,
+    Main: Main,
+    Loading: Loading,
+    SignUp: SignUp,
+    Login: Login,
+    LocationDetailScreen: LocationDetailScreen
+    // Settings: Settings
+  },
+  {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: "rgba(130,4,150, 0.4)"
+      },
+      headerTintColor: "#FFFFFF",
+      title: "Locations Near You"
+    }
   }
-});
+);
 
-const AppSwitchNavigator = createSwitchNavigator({
-  SignUp: SignUp,
-  Dashboard: AppDrawerNavigator,
-  Board: BoardScreen,
-  BoardDetails: BoardDetailScreen,
-  AddBoard: AddBoardScreen,
-  EditBoard: EditBoardScreen,
-  Main: Main,
-  Loading: Loading,
-  // SignUp: SignUp,
-  Login: Login,
-  LocationMap: LocationMap,
-  LocationDetailScreen: LocationDetailScreen
-});
-
-const AppContainer = createAppContainer(AppSwitchNavigator);
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center"
+const SettingsStack = createStackNavigator(
+  {
+    //Defination of Navigaton from home screen
+    Settings: Settings
+  },
+  {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: "rgba(130,4,150, 0.4)"
+      },
+      headerTintColor: "#FFFFFF",
+      title: "Account"
+      //Header title
+    }
   }
-});
+);
+
+const App = createBottomTabNavigator(
+  {
+    //Defination of Navigaton bottom options
+    Home: { screen: HomeStack },
+    Map: { screen: MapStack },
+    Settings: { screen: SettingsStack }
+  },
+  {
+    //For React Navigation 2.+ change defaultNavigationOptions->navigationOptions
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        const { routeName } = navigation.state;
+        let IconComponent = Ionicons;
+        let iconName;
+        if (routeName === "Home") {
+          iconName = `ios-home`;
+          // Sometimes we want to add badges to some icons.
+          // You can check the implementation below.
+        } else if (routeName === "Settings") {
+          iconName = `ios-person`;
+        } else if (routeName === "Map") {
+          iconName = `md-map`;
+        }
+
+        // You can return any component that you like here!
+        return <IconComponent name={iconName} size={25} color={tintColor} />;
+      }
+    }),
+    tabBarOptions: {
+      activeTintColor: "rgba(130,4,150, 0.7)",
+      inactiveTintColor: "gray"
+    }
+  }
+);
+//For React Navigation 2.+ need to export App only
+//export default App;
+//For React Navigation 3.+
+export default createAppContainer(App);

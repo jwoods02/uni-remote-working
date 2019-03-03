@@ -3,6 +3,8 @@ import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 import firebase from "firebase";
 
 export default class Login extends React.Component {
+  static navigationOptions = { header: null };
+
   state = { email: "", password: "", errorMessage: null };
 
   handleLogin = () => {
