@@ -143,7 +143,10 @@ const DashboardTabNavigator = createBottomTabNavigator(
       const { routeName } = navigation.state.routes[navigation.state.index];
       return {
         headerTitle: routeName,
-        headerBackTitle: "Back"
+        headerTitleStyle: {
+          // fontWeight: "bold"
+        },
+        headerBackTitle: null
       };
     }
   }
@@ -159,7 +162,7 @@ const DashboardStackNavigator = createStackNavigator(
           <Icon
             style={{ paddingLeft: 10 }}
             onPress={() => navigation.goBack()}
-            name="arrow-round-back"
+            name="md-menu"
             size={30}
           />
         )
