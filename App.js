@@ -32,12 +32,14 @@ import Settings from "./src/components/User/Settings";
 import setupFirebase from "./Firebase";
 import LocationMap from "./src/components/Maps/LocationMap";
 import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
+import Home from "./src/components/Home/Home";
 
 setupFirebase();
 
 const HomeStack = createStackNavigator(
   {
-    Board: BoardScreen,
+    Home: Home,
+    Baord: BoardScreen,
     BoardDetails: BoardDetailScreen,
     AddBoard: AddBoardScreen,
     EditBoard: EditBoardScreen,
@@ -63,6 +65,7 @@ const HomeStack = createStackNavigator(
 const MapStack = createStackNavigator(
   {
     LocationMap: LocationMap,
+    Home: Home,
     Board: BoardScreen,
     BoardDetails: BoardDetailScreen,
     AddBoard: AddBoardScreen,
@@ -125,7 +128,6 @@ const App = createBottomTabNavigator(
         } else if (routeName === "Map") {
           iconName = `md-map`;
         }
-
         // You can return any component that you like here!
         return <IconComponent name={iconName} size={25} color={tintColor} />;
       }
@@ -136,7 +138,5 @@ const App = createBottomTabNavigator(
     }
   }
 );
-//For React Navigation 2.+ need to export App only
-//export default App;
-//For React Navigation 3.+
+
 export default createAppContainer(App);
