@@ -53,8 +53,6 @@ const HomeStack = createStackNavigator(
   }
 );
 
-// yes
-
 const MapStack = createStackNavigator(
   {
     LocationMap: LocationMap,
