@@ -19,7 +19,7 @@ import Loading from "./src/components/Auth/Loading";
 import SignUp from "./src/components/Auth/SignUp";
 import Login from "./src/components/Auth/Login";
 import Main from "./src/components/Auth/Main";
-
+import LandingPage from "./src/components/Auth/LandingPage";
 import setupFirebase from "./Firebase";
 import LocationMap from "./src/components/Maps/LocationMap";
 import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
@@ -29,6 +29,7 @@ const Tab = createBottomTabNavigator({
     screen: BoardScreen
   }
 });
+
 // const RootStack = createStackNavigator({
 //   Home1: {
 //     screen: Tab
@@ -45,6 +46,7 @@ const RootStack = createStackNavigator(
     Loading: Loading,
     SignUp: SignUp,
     Login: Login,
+    LandingPage: LandingPage,
     LocationMap: LocationMap,
     LocationDetailScreen: LocationDetailScreen
   },

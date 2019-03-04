@@ -58,7 +58,7 @@ class BoardScreen extends Component {
   signOutUser = async () => {
     try {
       await firebase.auth().signOut();
-      this.props.navigation.navigate("SignUp");
+      this.props.navigation.navigate("LandingPage");
     } catch (e) {
       console.log(e);
     }
