@@ -28,6 +28,37 @@ class Home extends Component {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
+          <View
+            style={{
+              height: this.startHeaderHeight,
+              backgroundColor: "white",
+              borderBottomWidth: 1,
+              borderBottomColor: "#dddddd",
+              paddingTop: 20
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                padding: 10,
+                backgroundColor: "white",
+                marginHorizontal: 20,
+                shadowOffset: { width: 0, height: 0 },
+                shadowColor: "black",
+                shadowOpacity: 0.2,
+                elevation: 1,
+                marginTop: Platform.OS == "android" ? 30 : null
+              }}
+            >
+              <Icon name="ios-search" size={20} style={{ marginRight: 10 }} />
+              <TextInput
+                underlineColorAndroid="transparent"
+                placeholder="Search Locations"
+                placeholderTextColor="grey"
+                style={{ flex: 1, fontWeight: "700", backgroundColor: "white" }}
+              />
+            </View>
+          </View>
           <ScrollView scrollEventThrottle={16}>
             <View style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
               <Text
