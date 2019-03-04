@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   cardtitle: {
+    color: "#8A54A2",
     fontSize: 14,
     marginTop: 5,
     fontWeight: "bold"

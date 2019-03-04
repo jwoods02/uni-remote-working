@@ -64,6 +64,7 @@ class Home extends Component {
             <View style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
               <Text
                 style={{
+                  color: "#8A54A2",
                   fontSize: 24,
                   fontWeight: "700",
                   paddingHorizontal: 20
@@ -92,7 +93,9 @@ class Home extends Component {
                 </ScrollView>
               </View>
               <View style={{ marginTop: 40, paddingHorizontal: 20 }}>
-                <Text style={{ fontSize: 24, fontWeight: "700" }}>
+                <Text
+                  style={{ color: "#8A54A2", fontSize: 24, fontWeight: "700" }}
+                >
                   Featured: Location D
                 </Text>
                 <Text style={{ fontWeight: "100", marginTop: 10 }}>

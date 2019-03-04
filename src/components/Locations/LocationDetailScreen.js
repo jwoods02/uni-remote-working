@@ -134,7 +134,8 @@ import {
   ScrollView,
   Image,
   Dimensions,
-  Button
+  Button,
+  Alert
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
@@ -204,7 +205,13 @@ class LocationDetailScreen extends Component {
                     }}
                     source={{ uri: this.state.location.image }}
                   />
-                  <Button title="Request Code" type="outline" />
+                  <Button
+                    onPress={() => {
+                      Alert.alert("Code Granted: 1234");
+                    }}
+                    title="Request Code"
+                    type="outline"
+                  />
                 </View>
               </View>
             </View>
