@@ -2,7 +2,7 @@ import React from "react";
 
 import { Button, Text, View, TouchableOpacity, StyleSheet } from "react-native";
 
-import { Ionicons } from "react-native-vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 import {
   createStackNavigator,
@@ -24,6 +24,7 @@ import setupFirebase from "./Firebase";
 import LocationMap from "./src/components/Maps/LocationMap";
 import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
 import Home from "./src/components/Home/Home";
+import LandingPage from "./src/components/Auth/LandingPage";
 
 setupFirebase();
 
@@ -52,6 +53,8 @@ const HomeStack = createStackNavigator(
   }
 );
 
+// yes
+
 const MapStack = createStackNavigator(
   {
     LocationMap: LocationMap,
@@ -78,7 +81,8 @@ const MapStack = createStackNavigator(
 
 const SettingsStack = createStackNavigator(
   {
-    Settings: Settings
+    Settings: Settings,
+    LandingPage: LandingPage
   },
   {
     defaultNavigationOptions: {
