@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 
-class Category extends Component {
+class FavouritesCarousel extends Component {
   render() {
     return (
       <View
@@ -26,7 +26,7 @@ class Category extends Component {
     );
   }
 }
-export default Category;
+export default FavouritesCarousel;
 
 const styles = StyleSheet.create({
   container: {

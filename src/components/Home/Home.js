@@ -13,7 +13,7 @@ import {
   Button
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import Category from "./Category";
+import FavouritesCarousel from "./FavouritesCarousel";
 
 const { height, width } = Dimensions.get("window");
 
@@ -78,15 +78,15 @@ class Home extends Component {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                 >
-                  <Category
+                  <FavouritesCarousel
                     imageUri={require("../../../assets/locationA.jpg")}
                     name="Location A"
                   />
-                  <Category
+                  <FavouritesCarousel
                     imageUri={require("../../../assets/locationB.jpg")}
                     name="Location B"
                   />
-                  <Category
+                  <FavouritesCarousel
                     imageUri={require("../../../assets/locationC.jpg")}
                     name="Location C"
                   />
