@@ -7,7 +7,7 @@ import {
   Text
 } from "react-native";
 import { List, ListItem, Button, Icon } from "react-native-elements";
-import firebase from "../../Firebase";
+import firebase from "firebase";
 
 class BoardScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -36,6 +36,7 @@ class BoardScreen extends Component {
   componentDidMount() {
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
+
   onCollectionUpdate = querySnapshot => {
     const boards = [];
     querySnapshot.forEach(doc => {
@@ -57,7 +58,7 @@ class BoardScreen extends Component {
   signOutUser = async () => {
     try {
       await firebase.auth().signOut();
-      this.props.navigation.navigate("SignUp");
+      this.props.navigation.navigate("LandingPage");
     } catch (e) {
       console.log(e);
     }
@@ -86,6 +87,12 @@ class BoardScreen extends Component {
             />
           ))}
         </List>
+
+        <Button
+          style={{ top: 10, left: 0, right: 0, bottom: 0 }}
+          title=" Location Map"
+          onPress={() => this.props.navigation.navigate("LocationMap")}
+        />
 
         <Button
           style={{ top: 10, left: 0, right: 0, bottom: 0 }}

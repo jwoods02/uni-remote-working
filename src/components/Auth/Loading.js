@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
-import firebase from "../../Firebase";
+import firebase from "firebase";
 
 export default class Loading extends React.Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
-      this.props.navigation.navigate(user ? "Board" : "SignUp");
+      this.props.navigation.navigate(user ? "Board" : "LandingPage");
     });
   }
 

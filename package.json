@@ -9,13 +9,39 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "expo": "^30.0.1",
+    "babel-loader": "^8.0.0-beta.6",
+    "expo": "^32.0.0",
     "firebase": "^5.5.3",
-    "react": "16.3.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
+    "link": "^0.1.5",
+    "react": "16.5.0",
+    "react-native": "^0.57.1",
     "react-native-elements": "^0.19.1",
+    "react-native-fontawesome": "^6.0.1",
+    "react-native-image-slider": "^2.0.3",
+    "react-native-maps": "^0.23.0",
     "react-native-paper": "^2.11.1",
-    "react-navigation": "^2.17.0",
+    "react-native-really-awesome-button": "^1.3.1",
+    "react-native-snap-carousel": "^3.7.5",
+    "react-native-svg-transformer": "^0.12.1",
+    "react-native-swiper": "^1.5.14",
+    "react-native-vector-icons": "^6.3.0",
+    "react-navigation": "^3.0.9",
     "react-navigation-material-bottom-tabs": "^1.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/preset-env": "^7.3.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-plugin-transform-react-jsx-source": "^6.22.0",
+    "eslint": "^5.14.0",
+    "eslint-config-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-react-app": "^4.0.1",
+    "prettier": "^1.16.4"
+  },
+  "rnpm": {
+    "assets": [
+      "assets/fonts"
+    ]
   }
 }

@@ -7,22 +7,29 @@ import { StyleSheet, Platform, Image, Text, View } from "react-native";
 // import { StyleSheet, Text, View } from "react-native";
 import {
   createStackNavigator,
+  createAppContainer,
   createBottomTabNavigator
 } from "react-navigation";
-import BoardScreen from "./components/CRUD/BoardScreen";
-import BoardDetailScreen from "./components/CRUD/BoardDetailScreen";
-import AddBoardScreen from "./components/CRUD/AddBoardScreen";
-import EditBoardScreen from "./components/CRUD/EditBoardScreen";
-import Loading from "./components/Auth/Loading";
-import SignUp from "./components/Auth/SignUp";
-import Login from "./components/Auth/Login";
-import Main from "./components/Auth/Main";
+
+import BoardScreen from "./src/components/CRUD/BoardScreen";
+import BoardDetailScreen from "./src/components/CRUD/BoardDetailScreen";
+import AddBoardScreen from "./src/components/CRUD/AddBoardScreen";
+import EditBoardScreen from "./src/components/CRUD/EditBoardScreen";
+import Loading from "./src/components/Auth/Loading";
+import SignUp from "./src/components/Auth/SignUp";
+import Login from "./src/components/Auth/Login";
+import Main from "./src/components/Auth/Main";
+import LandingPage from "./src/components/Auth/LandingPage";
+import setupFirebase from "./Firebase";
+import LocationMap from "./src/components/Maps/LocationMap";
+import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
 
 const Tab = createBottomTabNavigator({
   Home: {
     screen: BoardScreen
   }
 });
+
 // const RootStack = createStackNavigator({
 //   Home1: {
 //     screen: Tab
@@ -38,7 +45,10 @@ const RootStack = createStackNavigator(
     Main: Main,
     Loading: Loading,
     SignUp: SignUp,
-    Login: Login
+    Login: Login,
+    LandingPage: LandingPage,
+    LocationMap: LocationMap,
+    LocationDetailScreen: LocationDetailScreen
   },
   {
     initialRouteName: "Loading",
@@ -52,15 +62,16 @@ const RootStack = createStackNavigator(
       },
       headerBackTitle: null
     }
-  },
-  {
-    screen: Tab
   }
 );
 
+setupFirebase();
+
+const AppContainer = createAppContainer(RootStack);
+
 export default class App extends React.Component {
   render() {
-    return <RootStack />;
+    return <AppContainer />;
   }
 }
 
