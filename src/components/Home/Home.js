@@ -9,7 +9,8 @@ import {
   StatusBar,
   ScrollView,
   Image,
-  Dimensions
+  Dimensions,
+  Button
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import Category from "./Category";
@@ -113,6 +114,11 @@ class Home extends Component {
                 </View>
               </View>
             </View>
+            <Button
+              style={{ top: 50, left: 0, right: 0, bottom: 0 }}
+              title="View All Locations"
+              onPress={() => this.props.navigation.navigate("LocationMap")}
+            />
           </ScrollView>
         </View>
       </SafeAreaView>
