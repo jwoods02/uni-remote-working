@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": 19003,
-  "packagerPid": 22023,
-  "expoServerNgrokUrl": "https://vq-gfz.anonymous.remote-working.exp.direct",
-  "packagerNgrokUrl": "https://packager.vq-gfz.anonymous.remote-working.exp.direct",
-  "ngrokPid": 22039
+  "packagerPort": 19007,
+  "packagerPid": 26618,
+  "expoServerNgrokUrl": "https://i4-nqr.anonymous.remote-working.exp.direct",
+  "packagerNgrokUrl": "https://packager.i4-nqr.anonymous.remote-working.exp.direct",
+  "ngrokPid": 26653
 }
