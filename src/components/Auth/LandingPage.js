@@ -9,7 +9,6 @@ const { height } = Dimensions.get("window");
 
 export default class LandingPage extends React.Component {
   static navigationOptions = { header: null };
-  test
 
   async componentWillMount() {
     await Font.loadAsync({
