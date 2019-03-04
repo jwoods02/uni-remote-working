@@ -56,7 +56,7 @@ const RootStack = createStackNavigator(
   }
 );
 
-axios.defaults.baseURL = "http://192.168.1.231:4000";
+axios.defaults.baseURL = "http://10.135.128.69:4000";
 setupFirebase();
 
 const AppContainer = createAppContainer(RootStack);

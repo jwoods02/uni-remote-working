@@ -2,22 +2,24 @@ import React, { Component } from "react";
 import StripeCheckout from "./StripeCheckout";
 import axios from "axios";
 
+const email = "new2@gmail.com";
+
 export default class Pay extends Component {
-  onPaymentSuccess = token => {
+  onPaymentSuccess = async token => {
     // send the stripe token to your backend!
     console.log(token);
-    axios
-      .post("/api/pay/token", {
-        token
-      })
-      .catch(function(error) {
-        // handle error
-        console.log(error);
-      })
-      .then(function() {
-        // always executed
-        console.log("At least one thing happened");
-      });
+    const newCustomer = await axios.post("/api/pay/customer", {
+      token,
+      email
+    });
+    console.log("CUSTOMER ID:", newCustomer.data.id);
+
+    const newSubscription = await axios.post("api/pay/subscription", {
+      customer: newCustomer.data.id
+    });
+
+    console.log("Subscription:", newSubscription.data.id);
+
     this.props.navigation.navigate("Board");
   };
 
@@ -36,7 +38,7 @@ export default class Pay extends Component {
         description="Test"
         currency="GBP"
         allowRememberMe={false}
-        prepopulatedEmail="test@test.com"
+        prepopulatedEmail={email}
         onClose={this.onClose}
         onPaymentSuccess={this.onPaymentSuccess}
       />

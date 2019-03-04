@@ -55,22 +55,6 @@ class StripeCheckout extends Component {
               ? onClose()
               : onPaymentSuccess(event.nativeEvent.data);
           }}
-          // source={{
-          //   html: `<form action="http://192.168.1.231:4000/api/pay/token" method="POST">
-          //         <script
-          //             src="https://checkout.stripe.com/checkout.js"
-          //             class="stripe-button"
-          //             data-key="pk_test_bvxdsrvMxXGmtHi3UEDMw759"
-          //             data-amount="999"
-          //             data-name="Remote Working"
-          //             data-description="Widget"
-          //             data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-          //             data-locale="auto"
-          //             data-currency="gbp"
-          //         ></script>
-          //         </form>
-          //         `
-          // }}
           source={{
             html: `<script src="https://checkout.stripe.com/checkout.js"></script>
             <script>
@@ -100,7 +84,6 @@ class StripeCheckout extends Component {
             baseUrl: ""
           }}
           style={styles.stripe}
-          // scalesPageToFit={Platform.OS === "android"}
         />
       </View>
     );

@@ -21,17 +21,32 @@ app.post("/api/pay/token", function(req, res) {
   res.send(req.body.token);
 });
 
-app.post("/api/pay/customer", function(req, res) {
+app.post("/api/pay/customer", async function(req, res) {
   console.log(req.body);
-  const customer = stripe.customers.create({
+  const customer = await stripe.customers.create({
     email: req.body.email,
     source: req.body.token
   });
   res.send(customer);
 });
 
-app.post("/api/pay/subscription", function(req, res) {
-  console.log(req.body.token);
+app.post("/api/pay/subscription", async function(req, res) {
+  console.log(req.body);
+
+  const subscription = await stripe.subscriptions
+    .create({
+      customer: req.body.customer,
+      items: [
+        {
+          plan: "plan_EZ1HJglPYy02ck"
+        }
+      ]
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+  res.send(subscription);
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
