@@ -55,6 +55,14 @@ class BoardScreen extends Component {
     });
   };
 
+  signOutUser = async () => {
+    try {
+      await firebase.auth().signOut();
+      this.props.navigation.navigate("LandingPage");
+    } catch (e) {
+      console.log(e);
+    }
+  };
   render() {
     if (this.state.isLoading) {
       return (
