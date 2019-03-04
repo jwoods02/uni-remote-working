@@ -21,6 +21,7 @@ import Login from "./src/components/Auth/Login";
 import Main from "./src/components/Auth/Main";
 import setupFirebase from "./Firebase";
 import Payment from "./src/components/Payment/Payment";
+import Pay from "./src/components/Payment/Pay";
 
 const Tab = createBottomTabNavigator({
   Home: {
@@ -38,7 +39,7 @@ const RootStack = createStackNavigator(
     Loading: Loading,
     SignUp: SignUp,
     Login: Login,
-    Payment: Payment
+    Payment: Pay
   },
   {
     initialRouteName: "Loading",
@@ -55,7 +56,7 @@ const RootStack = createStackNavigator(
   }
 );
 
-axios.defaults.baseURL = "http://10.247.39.200:4000";
+axios.defaults.baseURL = "http://192.168.1.231:4000";
 setupFirebase();
 
 const AppContainer = createAppContainer(RootStack);
