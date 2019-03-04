@@ -3,6 +3,13 @@ import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 import firebase from "firebase";
 
 export default class SignUp extends React.Component {
+  static navigationOptions = { header: null };
+
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      this.props.navigation.navigate(user ? "Dashboard" : "SignUp");
+    });
+  }
   state = { email: "", password: "", errorMessage: null };
 
   handleSignUp = () => {
@@ -10,7 +17,7 @@ export default class SignUp extends React.Component {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(user => this.props.navigation.navigate("Main"))
+      .then(user => this.props.navigation.navigate("Home"))
       .catch(error => this.setState({ errorMessage: error.message }));
   };
 

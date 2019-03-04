@@ -3,6 +3,8 @@ import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 import firebase from "firebase";
 
 export default class Login extends React.Component {
+  static navigationOptions = { header: null };
+
   state = { email: "", password: "", errorMessage: null };
 
   handleLogin = () => {
@@ -10,7 +12,7 @@ export default class Login extends React.Component {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate("Main"))
+      .then(() => this.props.navigation.navigate("Home"))
       .catch(error => this.setState({ errorMessage: error.message }));
   };
 

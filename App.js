@@ -1,14 +1,13 @@
 import React from "react";
 
-import { StyleSheet, Platform, Image, Text, View } from "react-native";
+import { Button, Text, View, TouchableOpacity, StyleSheet } from "react-native";
 
-// import the different screens
+import { Ionicons } from "react-native-vector-icons";
 
-// import { StyleSheet, Text, View } from "react-native";
 import {
   createStackNavigator,
-  createAppContainer,
-  createBottomTabNavigator
+  createBottomTabNavigator,
+  createAppContainer
 } from "react-navigation";
 
 import BoardScreen from "./src/components/CRUD/BoardScreen";
@@ -20,25 +19,20 @@ import SignUp from "./src/components/Auth/SignUp";
 import Login from "./src/components/Auth/Login";
 import Main from "./src/components/Auth/Main";
 import LandingPage from "./src/components/Auth/LandingPage";
+import Settings from "./src/components/User/Settings";
+
 import setupFirebase from "./Firebase";
 import LocationMap from "./src/components/Maps/LocationMap";
 import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
+import Home from "./src/components/Home/Home";
 
-const Tab = createBottomTabNavigator({
-  Home: {
-    screen: BoardScreen
-  }
-});
 
-// const RootStack = createStackNavigator({
-//   Home1: {
-//     screen: Tab
-//   }
-// });
+setupFirebase();
 
-const RootStack = createStackNavigator(
+const HomeStack = createStackNavigator(
   {
-    Board: BoardScreen,
+    Home: Home,
+    Baord: BoardScreen,
     BoardDetails: BoardDetailScreen,
     AddBoard: AddBoardScreen,
     EditBoard: EditBoardScreen,
@@ -51,35 +45,82 @@ const RootStack = createStackNavigator(
     LocationDetailScreen: LocationDetailScreen
   },
   {
-    initialRouteName: "Loading",
-    navigationOptions: {
+    defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: "#777777"
+        backgroundColor: "rgba(130,4,150, 0.4)"
       },
-      headerTintColor: "#fff",
-      headerTitleStyle: {
-        fontWeight: "bold"
-      },
-      headerBackTitle: null
+      headerTintColor: "#FFFFFF",
+      title: "Home"
     }
   }
 );
 
-setupFirebase();
-
-const AppContainer = createAppContainer(RootStack);
-
-export default class App extends React.Component {
-  render() {
-    return <AppContainer />;
+const MapStack = createStackNavigator(
+  {
+    LocationMap: LocationMap,
+    Board: BoardScreen,
+    BoardDetails: BoardDetailScreen,
+    AddBoard: AddBoardScreen,
+    EditBoard: EditBoardScreen,
+    Main: Main,
+    Loading: Loading,
+    SignUp: SignUp,
+    Login: Login,
+    LocationDetailScreen: LocationDetailScreen
+  },
+  {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: "rgba(130,4,150, 0.4)"
+      },
+      headerTintColor: "#FFFFFF",
+      title: "Locations Near You"
+    }
   }
-}
+);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
+const SettingsStack = createStackNavigator(
+  {
+    Settings: Settings
+  },
+  {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: "rgba(130,4,150, 0.4)"
+      },
+      headerTintColor: "#FFFFFF",
+      title: "Account"
+    }
   }
-});
+);
+
+const App = createBottomTabNavigator(
+  {
+    Home: { screen: HomeStack },
+    Map: { screen: MapStack },
+    Settings: { screen: SettingsStack }
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        const { routeName } = navigation.state;
+        let IconComponent = Ionicons;
+        let iconName;
+        if (routeName === "Home") {
+          iconName = `ios-home`;
+        } else if (routeName === "Settings") {
+          iconName = `ios-person`;
+        } else if (routeName === "Map") {
+          iconName = `md-map`;
+        }
+        return <IconComponent name={iconName} size={25} color={tintColor} />;
+      }
+    }),
+    tabBarOptions: {
+      activeTintColor: "rgba(130,4,150, 0.7)",
+      inactiveTintColor: "gray"
+    }
+  }
+);
+
+export default createAppContainer(App);

@@ -13,7 +13,7 @@ export default class Loading extends React.Component {
     return (
       <View style={styles.container}>
         <Text>Loading</Text>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color="rgba(130,4,150, 0.4)" />
       </View>
     );
   }

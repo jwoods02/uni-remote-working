@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     left: 100,
     backgroundColor: "#FFF",
-    opacity: 0.85,
+    opacity: 0.95,
     marginHorizontal: 10,
     shadowColor: "#000",
     shadowRadius: 5,
@@ -80,7 +80,8 @@ const styles = StyleSheet.create({
     flex: 1
   },
   cardtitle: {
-    fontSize: 12,
+    color: "#8A54A2",
+    fontSize: 14,
     marginTop: 5,
     fontWeight: "bold"
   },

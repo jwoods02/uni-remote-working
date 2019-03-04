@@ -5,6 +5,7 @@ import React, { Component } from "react";
 import {
   AppRegistry,
   StyleSheet,
+  Text,
   View,
   Animated,
   Dimensions,
@@ -88,6 +89,13 @@ export default class LocationMap extends Component {
       isLoading: false
     });
   };
+
+  // static navigationOptions = {
+  //   tabBarIcon: ({ focused }) => (
+  //     <Text style={focused ? { color: "#fff" } : { color: "#000" }}>Hi</Text>
+  //   ),
+  //   activeTintColor: "#fff"
+  // };
 
   render() {
     if (this.state.isLoading) {
