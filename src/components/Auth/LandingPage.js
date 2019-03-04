@@ -82,7 +82,7 @@ export default class LandingPage extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 100
+    paddingTop: 70
   },
   title: {
     fontSize: 30,
