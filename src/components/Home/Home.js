@@ -149,7 +149,7 @@ class Home extends Component {
                       borderWidth: 1,
                       borderColor: "#dddddd"
                     }}
-                    source={{ uri: location.image }}
+                    source={require("../../../assets/locationD.jpg")}
                   />
                 </View>
               </View>
