@@ -23,7 +23,10 @@ import Settings from "./src/components/User/Settings";
 import setupFirebase from "./Firebase";
 import LocationMap from "./src/components/Maps/LocationMap";
 import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
+import ActiveCodeHome from "./src/components/Home/ActiveCodeHome";
+import DefaultHome from "./src/components/Home/DefaultHome";
 import Home from "./src/components/Home/Home";
+
 import LandingPage from "./src/components/Auth/LandingPage";
 
 setupFirebase();
@@ -31,7 +34,9 @@ setupFirebase();
 const HomeStack = createStackNavigator(
   {
     Home: Home,
-    Baord: BoardScreen,
+    ActiveCodeHome: ActiveCodeHome,
+    DefaultHome: DefaultHome,
+    Board: BoardScreen,
     BoardDetails: BoardDetailScreen,
     AddBoard: AddBoardScreen,
     EditBoard: EditBoardScreen,
