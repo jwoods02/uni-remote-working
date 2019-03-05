@@ -20,7 +20,6 @@ import Main from "./src/components/Auth/Main";
 import Settings from "./src/components/User/Settings";
 
 import setupFirebase from "./Firebase";
-import Payment from "./src/components/Payment/Payment";
 import Pay from "./src/components/Payment/Pay";
 import LocationMap from "./src/components/Maps/LocationMap";
 import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
@@ -42,7 +41,8 @@ const HomeStack = createStackNavigator(
     SignUp: SignUp,
     Login: Login,
     LocationMap: LocationMap,
-    LocationDetailScreen: LocationDetailScreen
+    LocationDetailScreen: LocationDetailScreen,
+    Pay: Pay
   },
   {
     defaultNavigationOptions: {
@@ -79,7 +79,6 @@ const MapStack = createStackNavigator(
     }
   }
 );
-
 
 const SettingsStack = createStackNavigator(
   {
