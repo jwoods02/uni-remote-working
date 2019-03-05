@@ -10,20 +10,53 @@ import {
   ScrollView,
   Image,
   Dimensions,
-  Button
+  Button,
+  TouchableOpacity
 } from "react-native";
 import Icon from "@expo/vector-icons/Ionicons";
 import FavouritesCarousel from "./FavouritesCarousel";
+import firebase from "firebase";
 
 const { height, width } = Dimensions.get("window");
 
 class Home extends Component {
+  constructor() {
+    super();
+    this.ref = firebase.firestore().collection("locations");
+    this.unsubscribe = null;
+    this.state = {
+      isLoading: true,
+      locations: []
+    };
+  }
   componentWillMount() {
     this.startHeaderHeight = 80;
     if (Platform.OS == "android") {
       this.startHeaderHeight = 100 + StatusBar.currentHeight;
     }
   }
+
+  componentDidMount() {
+    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+  }
+
+  onCollectionUpdate = querySnapshot => {
+    const locations = [];
+    querySnapshot.forEach(doc => {
+      const { title, description, image, coordinate } = doc.data();
+      locations.push({
+        key: doc.id,
+        title,
+        description,
+        image,
+        coordinate
+      });
+    });
+    this.setState({
+      locations,
+      isLoading: false
+    });
+  };
 
   render() {
     return (
@@ -78,18 +111,22 @@ class Home extends Component {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                 >
-                  <FavouritesCarousel
-                    imageUri={require("../../../assets/locationA.jpg")}
-                    name="Location A"
-                  />
-                  <FavouritesCarousel
-                    imageUri={require("../../../assets/locationB.jpg")}
-                    name="Location B"
-                  />
-                  <FavouritesCarousel
-                    imageUri={require("../../../assets/locationC.jpg")}
-                    name="Location C"
-                  />
+                  {this.state.locations.map((location, i) => (
+                    <TouchableOpacity
+                      key={i}
+                      onPress={() => {
+                        this.props.navigation.navigate("LocationDetailScreen", {
+                          locationkey: `${JSON.stringify(location.key)}`
+                        });
+                      }}
+                    >
+                      <FavouritesCarousel
+                        key={i}
+                        imageUri={{ uri: location.image }}
+                        name={location.title}
+                      />
+                    </TouchableOpacity>
+                  ))}
                 </ScrollView>
               </View>
               <View style={{ marginTop: 40, paddingHorizontal: 20 }}>
@@ -112,7 +149,7 @@ class Home extends Component {
                       borderWidth: 1,
                       borderColor: "#dddddd"
                     }}
-                    source={require("../../../assets/locationD.jpg")}
+                    source={{ uri: location.image }}
                   />
                 </View>
               </View>
