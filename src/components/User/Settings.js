@@ -6,7 +6,9 @@ import {
   View,
   Text
 } from "react-native";
+import { Font } from "expo";
 import { List, ListItem, Button, Icon } from "react-native-elements";
+import { FontAwesome } from "@expo/vector-icons";
 import firebase from "firebase";
 
 class Settings extends Component {
@@ -14,8 +16,19 @@ class Settings extends Component {
     super();
     this.unsubscribe = null;
     this.state = {
-      isLoading: false
+      isLoading: true
     };
+  }
+
+  async componentWillMount() {
+    await Font.loadAsync({
+      FontAwesome: require("@expo/vector-icons/fonts/FontAwesome.ttf")
+    });
+    await Font.loadAsync({
+      "Material Icons": require("@expo/vector-icons/fonts/MaterialIcons.ttf")
+    });
+
+    this.setState({ isLoading: false });
   }
 
   signOutUser = async () => {
