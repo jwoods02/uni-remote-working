@@ -12,7 +12,7 @@ import {
   Dimensions,
   Button
 } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
+import Icon from "@expo/vector-icons/Ionicons";
 import FavouritesCarousel from "./FavouritesCarousel";
 
 const { height, width } = Dimensions.get("window");

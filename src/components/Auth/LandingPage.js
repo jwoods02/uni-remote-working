@@ -9,6 +9,7 @@ const { height } = Dimensions.get("window");
 
 export default class LandingPage extends React.Component {
   static navigationOptions = { header: null };
+  static tabBarOptions = { showLabel: false };
 
   async componentWillMount() {
     await Font.loadAsync({
