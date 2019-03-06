@@ -7,15 +7,6 @@ const port = 4000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/api/", function(req, res) {
-  res.send("Hello world!");
-});
-
-app.post("/api/", function(req, res) {
-  console.log(req.body.field1);
-  console.log(req.body.field2);
-});
-
 app.post("/api/pay/token", function(req, res) {
   console.log(req.body.token);
   res.send(req.body.token);

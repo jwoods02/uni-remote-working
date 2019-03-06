@@ -1,3 +1,4 @@
+// Adapted version of https://github.com/briansztamfater/expo-stripe-checkout
 import React, { Component } from "react";
 import {
   WebView,

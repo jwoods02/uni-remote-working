@@ -6,7 +6,6 @@ const email = "new2@gmail.com";
 
 export default class Pay extends Component {
   onPaymentSuccess = async token => {
-    // send the stripe token to your backend!
     console.log(token);
     const newCustomer = await axios.post("/api/pay/customer", {
       token,
@@ -25,7 +24,7 @@ export default class Pay extends Component {
 
   onClose = () => {
     console.log("LOGGED");
-    // maybe navigate to other screen here?
+
     this.props.navigation.navigate("Board");
   };
   render() {
