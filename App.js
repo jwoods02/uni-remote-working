@@ -23,7 +23,10 @@ import setupFirebase from "./Firebase";
 import Pay from "./src/components/Payment/Pay";
 import LocationMap from "./src/components/Maps/LocationMap";
 import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
+import ActiveCodeHome from "./src/components/Home/ActiveCodeHome";
+import DefaultHome from "./src/components/Home/DefaultHome";
 import Home from "./src/components/Home/Home";
+
 import LandingPage from "./src/components/Auth/LandingPage";
 
 setupFirebase();
@@ -32,7 +35,9 @@ axios.defaults.baseURL = "http://10.135.128.69:4000";
 const HomeStack = createStackNavigator(
   {
     Home: Home,
-    Baord: BoardScreen,
+    ActiveCodeHome: ActiveCodeHome,
+    DefaultHome: DefaultHome,
+    Board: BoardScreen,
     BoardDetails: BoardDetailScreen,
     AddBoard: AddBoardScreen,
     EditBoard: EditBoardScreen,

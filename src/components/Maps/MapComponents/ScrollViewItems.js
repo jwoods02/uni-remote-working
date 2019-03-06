@@ -5,7 +5,8 @@ import {
   View,
   Image,
   Dimensions,
-  Button
+  Button,
+  TouchableOpacity
 } from "react-native";
 
 const { width, height } = Dimensions.get("window");
@@ -19,37 +20,46 @@ export default class ScrollViewItems extends Component {
 
   render() {
     return this.props.markers.map((marker, index) => (
-      <View style={styles.card} key={index}>
-        <Image
-          source={{ uri: marker.image }}
-          style={styles.cardImage}
-          resizeMode="cover"
-        />
-        <View style={styles.textContent}>
-          <Text
-            numberOfLines={1}
-            style={styles.cardtitle}
-            onPress={() => {
-              this.props.navigation.navigate("LocationDetailScreen", {
-                locationkey: `${JSON.stringify(marker.key)}`
-              });
-            }}
-          >
-            {marker.title}
-          </Text>
-          <Text
-            numberOfLines={1}
-            style={styles.cardDescription}
-            onPress={() => {
-              this.props.navigation.navigate("LocationDetailScreen", {
-                locationkey: `${JSON.stringify(marker.key)}`
-              });
-            }}
-          >
-            {marker.description}
-          </Text>
+      <TouchableOpacity
+        key={index}
+        onPress={() => {
+          this.props.navigation.navigate("LocationDetailScreen", {
+            locationkey: `${JSON.stringify(marker.key)}`
+          });
+        }}
+      >
+        <View style={styles.card} key={index}>
+          <Image
+            source={{ uri: marker.image }}
+            style={styles.cardImage}
+            resizeMode="cover"
+          />
+          <View style={styles.textContent}>
+            <Text
+              numberOfLines={1}
+              style={styles.cardtitle}
+              onPress={() => {
+                this.props.navigation.navigate("LocationDetailScreen", {
+                  locationkey: `${JSON.stringify(marker.key)}`
+                });
+              }}
+            >
+              {marker.title}
+            </Text>
+            <Text
+              numberOfLines={1}
+              style={styles.cardDescription}
+              onPress={() => {
+                this.props.navigation.navigate("LocationDetailScreen", {
+                  locationkey: `${JSON.stringify(marker.key)}`
+                });
+              }}
+            >
+              {marker.description}
+            </Text>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     ));
   }
 }
