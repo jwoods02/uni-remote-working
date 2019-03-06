@@ -7,7 +7,8 @@ import { Ionicons } from "@expo/vector-icons";
 import {
   createStackNavigator,
   createBottomTabNavigator,
-  createAppContainer
+  createAppContainer,
+  createSwitchNavigator
 } from "react-navigation";
 
 import BoardScreen from "./src/components/CRUD/BoardScreen";
@@ -84,8 +85,7 @@ const MapStack = createStackNavigator(
 
 const SettingsStack = createStackNavigator(
   {
-    Settings: Settings,
-    LandingPage: LandingPage
+    Settings: Settings
   },
   {
     defaultNavigationOptions: {
@@ -98,7 +98,7 @@ const SettingsStack = createStackNavigator(
   }
 );
 
-const App = createBottomTabNavigator(
+const AppStack = createBottomTabNavigator(
   {
     Home: { screen: HomeStack },
     Map: { screen: MapStack },
@@ -127,4 +127,16 @@ const App = createBottomTabNavigator(
   }
 );
 
-export default createAppContainer(App);
+const AuthStack = createStackNavigator({
+  Loading: Loading,
+  LandingPage: LandingPage,
+  Login: Login,
+  SignUp: SignUp
+});
+
+const RootStack = createSwitchNavigator({
+  Auth: AuthStack,
+  App: AppStack
+});
+
+export default createAppContainer(RootStack);
