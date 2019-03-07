@@ -79,7 +79,7 @@ class LocationDetailScreen extends Component {
                       borderWidth: 1,
                       borderColor: "#dddddd"
                     }}
-                    source={{ uri: this.state.location.image + "?fm=jpg&q=90" }}
+                    source={{ uri: this.state.location.image }}
                   />
                   <Button
                     onPress={() => {

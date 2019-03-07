@@ -38,10 +38,7 @@ const HomeStack = createStackNavigator(
     Home: Home,
     ActiveCodeHome: ActiveCodeHome,
     DefaultHome: DefaultHome,
-    Board: BoardScreen,
-    BoardDetails: BoardDetailScreen,
-    AddBoard: AddBoardScreen,
-    EditBoard: EditBoardScreen,
+
     Main: Main,
     Loading: Loading,
     SignUp: SignUp,
@@ -63,10 +60,7 @@ const HomeStack = createStackNavigator(
 const MapStack = createStackNavigator(
   {
     LocationMap: LocationMap,
-    Board: BoardScreen,
-    BoardDetails: BoardDetailScreen,
-    AddBoard: AddBoardScreen,
-    EditBoard: EditBoardScreen,
+
     Main: Main,
     Loading: Loading,
     SignUp: SignUp,
