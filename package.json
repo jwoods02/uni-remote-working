@@ -2,20 +2,27 @@
   "name": "empty-project-template",
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
+  "proxy": "http://localhost:4000",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "server": "nodemon server/app.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "nodemon": "^1.18.10",
+    "prop-types": "^15.6.0",
     "babel-loader": "^8.0.0-beta.6",
     "@expo/vector-icons": "^9.0.0",
     "expo": "^32.0.0",
     "firebase": "^5.5.3",
     "link": "^0.1.5",
     "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.1.tar.gz",
     "react-native-elements": "^0.19.1",
     "react-native-image-slider": "^2.0.3",
     "react-native-maps": "^0.23.0",
@@ -26,7 +33,8 @@
     "react-native-swiper": "^1.5.14",
     "react-native-material-bottom-navigation": "^1.0.2",
     "react-navigation": "^3.0.9",
-    "react-navigation-material-bottom-tabs": "^1.0.0"
+    "react-navigation-material-bottom-tabs": "^1.0.0",
+    "stripe": "^6.25.1"
   },
   "devDependencies": {
     "@babel/core": "^7.3.3",
