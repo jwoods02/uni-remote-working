@@ -1,7 +1,6 @@
 import React from "react";
-
+import axios from "axios";
 import { Button, Text, View, TouchableOpacity, StyleSheet } from "react-native";
-
 import { Ionicons } from "@expo/vector-icons";
 
 import {
@@ -22,6 +21,7 @@ import Main from "./src/components/Auth/Main";
 import Settings from "./src/components/User/Settings";
 
 import setupFirebase from "./Firebase";
+import Pay from "./src/components/Payment/Pay";
 import LocationMap from "./src/components/Maps/LocationMap";
 import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
 import ActiveCodeHome from "./src/components/Home/ActiveCodeHome";
@@ -31,6 +31,7 @@ import Home from "./src/components/Home/Home";
 import LandingPage from "./src/components/Auth/LandingPage";
 
 setupFirebase();
+axios.defaults.baseURL = "http://10.135.132.20:4000";
 
 const HomeStack = createStackNavigator(
   {
@@ -46,7 +47,8 @@ const HomeStack = createStackNavigator(
     SignUp: SignUp,
     Login: Login,
     LocationMap: LocationMap,
-    LocationDetailScreen: LocationDetailScreen
+    LocationDetailScreen: LocationDetailScreen,
+    Pay: Pay
   },
   {
     defaultNavigationOptions: {
@@ -70,6 +72,7 @@ const MapStack = createStackNavigator(
     Loading: Loading,
     SignUp: SignUp,
     Login: Login,
+    Payment: Pay,
     LocationDetailScreen: LocationDetailScreen
   },
   {
