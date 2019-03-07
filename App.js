@@ -17,7 +17,7 @@ import EditBoardScreen from "./src/components/CRUD/EditBoardScreen";
 import Loading from "./src/components/Auth/Loading";
 import SignUp from "./src/components/Auth/SignUp";
 import Login from "./src/components/Auth/Login";
-import Ma from "./src/components/Auth/Main";
+import Main from "./src/components/Auth/Main";
 import Settings from "./src/components/User/Settings";
 
 import setupFirebase from "./Firebase";
