@@ -29,7 +29,7 @@ class StripeCheckout extends Component {
       onClose
     } = this.props;
 
-    const jsCode = `(function() {
+    const fixPostMessage = `(function() {
                     var originalPostMessage = window.postMessage;
 
                     var patchedPostMessage = function(message, targetOrigin, transfer) {
@@ -49,7 +49,7 @@ class StripeCheckout extends Component {
           scrollEnabled={false}
           bounces={false}
           useWebKit={true}
-          injectedJavaScript={jsCode}
+          injectedJavaScript={fixPostMessage}
           originWhitelist={["*"]}
           onMessage={event => {
             return event.nativeEvent.data === "WINDOW_CLOSED"
