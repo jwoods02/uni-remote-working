@@ -62,25 +62,26 @@ class ActiveCodeHome extends Component {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
-          <ScrollView scrollEventThrottle={16}>
-            <View style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
-              <Text
-                style={{
-                  color: "#8A54A2",
-                  fontSize: 24,
-                  fontWeight: "700",
-                  paddingHorizontal: 20
-                }}
-              >
-                Some of your favourites...
-              </Text>
-            </View>
+          <View>
             <Button
-              style={{ top: 50, left: 0, right: 0, bottom: 0 }}
-              title="View All Locations"
-              onPress={() => this.props.navigation.navigate("LocationMap")}
+              onPress={this._removeCode}
+              title="Remove code"
+              color="#FF0000"
             />
-          </ScrollView>
+            <Text>Cardiff Library</Text>
+            <Button
+              onPress={this._feedback}
+              title="Feedback"
+            />
+          </View>
+          <View>
+            <Text>Code</Text>
+            <Text>Valid for: 24 hours</Text>
+            <Button
+              onPress={this._howTo}
+              title="How do I use this code?"
+            />
+          </View>
         </View>
       </SafeAreaView>
     );
