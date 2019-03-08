@@ -39,14 +39,14 @@ exports.setGuestId = functions.firestore
 // Create an Access Guest with code
 app.post("/access_persons", (req, res) => {
   const promise = Promise.resolve(Math.floor(1000 + Math.random() * 9000));
-  const date = new Date();
+  // const date = new Date();
   promise
     .then(value => {
       db.collection("data")
         .add({
                   type: "access_guest",
                   attributes: {
-                    starts_at: date,
+                    starts_at: new Date(),
                     ends_at: new Date().setDate(new Date().getDate() + 1),
                     name: req.body.name,
                     pin: value,
@@ -69,26 +69,17 @@ app.post("/access_persons", (req, res) => {
 
 
 
-
 // Deactivate access code
 app.patch("/access_persons/:id", (req, res) => {
 
-  db.collection("data").doc(req.params.id).update({ attributes: { active: false } })
+  db.collection("data").doc(req.params.id).update( { "attributes.active": false })
   .then(() => {
-    res.status(200).send("Updated!!")
+    res.status(200).send("Access code deactived")
   }).catch(err => {
     console.log("Error updating documents", err);
   });
 
 });
-
-
-//Grant access to a lock
-
-
-
-
-//Check if access code is valid
 
 
 
