@@ -19,13 +19,13 @@ export default class Pay extends Component {
 
     console.log("Subscription:", newSubscription.data.id);
 
-    this.props.navigation.navigate("Board");
+    this.props.navigation.navigate("Settings");
   };
 
   onClose = () => {
     console.log("LOGGED");
 
-    this.props.navigation.navigate("Board");
+    this.props.navigation.navigate("Settings");
   };
   render() {
     return (
