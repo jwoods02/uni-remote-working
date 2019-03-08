@@ -13,18 +13,18 @@ main.use(bodyParser.urlencoded({ extended: false }));
 export const webApi = functions.https.onRequest(main);
 
 
-//Set user id after document creation
-// exports.setGuestId = functions.firestore
-//   .document('data/{id}')
-//   .onCreate((snapshot, context) => {
+// Set user id after document creation
+exports.setGuestId = functions.firestore
+  .document('data/{id}')
+  .onCreate((snapshot, context) => {
 
-//      return snapshot.ref.set({
+     return snapshot.ref.set({
 
-//       id: "036aa265-d008-4c1a-942d-905e7f2ec3e2"
+      id: snapshot.id
 
-//      }, { merge: true });
+     }, { merge: true });
 
-//   });
+  });
 
 
 
@@ -36,7 +36,7 @@ export const webApi = functions.https.onRequest(main);
 // });
 
 
-// Create an Access Guest
+// Create an Access Guest with code
 app.post("/access_persons", (req, res) => {
   const promise = Promise.resolve(Math.floor(1000 + Math.random() * 9000));
   const date = new Date();
@@ -47,34 +47,19 @@ app.post("/access_persons", (req, res) => {
                   type: "access_guest",
                   attributes: {
                     starts_at: date,
-                    ends_at: date.setDate(date.getDate() + 1),
-                    name: req.body.userId,
+                    ends_at: new Date().setDate(new Date().getDate() + 1),
+                    name: req.body.name,
                     pin: value,
                     active: true
-                  },
-                  id: "036aa265-d008-4c1a-942d-905e7f2ec3e2"
+                  }
                 })
-        .then(async (docRef) => {
+        .then(docRef => {
 
-          const things = await docRef.get().then(function(doc) {
-            if (doc.exists) {
-                return doc.data();
-            } else {
-                // doc.data() will be undefined in this case
-                return "No such document!";
-            }
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
-        });
-
-
-
-
-          res.status(200).send(things);
+          res.status(200).send(docRef.id);
 
         })
         .catch(err => {
-          console.log("Error adding documents", err);
+          console.log("Error creating guest", err);
         });
     })
     .catch(err => {
@@ -85,34 +70,21 @@ app.post("/access_persons", (req, res) => {
 
 
 
+// Deactivate access code
+app.patch("/access_persons/:id", (req, res) => {
 
+  db.collection("data").doc(req.params.id).update({ attributes: { active: false } })
+  .then(() => {
+    res.status(200).send("Updated!!")
+  }).catch(err => {
+    console.log("Error updating documents", err);
+  });
 
-//Invalidate access code
-app.patch("/access_persons/", (req, res) => {
-  const foo: FirebaseFirestore.DocumentData[] = [];
-  db.collection("data")
-    .where("id", "==", parseInt(req.params.userId))
-    .get()
-    .then(querySnapshot => {
-      querySnapshot.forEach(doc => {
-        foo.push(doc.data());
-      });
-    })
-    .then(() => {
-      res.status(200).send(foo);
-    })
-    .catch(err => {
-      console.log("Error getting documents", err);
-    });
 });
 
 
 //Grant access to a lock
-// app.post("/access_persons/:userId/accesses", (req, res) => {
 
-
-
-// });
 
 
 
@@ -121,18 +93,20 @@ app.patch("/access_persons/", (req, res) => {
 
 
 //View details for given user
-app.get("/user/:userId", (req, res) => {
-  const foo: FirebaseFirestore.DocumentData[] = [];
+app.get("/access_persons/:id", (req, res) => {
+  
   db.collection("data")
-    .where("userId", "==", parseInt(req.params.userId))
+    .where("id", "==", req.params.id)
     .get()
     .then(querySnapshot => {
+      let docRef: FirebaseFirestore.DocumentData;
       querySnapshot.forEach(doc => {
-        foo.push(doc.data());
+        docRef = doc;
       });
+      return docRef;
     })
-    .then(() => {
-      res.status(200).send(foo);
+    .then(docRef => {
+      res.status(200).send(docRef.data());
     })
     .catch(err => {
       console.log("Error getting documents", err);
