@@ -107,7 +107,7 @@ app.get("/access_persons/:id", (req, res) => {
 
 
 //View all data
-app.get("/data", (req, res) => {
+app.get("/access_persons", (req, res) => {
   const foo: FirebaseFirestore.DocumentData[] = [];
   db.collection("data")
     .get()
