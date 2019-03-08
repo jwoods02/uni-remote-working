@@ -31,9 +31,8 @@ This code provides a mock API deployed in Firebase that simulates a physical con
 
 ## RESTful API
 
-- Create a guest user and generate 4 digit access code
+### Create a guest user and generate 4 digit access code
 
  ```sh
-   $ [POST]
-   $ https://[YOUR PROJECT]/api/v1/access_persons
+   POST - https://[YOUR PROJECT]/api/v1/access_persons
    ```
