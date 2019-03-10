@@ -1,11 +1,11 @@
 import * as React from "react";
-import { ThemeContext } from "./theme-context";
-export function withTheme(Component) {
-  return function ThemeComponent(props) {
+import { UserContext } from "./theme-context";
+export function withUser(Component) {
+  return function UserComponent(props) {
     return (
-      <ThemeContext.Consumer>
+      <UserContext.Consumer>
         {contexts => <Component {...props} {...contexts} />}
-      </ThemeContext.Consumer>
+      </UserContext.Consumer>
     );
   };
 }

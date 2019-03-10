@@ -1,6 +1,6 @@
 import * as React from "react";
-import { ThemeContext } from "./theme-context";
-export default class ThemeProvider extends React.Component {
+import { UserContext } from "./theme-context";
+export default class UserProvider extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -13,15 +13,15 @@ export default class ThemeProvider extends React.Component {
   }
   render() {
     return (
-      <ThemeContext.Provider
+      <UserContext.Provider
         value={{
-          themeContext: {
+          userContext: {
             ...this.state
           }
         }}
       >
         {this.props.children}
-      </ThemeContext.Provider>
+      </UserContext.Provider>
     );
   }
 }
