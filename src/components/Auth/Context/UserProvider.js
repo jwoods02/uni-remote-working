@@ -1,15 +1,15 @@
 import * as React from "react";
-import { UserContext } from "./theme-context";
+import { UserContext } from "./user-context";
 export default class UserProvider extends React.Component {
   constructor() {
     super();
     this.state = {
-      setColor: this.setColor.bind(this),
-      color: "yellow"
+      setUser: this.setUser.bind(this),
+      user: "yellow"
     };
   }
-  setColor(color) {
-    this.setState({ color });
+  setUser(user) {
+    this.setState({ user });
   }
   render() {
     return (

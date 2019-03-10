@@ -16,7 +16,7 @@ import {
 import Icon from "@expo/vector-icons/Ionicons";
 import FavouritesCarousel from "./FavouritesCarousel";
 import firebase from "firebase";
-import { withUser } from "../Auth/Context/withTheme";
+import { withUser } from "../Auth/Context/withUser";
 
 const { height, width } = Dimensions.get("window");
 
@@ -60,7 +60,7 @@ class DefaultHome extends Component {
   };
 
   render() {
-    console.log(this.props.userContext.color);
+    console.log(this.props.userContext.user);
 
     return (
       <SafeAreaView style={{ flex: 1 }}>

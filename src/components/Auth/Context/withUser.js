@@ -1,5 +1,5 @@
 import * as React from "react";
-import { UserContext } from "./theme-context";
+import { UserContext } from "./user-context";
 export function withUser(Component) {
   return function UserComponent(props) {
     return (
