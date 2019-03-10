@@ -17,6 +17,7 @@ import firebase from "firebase";
 import ScrollViewItems from "./MapComponents/ScrollViewItems";
 import MapSearch from "./MapComponents/MapSearch";
 import MapViewItems from "./MapComponents/MapViewItems";
+import { withUser } from "../Auth/Context/withUser";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
@@ -31,7 +32,7 @@ export const getCurrentLocation = () => {
   });
 };
 
-export default class LocationMap extends Component {
+class LocationMap extends Component {
   constructor() {
     super();
     this.ref = firebase.firestore().collection("locations");
@@ -98,6 +99,8 @@ export default class LocationMap extends Component {
   // };
 
   render() {
+    console.log(this.props.userContext.user);
+
     if (this.state.isLoading) {
       return (
         <View style={styles.activity}>
@@ -164,5 +167,6 @@ const styles = StyleSheet.create({
     paddingRight: width - CARD_WIDTH
   }
 });
+export default withUser(LocationMap);
 
-AppRegistry.registerComponent("LocationMap", () => LocationMap);
+// AppRegistry.registerComponent("LocationMap", () => LocationMap);

@@ -162,6 +162,11 @@ class DefaultHome extends Component {
               title="View All Locations"
               onPress={() => this.props.navigation.navigate("LocationMap")}
             />
+
+            <Button
+              title="Update User context"
+              onPress={() => this.props.userContext.setUser("red")}
+            />
           </ScrollView>
         </View>
       </SafeAreaView>
