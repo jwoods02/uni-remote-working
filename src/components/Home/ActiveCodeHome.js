@@ -17,6 +17,7 @@ import {
 
 import firebase from "firebase";
 import MapViewItems from "../Maps/MapComponents/MapViewItems";
+import Dialog from "react-native-dialog";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
@@ -32,6 +33,8 @@ export const getCurrentLocation = () => {
 };
 
 export default class ActiveCodeHome extends Component {
+  static navigationOptions = { title: "Home", headerLeft: null };
+
   constructor() {
     super();
     this.ref = firebase.firestore().collection("locations");
@@ -45,7 +48,8 @@ export default class ActiveCodeHome extends Component {
         longitude: -3.17909,
         latitudeDelta: 0.04864195044303443,
         longitudeDelta: 0.040142817690068
-      }
+      },
+      dialogVisible: false
     };
   }
 
@@ -98,9 +102,18 @@ export default class ActiveCodeHome extends Component {
     Alert.alert("This is where how to will be handled");
   }
 
-  _removeCode() {
-    Alert.alert("This is where the code will be removed");
-  }
+  _removeCode = () => {
+    this.setState({ dialogVisible: true });
+  };
+
+  handleCancel = () => {
+    this.setState({ dialogVisible: false });
+  };
+
+  handleRemove = () => {
+    this.setState({ dialogVisible: false });
+    this.props.navigation.navigate("Home");
+  };
 
   render() {
     if (this.state.isLoading) {
@@ -149,7 +162,7 @@ export default class ActiveCodeHome extends Component {
             }}
           >
             <Text style={{ fontWeight: "bold", fontSize: 30 }}>
-              {this.props.code}
+              {this.props.navigation.state.params.code}
             </Text>
             <Text style={{ fontSize: 20 }}>Valid for: 24hr</Text>
           </View>
@@ -234,6 +247,13 @@ export default class ActiveCodeHome extends Component {
             risus. Ut scelerisque non odio eget convallis. Aenean nec accumsan
             libero. Nunc hendrerit est eu varius viverra.
           </Text>
+          <Dialog.Container visible={this.state.dialogVisible}>
+            <Dialog.Description>
+              Are you sure you want to remove your access code?
+            </Dialog.Description>
+            <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+            <Dialog.Button label="Remove" onPress={this.handleRemove} />
+          </Dialog.Container>
         </ScrollView>
       </View>
     );
