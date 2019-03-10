@@ -16,6 +16,7 @@ import {
 import Icon from "@expo/vector-icons/Ionicons";
 
 import firebase from "firebase";
+import Dialog from "react-native-dialog";
 
 const { height, width } = Dimensions.get("window");
 
@@ -25,7 +26,8 @@ class LocationDetailScreen extends Component {
     this.state = {
       isLoading: true,
       location: {},
-      key: ""
+      key: "",
+      dialogVisible: false
     };
   }
 
@@ -55,6 +57,18 @@ class LocationDetailScreen extends Component {
     });
   }
 
+  showDialog = () => {
+    this.setState({ dialogVisible: true });
+  };
+
+  handleCancel = () => {
+    this.setState({ dialogVisible: false });
+  };
+
+  handleRequest = () => {
+    this.setState({ dialogVisible: false });
+  };
+
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -82,12 +96,20 @@ class LocationDetailScreen extends Component {
                     source={{ uri: this.state.location.image }}
                   />
                   <Button
-                    onPress={() => {
-                      Alert.alert("Code Granted: 1234");
-                    }}
+                    onPress={this.showDialog}
                     title="Request Code"
                     type="outline"
                   />
+                  <Dialog.Container visible={this.state.dialogVisible}>
+                    <Dialog.Description>
+                      Are you sure you want to get access to this building?
+                    </Dialog.Description>
+                    <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                    <Dialog.Button
+                      label="Request"
+                      onPress={this.handleRequest}
+                    />
+                  </Dialog.Container>
                 </View>
               </View>
             </View>

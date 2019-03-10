@@ -133,7 +133,7 @@ export default class ActiveCodeHome extends Component {
           >
             <Button
               onPress={this._removeCode}
-              title="Remove code"
+              title="X Remove code"
               color="#FF0000"
             />
             <Text style={{ fontSize: 20, paddingTop: 8 }}>Cardiff Library</Text>
@@ -180,15 +180,51 @@ export default class ActiveCodeHome extends Component {
             flex: 1,
             flexDirection: "column",
             borderTopWidth: 1,
-            borderTopColor: "#dddddd"
+            borderTopColor: "#dddddd",
+            paddingLeft: 5
           }}
         >
-          <Text>Cardiff Library</Text>
-          <Text>description</Text>
-          <View style={{ flex: 1, flexDirection: "row" }}>
-            <Text>10 desks</Text>
-            <Text>24 / 7 Access</Text>
-            <Text>Kitchen Area</Text>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              paddingBottom: 10,
+              paddingTop: 5
+            }}
+          >
+            Cardiff Library
+          </Text>
+          <Text style={{ fontSize: 15, paddingBottom: 10 }}>description</Text>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              justifyContent: "center",
+              paddingBottom: 10
+            }}
+          >
+            <View
+              style={{
+                paddingRight: 5,
+                borderRightWidth: 2,
+                borderRightColor: "#dddddd"
+              }}
+            >
+              <Text>10 desks</Text>
+            </View>
+            <View
+              style={{
+                paddingLeft: 5,
+                paddingRight: 5,
+                borderRightColor: "#dddddd",
+                borderRightWidth: 2
+              }}
+            >
+              <Text>24 / 7 Access</Text>
+            </View>
+            <View style={{ paddingLeft: 5 }}>
+              <Text>Kitchen Area</Text>
+            </View>
           </View>
           <Text>
             Information - Lorem ipsum dolor sit amet, consectetur adipiscing
