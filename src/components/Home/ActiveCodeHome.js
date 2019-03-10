@@ -11,7 +11,8 @@ import {
   Dimensions,
   ActivityIndicator,
   Button,
-  Alert
+  Alert,
+  ScrollView
 } from "react-native";
 
 import firebase from "firebase";
@@ -114,11 +115,10 @@ export default class ActiveCodeHome extends Component {
       <View style={styles.container}>
         <View
           style={{
-            maxHeight: 130,
             backgroundColor: "white",
+            maxHeight: 100,
             borderBottomWidth: 1,
             borderBottomColor: "#dddddd",
-            paddingTop: 20,
             flex: 1,
             flexDirection: "column",
             justifyContent: "space-between"
@@ -136,8 +136,22 @@ export default class ActiveCodeHome extends Component {
               title="Remove code"
               color="#FF0000"
             />
-            <Text style={{ fontSize: 20 }}>Cardiff Library</Text>
+            <Text style={{ fontSize: 20, paddingTop: 8 }}>Cardiff Library</Text>
             <Button onPress={this._feedback} title="Feedback" />
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              paddingLeft: 8,
+              paddingRight: 8
+            }}
+          >
+            <Text style={{ fontWeight: "bold", fontSize: 30 }}>
+              {this.props.code}
+            </Text>
+            <Text style={{ fontSize: 20 }}>Valid for: 24hr</Text>
           </View>
           <View
             style={{
@@ -146,17 +160,45 @@ export default class ActiveCodeHome extends Component {
               justifyContent: "space-between"
             }}
           >
-            <Text>Code</Text>
-            <Text>Valid for: 24 hours</Text>
             <Button onPress={this._howTo} title="How do I use this code?" />
           </View>
         </View>
-        <MapViewItems //the map
-          region={this.state.region}
-          markers={this.state.markers}
-          animation={this.animation}
-          navigation={this.props.navigation} // not sure why you have to pass navigation as prop to children components.
-        />
+        <View
+          style={{
+            minHeight: 300
+          }}
+        >
+          <MapViewItems //the map
+            region={this.state.region}
+            markers={this.state.markers}
+            animation={this.animation}
+            navigation={this.props.navigation} // not sure why you have to pass navigation as prop to children components.
+          />
+        </View>
+        <ScrollView
+          style={{
+            flex: 1,
+            flexDirection: "column",
+            borderTopWidth: 1,
+            borderTopColor: "#dddddd"
+          }}
+        >
+          <Text>Cardiff Library</Text>
+          <Text>description</Text>
+          <View style={{ flex: 1, flexDirection: "row" }}>
+            <Text>10 desks</Text>
+            <Text>24 / 7 Access</Text>
+            <Text>Kitchen Area</Text>
+          </View>
+          <Text>
+            Information - Lorem ipsum dolor sit amet, consectetur adipiscing
+            elit. Nam sollicitudin, tortor vitae ultrices eleifend, risus erat
+            blandit sem, quis cursus orci lorem eget odio. Aliquam nulla arcu,
+            sagittis non hendrerit interdum, feugiat vel sapien. Proin at tellus
+            risus. Ut scelerisque non odio eget convallis. Aenean nec accumsan
+            libero. Nunc hendrerit est eu varius viverra.
+          </Text>
+        </ScrollView>
       </View>
     );
   }
