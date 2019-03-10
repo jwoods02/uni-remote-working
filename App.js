@@ -29,6 +29,8 @@ import DefaultHome from "./src/components/Home/DefaultHome";
 import Home from "./src/components/Home/Home";
 
 import LandingPage from "./src/components/Auth/LandingPage";
+import ThemeProvider from "./src/components/Auth/Context/ThemeProvider";
+// import { ThemeProvider } from "react-native-paper";
 
 setupFirebase();
 axios.defaults.baseURL = "http://10.164.76.149:4000";
@@ -135,4 +137,13 @@ const RootStack = createSwitchNavigator({
   App: AppStack
 });
 
-export default createAppContainer(RootStack);
+AppContainer = createAppContainer(RootStack);
+export default class App extends React.Component {
+  render() {
+    return (
+      <ThemeProvider>
+        <AppContainer />
+      </ThemeProvider>
+    );
+  }
+}
