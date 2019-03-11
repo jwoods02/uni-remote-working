@@ -13,15 +13,7 @@ const workPlace = {
 export default class MapSearch extends Component {
   render() {
     return (
-      <View style={styles.searchBox}>
-        {/* <GooglePlacesAutocomplete
-          placeholder="Where to Go"
-          minLength={2} // minimum length of text to search
-          autoFocus={false}
-          returnKeyType={"search"}
-          renderDescription={row => row.description} // custom description render
-          // styles={searchInputStyle}
-        /> */}
+      <View>
         <GooglePlacesAutocomplete
           placeholder="Search"
           minLength={2} // minimum length of text to search
@@ -32,7 +24,15 @@ export default class MapSearch extends Component {
           renderDescription={row => row.description} // custom description render
           onPress={(data, details = null) => {
             // 'details' is provided when fetchDetails = true
-            console.log(data, details);
+            // console.log(data);
+            this.props.updateRegionFromSearch(
+              details.geometry.location.lat,
+              details.geometry.location.lng
+            );
+            console.log("");
+            console.log(details.geometry.location.lat);
+            console.log("");
+            console.log(details.geometry.location.lng);
           }}
           getDefaultValue={() => ""}
           query={{
@@ -41,25 +41,7 @@ export default class MapSearch extends Component {
             language: "en", // language of the results
             types: "(cities)" // default: 'geocode'
           }}
-          styles={{
-            textInputContainer: {
-              width: "100%"
-            },
-            description: {
-              fontWeight: "bold"
-            },
-            predefinedPlacesDescription: {
-              color: "rgba(130,4,150, 0.9)"
-            },
-            listView: {
-              color: "rgba(130,4,150, 0.9)",
-              backgroundColor: "rgba(130,4,150, 0.2)"
-              // zIndex: 16, //To popover the component outwards
-              // position: "absolute"
-            }
-          }}
-          // currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-          // currentLocationLabel="Current location"
+          styles={searchInputStyle}
           nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
           GoogleReverseGeocodingQuery={
             {
@@ -75,47 +57,45 @@ export default class MapSearch extends Component {
             "locality",
             "administrative_area_level_3"
           ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-          // predefinedPlaces={[homePlace, workPlace]}
           debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-          // renderLeftButton={() => (
-          //   <Image source={require("path/custom/left-icon")} />
-          // )}
-          // renderRightButton={() => <Text>Custom text after the input</Text>}
         />
       </View>
     );
   }
 }
 
-// const searchInputStyle = {
-//   container: {
-//     backgroundColor: "#fff",
-//     width: "100%",
-//     marginLeft: 20,
-//     marginRight: 20,
-//     marginTop: 20,
-//     marginBottom: 0,
-//     opacity: 0.9,
-//     borderRadius: 8
-//   },
-//   description: {
-//     fontWeight: "bold",
-//     color: "#007",
-//     borderTopWidth: 0,
-//     borderBottomWidth: 0,
-//     opacity: 0.9
-//   },
-//   predefinedPlacesDescription: {
-//     color: "#355"
-//   },
-//   textInputContainer: {
-//     height: 50
-//   },
-//   textInput: {
-//     height: 33,
-//     fontSize: 16
-//   }
-// };
+const searchInputStyle = {
+  container: {
+    backgroundColor: "#fff",
+    width: 200,
+    marginTop: 20,
+    marginBottom: 0,
+    opacity: 0.7,
+    borderRadius: 8
+  },
+  description: {
+    fontWeight: "bold",
+    color: "#007",
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    opacity: 0.9
+  },
+  predefinedPlacesDescription: {
+    color: "#355"
+  },
+  textInputContainer: {
+    height: 50,
+    width: 200
+  },
+  textInput: {
+    height: 33,
+    fontSize: 16
+  },
+  listView: {
+    color: "rgba(130,4,150, 0.9)",
+    backgroundColor: "rgba(130,4,150, 0.2)"
+  }
+};
 
 // const styles = StyleSheet.create({
 //   searchBox: {

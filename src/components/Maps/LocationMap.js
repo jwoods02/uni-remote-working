@@ -34,6 +34,8 @@ export const getCurrentLocation = () => {
 export default class LocationMap extends Component {
   constructor() {
     super();
+    this.updateRegionFromSearch = this.updateRegionFromSearch.bind(this);
+
     this.ref = firebase.firestore().collection("locations");
     this.unsubscribe = null;
     this.state = {
@@ -90,12 +92,16 @@ export default class LocationMap extends Component {
     });
   };
 
-  // static navigationOptions = {
-  //   tabBarIcon: ({ focused }) => (
-  //     <Text style={focused ? { color: "#fff" } : { color: "#000" }}>Hi</Text>
-  //   ),
-  //   activeTintColor: "#fff"
-  // };
+  updateRegionFromSearch(lat, lng) {
+    this.setState({
+      region: {
+        latitude: lat,
+        longitude: lng,
+        latitudeDelta: 0.09,
+        longitudeDelta: 0.09
+      }
+    });
+  }
 
   render() {
     if (this.state.isLoading) {
@@ -116,7 +122,7 @@ export default class LocationMap extends Component {
         />
         <Callout>
           {/* search */}
-          <MapSearch />
+          <MapSearch updateRegionFromSearch={this.updateRegionFromSearch} />
         </Callout>
         {/* animation */}
         <Animated.ScrollView
