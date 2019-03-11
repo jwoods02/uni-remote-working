@@ -97,8 +97,8 @@ export default class LocationMap extends Component {
       region: {
         latitude: lat,
         longitude: lng,
-        latitudeDelta: 0.09,
-        longitudeDelta: 0.09
+        latitudeDelta: 0.03,
+        longitudeDelta: 0.03
       }
     });
   }
