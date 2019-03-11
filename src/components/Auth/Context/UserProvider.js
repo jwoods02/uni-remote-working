@@ -1,5 +1,7 @@
 import * as React from "react";
 import { UserContext } from "./user-context";
+import firebase from "firebase";
+
 export default class UserProvider extends React.Component {
   constructor() {
     super();
@@ -10,6 +12,14 @@ export default class UserProvider extends React.Component {
   }
   setUser(user) {
     this.setState({ user });
+  }
+
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user =>
+      this.setState({
+        user: user
+      })
+    );
   }
   render() {
     return (
@@ -25,3 +35,38 @@ export default class UserProvider extends React.Component {
     );
   }
 }
+
+// import * as React from "react";
+// import { UserContext } from "./user-context";
+// import firebase from "firebase";
+
+// export default class UserProvider extends React.Component {
+//   state = {
+//     user: null
+//   };
+//   //need the old set state in here
+//   setUser(user) {
+//     setState({ user });
+//   }
+
+//   componentDidMount() {
+//     firebase.auth().onAuthStateChanged(function(user) {
+//       if (user) {
+//         setUser(user);
+//       }
+//     });
+//   }
+//   render() {
+//     return (
+//       <UserContext.Provider
+//         value={{
+//           userContext: {
+//             ...this.state
+//           }
+//         }}
+//       >
+//         {this.props.children}
+//       </UserContext.Provider>
+//     );
+//   }
+// }
