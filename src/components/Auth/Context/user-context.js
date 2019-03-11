@@ -4,7 +4,7 @@ export const UserContext = React.createContext(
   // matching Provider above it in the tree, useful for testing
   {
     userContext: {
-      user: "blue",
+      user: null,
       setUser: () => {}
     }
   }
