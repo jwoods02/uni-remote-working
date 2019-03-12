@@ -136,7 +136,7 @@ const RootStack = createSwitchNavigator({
   App: AppStack
 });
 
-AppContainer = createAppContainer(RootStack);
+let AppContainer = createAppContainer(RootStack);
 export default class App extends React.Component {
   render() {
     return (

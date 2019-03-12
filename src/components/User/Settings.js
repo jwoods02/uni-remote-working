@@ -45,8 +45,6 @@ class Settings extends Component {
     }
   };
   render() {
-    console.log(this.props.userContext.user);
-
     if (this.state.isLoading) {
       return (
         <View style={styles.activity}>

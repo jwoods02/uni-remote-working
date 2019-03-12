@@ -60,8 +60,6 @@ class DefaultHome extends Component {
   };
 
   render() {
-    console.log(this.props.userContext.user);
-
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>

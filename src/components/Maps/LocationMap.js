@@ -99,8 +99,6 @@ class LocationMap extends Component {
   // };
 
   render() {
-    console.log(this.props.userContext.user);
-
     if (this.state.isLoading) {
       return (
         <View style={styles.activity}>
@@ -168,5 +166,3 @@ const styles = StyleSheet.create({
   }
 });
 export default withUser(LocationMap);
-
-// AppRegistry.registerComponent("LocationMap", () => LocationMap);
