@@ -7,7 +7,7 @@ import {
   Text
 } from "react-native";
 import { Font } from "expo";
-import { List, ListItem, Button, Icon } from "react-native-elements";
+import { ListItem, Button, Icon } from "react-native-elements";
 import { FontAwesome } from "@expo/vector-icons";
 import firebase from "firebase";
 
@@ -53,18 +53,16 @@ class Settings extends Component {
     }
     return (
       <ScrollView style={styles.container}>
-        <List>
-          <ListItem
-            title="Pay Now"
-            leftIcon={{ name: "shopping-basket", type: "font-awesome" }}
-            onPress={() => this.payment()}
-          />
-          <ListItem
-            title="Log Out"
-            leftIcon={{ name: "sign-out", type: "font-awesome" }}
-            onPress={() => this.signOutUser()}
-          />
-        </List>
+        <ListItem
+          title="Pay Now"
+          leftIcon={{ name: "shopping-basket", type: "font-awesome" }}
+          onPress={() => this.payment()}
+        />
+        <ListItem
+          title="Log Out"
+          leftIcon={{ name: "sign-out", type: "font-awesome" }}
+          onPress={() => this.signOutUser()}
+        />
       </ScrollView>
     );
   }

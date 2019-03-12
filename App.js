@@ -31,7 +31,7 @@ import Home from "./src/components/Home/Home";
 import LandingPage from "./src/components/Auth/LandingPage";
 
 setupFirebase();
-axios.defaults.baseURL = "http://10.164.76.149:4000";
+axios.defaults.baseURL = "http://192.168.0.10:4000";
 
 const HomeStack = createStackNavigator(
   {

@@ -1,24 +1,53 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { Input } from "react-native-elements";
 import firebase from "firebase";
-
 export default class SignUp extends React.Component {
+  constructor() {
+    super();
+    this.ref = firebase.firestore().collection("users");
+    this.state = {
+      email: "",
+      firstName: "",
+      lastName: "",
+      password: "",
+      confirmPassword: "",
+      errorMessage: null
+    };
+  }
+
   static navigationOptions = { header: null };
 
-  componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      this.props.navigation.navigate(user ? "Dashboard" : "SignUp");
-    });
-  }
-  state = { email: "", password: "", errorMessage: null };
+  handleSignUp = async () => {
+    console.log(this.state.email);
+    const {
+      email,
+      firstName,
+      lastName,
+      password,
+      confirmPassword
+    } = this.state;
 
-  handleSignUp = () => {
-    const { email, password } = this.state;
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(user => this.props.navigation.navigate("Home"))
-      .catch(error => this.setState({ errorMessage: error.message }));
+    if (password !== confirmPassword) {
+      this.setState({ errorMessage: "Ensure password fields match" });
+    }
+
+    if (!this.state.errorMessage) {
+      try {
+        await firebase.auth().createUserWithEmailAndPassword(email, password);
+
+        await this.ref.add({
+          auth: firebase.auth().currentUser.uid,
+          email: email,
+          firstName: firstName,
+          lastName: lastName
+        });
+
+        this.props.navigation.navigate("Pay", { email });
+      } catch (error) {
+        this.setState({ errorMessage: error.message });
+      }
+    }
   };
 
   render() {
@@ -28,26 +57,44 @@ export default class SignUp extends React.Component {
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
         )}
-        <TextInput
+        <Input
           placeholder="Email"
           autoCapitalize="none"
           style={styles.textInput}
           onChangeText={email => this.setState({ email })}
           value={this.state.email}
         />
-        <TextInput
+        <Input
+          placeholder="First Name"
+          autoCapitalize="none"
+          style={styles.textInput}
+          onChangeText={firstName => this.setState({ firstName })}
+          value={this.state.firstName}
+        />
+        <Input
+          placeholder="Last Name"
+          autoCapitalize="none"
+          style={styles.textInput}
+          onChangeText={lastName => this.setState({ lastName })}
+          value={this.state.lastName}
+        />
+        <Input
           secureTextEntry
           placeholder="Password"
           autoCapitalize="none"
-          style={styles.textInput}
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <Button title="Sign Up" onPress={this.handleSignUp} />
-        <Button
-          title="Already have an account? Login"
-          onPress={() => this.props.navigation.navigate("Login")}
+        <Input
+          secureTextEntry
+          placeholder="Confirm Password"
+          autoCapitalize="none"
+          style={styles.textInput}
+          onChangeText={confirmPassword => this.setState({ confirmPassword })}
+          value={this.state.confirmPassword}
         />
+        <Button title="Sign Up" onPress={this.handleSignUp} />
+        <Button title="Already have an account? Login" />
       </View>
     );
   }
@@ -59,11 +106,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
-  textInput: {
-    height: 40,
-    width: "90%",
-    borderColor: "gray",
-    borderWidth: 1,
-    marginTop: 8
-  }
+  textInput: {}
 });
