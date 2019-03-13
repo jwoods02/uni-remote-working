@@ -12,30 +12,30 @@ stages:
   - build
   - deploy
 
-install:
+npm-install:
   stage: install
-    only:
-      - merge_requests
-    script:
-      - npm install
+  only:
+    - merge_requests
+  script:
+    - npm install
 
-test:
+npm-test:
   stage: test
-    only:
-      - merge_requests
-    script:
-      - npm ci
+  only:
+    - merge_requests
+  script:
+    - npm ci
 
-build:
+expo-build:
   stage: build
-    only:
-      - development
-    script:
-      - echo "Build"
+  only:
+    - development
+  script:
+    - echo "Build"
 
-deploy:
+expo-deploy:
   stage: deploy
-    only:
-      - master
-    script:
-      - echo "Deployed"
+  only:
+    - master
+  script:
+    - echo "Deployed"
