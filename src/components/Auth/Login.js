@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 import firebase from "firebase";
+import { withUser } from "../Auth/Context/withUser";
 
-export default class Login extends React.Component {
+class Login extends React.Component {
   static navigationOptions = { header: null };
 
   state = { email: "", password: "", errorMessage: null };
@@ -14,6 +15,7 @@ export default class Login extends React.Component {
       .signInWithEmailAndPassword(email, password)
       .then(() => this.props.navigation.navigate("Home"))
       .catch(error => this.setState({ errorMessage: error.message }));
+    this.props.userContext.setUser(this.state);
   };
 
   doSignInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider);
@@ -49,6 +51,8 @@ export default class Login extends React.Component {
     );
   }
 }
+
+export default withUser(Login);
 
 const styles = StyleSheet.create({
   container: {

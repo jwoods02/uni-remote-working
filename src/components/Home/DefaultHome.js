@@ -16,6 +16,7 @@ import {
 import Icon from "@expo/vector-icons/Ionicons";
 import FavouritesCarousel from "./FavouritesCarousel";
 import firebase from "firebase";
+import { withUser } from "../Auth/Context/withUser";
 
 const { height, width } = Dimensions.get("window");
 
@@ -159,13 +160,18 @@ class DefaultHome extends Component {
               title="View All Locations"
               onPress={() => this.props.navigation.navigate("LocationMap")}
             />
+
+            <Button
+              title="Update User context"
+              onPress={() => this.props.userContext.setUser("red")}
+            />
           </ScrollView>
         </View>
       </SafeAreaView>
     );
   }
 }
-export default DefaultHome;
+export default withUser(DefaultHome);
 
 const styles = StyleSheet.create({
   container: {
