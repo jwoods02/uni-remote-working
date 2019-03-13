@@ -14,28 +14,32 @@ export default class Pay extends Component {
   }
 
   onPaymentSuccess = async token => {
-    const newCustomer = await axios.post("/api/pay/customer", {
-      token,
-      email: this.state.email
-    });
+    try {
+      const newCustomer = await axios.post("/api/pay/customer", {
+        token,
+        email: this.state.email
+      });
 
-    await axios.post("api/pay/subscription", {
-      customer: newCustomer.data.id
-    });
+      await axios.post("api/pay/subscription", {
+        customer: newCustomer.data.id
+      });
 
-    const querySnapshot = await firebase
-      .firestore()
-      .collection("users")
-      .where("email", "==", this.state.email)
-      .get();
-
-    querySnapshot.forEach(doc => {
-      firebase
+      const querySnapshot = await firebase
         .firestore()
         .collection("users")
-        .doc(doc.id)
-        .update({ stripe_customer: newCustomer.data.id });
-    });
+        .where("email", "==", this.state.email)
+        .get();
+
+      querySnapshot.forEach(doc => {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(doc.id)
+          .update({ stripe_customer: newCustomer.data.id });
+      });
+    } catch (err) {
+      console.log(err);
+    }
 
     this.props.navigation.navigate("Home");
   };
