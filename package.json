@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "test": "node_modules/.bin/jest",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "ci": "eslint src/**/*.js && jest"
   },
   "jest": {
     "preset": "jest-expo"

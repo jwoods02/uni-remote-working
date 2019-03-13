@@ -6,16 +6,36 @@ cache:
   paths:
     - node_modules/
 
+stages:
+  - install
+  - test
+  - build
+  - deploy
+
+install:
+  stage: install
+    only:
+      - merge_requests
+    script:
+      - npm install
+
 test:
-  only:
-    - merge_requests
-  script:
-    - npm install
-    - npm test
+  stage: test
+    only:
+      - merge_requests
+    script:
+      - npm ci
 
 build:
-  only:
-    - merge_requests
-  script:
-    - npm install
-    - npx expo build
+  stage: build
+    only:
+      - development
+    script:
+      - echo "Build"
+
+deploy:
+  stage: deploy
+    only:
+      - master
+    script:
+      - echo "Deployed"
