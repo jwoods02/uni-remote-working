@@ -19,7 +19,6 @@ export default class SignUp extends React.Component {
   static navigationOptions = { header: null };
 
   handleSignUp = async () => {
-    console.log(this.state.email);
     const {
       email,
       firstName,
