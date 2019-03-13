@@ -14,6 +14,8 @@ You can skip to the next step if you are just testing the API.
 1. Before getting started, you need to install firebase-tools thought npm
 
    ```sh
+   $ cd [new project]
+   $ npm i
    $ npm i -g firebase-tools
    ```
 
