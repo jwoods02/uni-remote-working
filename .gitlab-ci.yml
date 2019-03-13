@@ -24,7 +24,7 @@ npm-test:
   only:
     - merge_requests
   script:
-    - npm ci
+    - npm run ci
 
 expo-build:
   stage: build
