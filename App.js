@@ -32,7 +32,7 @@ import LandingPage from "./src/components/Auth/LandingPage";
 import UserProvider from "./src/components/Auth/Context/UserProvider";
 
 setupFirebase();
-axios.defaults.baseURL = "http://172.19.12.89:4000";
+axios.defaults.baseURL = "http://192.168.0.70:4000";
 
 const HomeStack = createStackNavigator(
   {

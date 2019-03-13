@@ -31,11 +31,6 @@ class Settings extends Component {
 
     this.setState({ isLoading: false });
   }
-
-  payment = () => {
-    this.props.navigation.navigate("Pay");
-  };
-
   signOutUser = async () => {
     try {
       await firebase.auth().signOut();
@@ -54,11 +49,6 @@ class Settings extends Component {
     }
     return (
       <ScrollView style={styles.container}>
-        <ListItem
-          title="Pay Now"
-          leftIcon={{ name: "shopping-basket", type: "font-awesome" }}
-          onPress={() => this.payment()}
-        />
         <ListItem
           title="Log Out"
           leftIcon={{ name: "sign-out", type: "font-awesome" }}
