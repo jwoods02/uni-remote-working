@@ -44,9 +44,7 @@ export default class Pay extends Component {
     this.props.navigation.navigate("Home");
   };
 
-  onClose = () => {
-    this.props.navigation.goBack();
-  };
+  onClose = () => {};
   render() {
     return (
       <StripeCheckout
