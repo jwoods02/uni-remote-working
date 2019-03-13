@@ -10,6 +10,7 @@ import { Font } from "expo";
 import { ListItem, Button, Icon } from "react-native-elements";
 import { FontAwesome } from "@expo/vector-icons";
 import firebase from "firebase";
+import { withUser } from "../Auth/Context/withUser";
 
 class Settings extends Component {
   constructor() {
@@ -89,4 +90,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Settings;
+export default withUser(Settings);
