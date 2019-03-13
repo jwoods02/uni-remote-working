@@ -14,20 +14,14 @@ export default class Pay extends Component {
   }
 
   onPaymentSuccess = async token => {
-    console.log(token);
     const newCustomer = await axios.post("/api/pay/customer", {
       token,
       email: this.state.email
     });
-    console.log("CUSTOMER ID:", newCustomer.data.id);
 
-    const newSubscription = await axios.post("api/pay/subscription", {
+    await axios.post("api/pay/subscription", {
       customer: newCustomer.data.id
     });
-
-    console.log("Subscription:", newSubscription.data.id);
-
-    console.log("EMAIL", this.state.email);
 
     const querySnapshot = await firebase
       .firestore()
@@ -47,7 +41,6 @@ export default class Pay extends Component {
   };
 
   onClose = () => {
-    console.log("GONE BACK");
     this.props.navigation.goBack();
   };
   render() {
