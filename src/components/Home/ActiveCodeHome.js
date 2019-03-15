@@ -40,8 +40,7 @@ export default class ActiveCodeHome extends Component {
     this.ref = firebase
       .firestore()
       .collection("locations")
-      .doc("DPLWA6yt1DEuOGtDUDgv")
-      .get();
+      .doc("DPLWA6yt1DEuOGtDUDgv");
     this.unsubscribe = null;
     this.state = {
       isLoading: true,
@@ -70,8 +69,8 @@ export default class ActiveCodeHome extends Component {
       if (position) {
         this.setState({
           region: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
+            latitude: this.state.markers[0].coordinate.latitude,
+            longitude: this.state.markers[0].coordinate.longitude,
             latitudeDelta: 0.03,
             longitudeDelta: 0.03
           }
@@ -80,19 +79,17 @@ export default class ActiveCodeHome extends Component {
     });
   }
 
-  onCollectionUpdate = querySnapshot => {
-    console.log(querySnapshot);
+  onCollectionUpdate = doc => {
     const markers = [];
-    // querySnapshot.forEach(doc => {
-    //   const { title, description, image, coordinate } = doc.data();
-    //   markers.push({
-    //     key: doc.id,
-    //     title,
-    //     description,
-    //     image,
-    //     coordinate
-    //   });
-    // });
+    const { title, description, image, coordinate } = doc.data();
+    markers.push({
+      key: doc.id,
+      title,
+      description,
+      image,
+      coordinate
+    });
+
     this.setState({
       markers,
       isLoading: false
