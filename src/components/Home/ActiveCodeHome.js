@@ -129,49 +129,29 @@ export default class ActiveCodeHome extends Component {
 
     return (
       <View style={styles.container}>
-        <View
-          style={{
-            backgroundColor: "white",
-            maxHeight: 80,
-            borderBottomWidth: 1,
-            borderBottomColor: "#dddddd",
-            flex: 1,
-            flexDirection: "column",
-            justifyContent: "space-between",
-            paddingLeft: 5,
-            paddingRight: 5
-          }}
-        >
+        <View style={styles.headerContainer}>
           <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              paddingTop: 8,
-              paddingLeft: 8,
-              paddingRight: 8
-            }}
+            style={[
+              styles.headerRow,
+              {
+                paddingTop: 8,
+                paddingLeft: 8,
+                paddingRight: 8
+              }
+            ]}
           >
-            <Text
-              style={{
-                color: "#8A54A2",
-                fontWeight: "700",
-                fontSize: 24
-              }}
-            >
-              {this.state.markers[0].title}
-            </Text>
-            <Text style={{ fontWeight: "700", fontSize: 24 }}>
+            <Text style={styles.title}>{this.state.markers[0].title}</Text>
+            <Text style={styles.code}>
               {this.props.navigation.state.params.code}
             </Text>
           </View>
           <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center"
-            }}
+            style={[
+              styles.headerRow,
+              {
+                alignItems: "center"
+              }
+            ]}
           >
             <Button
               onPress={this._removeCode}
@@ -286,6 +266,28 @@ const styles = StyleSheet.create({
   },
   endPadding: {
     paddingRight: width - CARD_WIDTH
+  },
+  headerContainer: {
+    backgroundColor: "white",
+    maxHeight: 80,
+    borderBottomWidth: 1,
+    borderBottomColor: "#dddddd",
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    paddingLeft: 5,
+    paddingRight: 5
+  },
+  headerRow: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  code: { fontWeight: "700", fontSize: 24 },
+  title: {
+    color: "#8A54A2",
+    fontWeight: "700",
+    fontSize: 24
   }
 });
 
