@@ -13,51 +13,10 @@ import firebase from "firebase";
 import { withUser } from "../Auth/Context/withUser";
 
 class ManageSession extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.ref = firebase
-  //     .firestore()
-  //     .collection("session")
-  //     .where("user_id", "==", this.props.userContext.user);
-  //   this.unsubscribe = null;
-  //   this.state = {
-  //     isLoading: true,
-  //     session: [],
-
-  //     dialogVisible: false
-  //   };
-  // }
-
-  // componentWillMount() {
-  //   this.index = 0;
-  // }
-
-  // componentDidMount() {
-  //   this.state = this.unsubscribe = this.ref.onSnapshot(
-  //     this.onCollectionUpdate
-  //   );
-  // }
-
-  // onCollectionUpdate = doc => {
-  //   if (doc) {
-  //     console.log(doc);
-  //     const session = [];
-  //     const { user_id, location_id, start, end, interval_minutes } = doc.data();
-  //     session.push({
-  //       key: doc.id,
-  //       user_id,
-  //       location_id,
-  //       start,
-  //       end,
-  //       interval_minutes
-  //     });
-
-  //     this.setState({
-  //       session,
-  //       isLoading: false
-  //     });
-  //   }
-  // };
+  constructor() {
+    super();
+    this.ref = firebase.firestore().collection("session");
+  }
 
   startSession() {
     this.ref
@@ -73,8 +32,17 @@ class ManageSession extends Component {
         console.error("Error adding document: ", error);
       });
   }
+
+  endSession() {
+    firebase
+      .firestore()
+      .collection("session")
+      .where("user_id", "==", this.props.userContext.user)
+      .update({ end: firebase.firestore.FieldValue.serverTimestamp() });
+  }
+
   render() {
-    console.log(this.state);
+    console.log(this.props.userContext.user);
 
     return (
       <ScrollView style={styles.container}>
@@ -90,10 +58,7 @@ class ManageSession extends Component {
         <ListItem
           title="End Session"
           leftIcon={{ name: "stop-circle", type: "font-awesome", color: "red" }}
-        />
-        <ListItem
-          title={this.state.user_id}
-          leftIcon={{ name: "stop-circle", type: "font-awesome", color: "red" }}
+          onPress={() => this.endSession()}
         />
       </ScrollView>
     );
