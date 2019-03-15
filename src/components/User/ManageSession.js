@@ -13,51 +13,51 @@ import firebase from "firebase";
 import { withUser } from "../Auth/Context/withUser";
 
 class ManageSession extends Component {
-  constructor(props) {
-    super(props);
-    this.ref = firebase
-      .firestore()
-      .collection("session")
-      .where("user_id", "==", this.props.userContext.user);
-    this.unsubscribe = null;
-    this.state = {
-      isLoading: true,
-      session: [],
+  // constructor(props) {
+  //   super(props);
+  //   this.ref = firebase
+  //     .firestore()
+  //     .collection("session")
+  //     .where("user_id", "==", this.props.userContext.user);
+  //   this.unsubscribe = null;
+  //   this.state = {
+  //     isLoading: true,
+  //     session: [],
 
-      dialogVisible: false
-    };
-  }
+  //     dialogVisible: false
+  //   };
+  // }
 
-  componentWillMount() {
-    this.index = 0;
-  }
+  // componentWillMount() {
+  //   this.index = 0;
+  // }
 
-  componentDidMount() {
-    this.state = this.unsubscribe = this.ref.onSnapshot(
-      this.onCollectionUpdate
-    );
-  }
+  // componentDidMount() {
+  //   this.state = this.unsubscribe = this.ref.onSnapshot(
+  //     this.onCollectionUpdate
+  //   );
+  // }
 
-  onCollectionUpdate = doc => {
-    if (doc) {
-      console.log(doc);
-      const session = [];
-      const { user_id, location_id, start, end, interval_minutes } = doc.data();
-      session.push({
-        key: doc.id,
-        user_id,
-        location_id,
-        start,
-        end,
-        interval_minutes
-      });
+  // onCollectionUpdate = doc => {
+  //   if (doc) {
+  //     console.log(doc);
+  //     const session = [];
+  //     const { user_id, location_id, start, end, interval_minutes } = doc.data();
+  //     session.push({
+  //       key: doc.id,
+  //       user_id,
+  //       location_id,
+  //       start,
+  //       end,
+  //       interval_minutes
+  //     });
 
-      this.setState({
-        session,
-        isLoading: false
-      });
-    }
-  };
+  //     this.setState({
+  //       session,
+  //       isLoading: false
+  //     });
+  //   }
+  // };
 
   startSession() {
     this.ref
