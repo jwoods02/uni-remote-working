@@ -37,7 +37,11 @@ export default class ActiveCodeHome extends Component {
 
   constructor() {
     super();
-    this.ref = firebase.firestore().collection("locations");
+    this.ref = firebase
+      .firestore()
+      .collection("locations")
+      .doc("DPLWA6yt1DEuOGtDUDgv")
+      .get();
     this.unsubscribe = null;
     this.state = {
       isLoading: true,
@@ -77,17 +81,18 @@ export default class ActiveCodeHome extends Component {
   }
 
   onCollectionUpdate = querySnapshot => {
+    console.log(querySnapshot);
     const markers = [];
-    querySnapshot.forEach(doc => {
-      const { title, description, image, coordinate } = doc.data();
-      markers.push({
-        key: doc.id,
-        title,
-        description,
-        image,
-        coordinate
-      });
-    });
+    // querySnapshot.forEach(doc => {
+    //   const { title, description, image, coordinate } = doc.data();
+    //   markers.push({
+    //     key: doc.id,
+    //     title,
+    //     description,
+    //     image,
+    //     coordinate
+    //   });
+    // });
     this.setState({
       markers,
       isLoading: false
