@@ -129,19 +129,45 @@ export default class ActiveCodeHome extends Component {
         <View
           style={{
             backgroundColor: "white",
-            maxHeight: 100,
+            maxHeight: 80,
             borderBottomWidth: 1,
             borderBottomColor: "#dddddd",
             flex: 1,
             flexDirection: "column",
-            justifyContent: "space-between"
+            justifyContent: "space-between",
+            paddingLeft: 5,
+            paddingRight: 5
           }}
         >
           <View
             style={{
               flex: 1,
               flexDirection: "row",
-              justifyContent: "space-between"
+              justifyContent: "space-between",
+              paddingTop: 8,
+              paddingLeft: 8,
+              paddingRight: 8
+            }}
+          >
+            <Text
+              style={{
+                color: "#8A54A2",
+                fontWeight: "700",
+                fontSize: 24
+              }}
+            >
+              Cardiff Library
+            </Text>
+            <Text style={{ fontWeight: "700", fontSize: 24 }}>
+              {this.props.navigation.state.params.code}
+            </Text>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center"
             }}
           >
             <Button
@@ -149,104 +175,88 @@ export default class ActiveCodeHome extends Component {
               title="X Remove code"
               color="#FF0000"
             />
-            <Text style={{ fontSize: 20, paddingTop: 8 }}>Cardiff Library</Text>
-            <Button onPress={this._feedback} title="Feedback" />
-          </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              paddingLeft: 8,
-              paddingRight: 8
-            }}
-          >
-            <Text style={{ fontWeight: "bold", fontSize: 30 }}>
-              {this.props.navigation.state.params.code}
+            <Text style={{ fontSize: 20, paddingRight: 10 }}>
+              Valid for: 24hr
             </Text>
-            <Text style={{ fontSize: 20 }}>Valid for: 24hr</Text>
           </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              justifyContent: "space-between"
-            }}
-          >
-            <Button onPress={this._howTo} title="How do I use this code?" />
-          </View>
-        </View>
-        <View
-          style={{
-            minHeight: 300
-          }}
-        >
-          <MapViewItems //the map
-            region={this.state.region}
-            markers={this.state.markers}
-            animation={this.animation}
-            navigation={this.props.navigation} // not sure why you have to pass navigation as prop to children components.
-          />
         </View>
         <ScrollView
           style={{
             flex: 1,
             flexDirection: "column",
             borderTopWidth: 1,
-            borderTopColor: "#dddddd",
-            paddingLeft: 5
+            borderTopColor: "#dddddd"
           }}
         >
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              paddingBottom: 10,
-              paddingTop: 5
-            }}
-          >
-            Cardiff Library
-          </Text>
-          <Text style={{ fontSize: 15, paddingBottom: 10 }}>description</Text>
+          <Button onPress={this._howTo} title="How do I use this code?" />
           <View
             style={{
-              flex: 1,
-              flexDirection: "row",
-              justifyContent: "center",
-              paddingBottom: 10
+              minHeight: 300
             }}
           >
-            <View
-              style={{
-                paddingRight: 5,
-                borderRightWidth: 2,
-                borderRightColor: "#dddddd"
-              }}
-            >
-              <Text>10 desks</Text>
-            </View>
-            <View
-              style={{
-                paddingLeft: 5,
-                paddingRight: 5,
-                borderRightColor: "#dddddd",
-                borderRightWidth: 2
-              }}
-            >
-              <Text>24 / 7 Access</Text>
-            </View>
-            <View style={{ paddingLeft: 5 }}>
-              <Text>Kitchen Area</Text>
-            </View>
+            <MapViewItems //the map
+              region={this.state.region}
+              markers={this.state.markers}
+              animation={this.animation}
+              navigation={this.props.navigation} // not sure why you have to pass navigation as prop to children components.
+            />
           </View>
-          <Text>
-            Information - Lorem ipsum dolor sit amet, consectetur adipiscing
-            elit. Nam sollicitudin, tortor vitae ultrices eleifend, risus erat
-            blandit sem, quis cursus orci lorem eget odio. Aliquam nulla arcu,
-            sagittis non hendrerit interdum, feugiat vel sapien. Proin at tellus
-            risus. Ut scelerisque non odio eget convallis. Aenean nec accumsan
-            libero. Nunc hendrerit est eu varius viverra.
-          </Text>
+          <View style={{ padding: 8 }}>
+            <Text
+              style={{
+                color: "#8A54A2",
+                fontSize: 20,
+                fontWeight: "700",
+                paddingBottom: 10,
+                paddingTop: 5
+              }}
+            >
+              Cardiff Library
+            </Text>
+            <Text style={{ fontSize: 15, paddingBottom: 10, color: "gray" }}>
+              description
+            </Text>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                justifyContent: "center",
+                paddingBottom: 10
+              }}
+            >
+              <View
+                style={{
+                  paddingRight: 5,
+                  borderRightWidth: 2,
+                  borderRightColor: "#dddddd"
+                }}
+              >
+                <Text>10 desks</Text>
+              </View>
+              <View
+                style={{
+                  paddingLeft: 5,
+                  paddingRight: 5,
+                  borderRightColor: "#dddddd",
+                  borderRightWidth: 2
+                }}
+              >
+                <Text>24 / 7 Access</Text>
+              </View>
+              <View style={{ paddingLeft: 5 }}>
+                <Text>Kitchen Area</Text>
+              </View>
+            </View>
+            <Text>
+              Information - Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit. Nam sollicitudin, tortor vitae ultrices eleifend, risus erat
+              blandit sem, quis cursus orci lorem eget odio. Aliquam nulla arcu,
+              sagittis non hendrerit interdum, feugiat vel sapien. Proin at
+              tellus risus. Ut scelerisque non odio eget convallis. Aenean nec
+              accumsan libero. Nunc hendrerit est eu varius viverra.
+            </Text>
+          </View>
+
           <Dialog.Container visible={this.state.dialogVisible}>
             <Dialog.Description>
               Are you sure you want to remove your access code?
