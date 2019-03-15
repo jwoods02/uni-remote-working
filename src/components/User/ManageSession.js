@@ -13,46 +13,49 @@ import firebase from "firebase";
 import { withUser } from "../Auth/Context/withUser";
 
 class ManageSession extends Component {
-  constructor() {
-    super();
-    this.ref = firebase.firestore().collection("session");
+  constructor(props) {
+    super(props);
+    this.ref = firebase
+      .firestore()
+      .collection("session")
+      .where("user_id", "==", this.props.userContext.user);
+    this.unsubscribe = null;
     this.state = {
-      user_id: "",
-      location_id: "",
-      start: null,
-      end: null,
-      interval_minutes: null
+      isLoading: true,
+      session: [],
+
+      dialogVisible: false
     };
   }
 
-  componentDidMount() {
-    this.onPaymentSuccess();
+  componentWillMount() {
+    this.index = 0;
   }
 
-  onPaymentSuccess = async token => {
-    try {
-      const querySnapshot = await firebase
-        .firestore()
-        .collection("session")
-        .where("user_id", "==", this.props.userContext.user)
-        .get();
-      if (querySnapshot != null) {
-        querySnapshot.forEach(doc => {
-          let session = doc.data();
-          // console.log(session);
-        });
-      }
-      this.setState({
-        user_id: querySnapshot.doc.data.user_id,
-        location_id: querySnapshot.doc.data.location_id,
-        start: querySnapshot.doc.data.start,
-        end: querySnapshot.doc.data.end,
-        interval_minutes: querySnapshot.doc.data.interval_minutes
+  componentDidMount() {
+    this.state = this.unsubscribe = this.ref.onSnapshot(
+      this.onCollectionUpdate
+    );
+  }
+
+  onCollectionUpdate = doc => {
+    if (doc) {
+      console.log(doc);
+      const session = [];
+      const { user_id, location_id, start, end, interval_minutes } = doc.data();
+      session.push({
+        key: doc.id,
+        user_id,
+        location_id,
+        start,
+        end,
+        interval_minutes
       });
 
-      // console.log(querySnapshot);
-    } catch (err) {
-      console.log(err);
+      this.setState({
+        session,
+        isLoading: false
+      });
     }
   };
 
@@ -71,7 +74,6 @@ class ManageSession extends Component {
       });
   }
   render() {
-    // console.log(this.props.userContext.user);
     console.log(this.state);
 
     return (
