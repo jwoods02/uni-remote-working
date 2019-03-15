@@ -17,7 +17,7 @@ class ManageSession extends Component {
     super();
     this.ref = firebase.firestore().collection("session");
     this.state = {
-      user_id: this.props.userContext.user,
+      user_id: "",
       location_id: "",
       start: null,
       end: null,
@@ -26,7 +26,16 @@ class ManageSession extends Component {
     };
   }
 
-  startSession = {};
+  startSession() {
+    console.log("executed");
+    const querySnapshot = firebase
+      .firestore()
+      .collection("session")
+      .where("user_id", "==", "kNtxHB4eWaZ8VGb2NjSUTsYxIL23")
+      .get();
+
+    console.log(querySnapshot);
+  }
 
   async componentWillMount() {
     await Font.loadAsync({
@@ -37,6 +46,38 @@ class ManageSession extends Component {
     });
 
     this.setState({ isLoading: false });
+  }
+
+  componentDidMount() {
+    console.log(this.props.userContext.user);
+    console.log(
+      firebase
+        .firestore()
+        .collection("session")
+        .where("user_id", "==", "kNtxHB4eWaZ8VGb2NjSUTsYxIL23")
+        .get()
+    );
+    // .firestore()
+    // .collection("session")
+    // .where("user_id", "==", "kNtxHB4eWaZ8VGb2NjSUTsYxIL23")
+    // .get()
+    // .then(doc => {
+    //   if (doc.exists) {
+    //     const session = doc.data();
+    //     this.setState({
+    //       key: doc.id,
+    //       user_id: session.user_id,
+    //       location_id: session.location_id,
+    //       start: session.start,
+    //       end: session.end,
+    //       interval_minutes: session.interval_minutes,
+    //       isLoading: true
+    //     });
+    //     console.log(this.state);
+    //   } else {
+    //     console.log("No such document!");
+    //   }
+    // });
   }
 
   render() {
@@ -57,6 +98,7 @@ class ManageSession extends Component {
             type: "font-awesome",
             color: "green"
           }}
+          onPress={() => this.startSession}
         />
         <ListItem
           title="End Session"
