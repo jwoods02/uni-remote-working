@@ -158,7 +158,7 @@ export default class ActiveCodeHome extends Component {
                 fontSize: 24
               }}
             >
-              Cardiff Library
+              {this.state.markers[0].title}
             </Text>
             <Text style={{ fontWeight: "700", fontSize: 24 }}>
               {this.props.navigation.state.params.code}
@@ -213,10 +213,10 @@ export default class ActiveCodeHome extends Component {
                 paddingTop: 5
               }}
             >
-              Cardiff Library
+              {this.state.markers[0].title}
             </Text>
             <Text style={{ fontSize: 15, paddingBottom: 10, color: "gray" }}>
-              description
+              {this.state.markers[0].description}
             </Text>
             <View
               style={{
