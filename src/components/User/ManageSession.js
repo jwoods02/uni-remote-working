@@ -12,14 +12,21 @@ import { FontAwesome } from "@expo/vector-icons";
 import firebase from "firebase";
 import { withUser } from "../Auth/Context/withUser";
 
-class Settings extends Component {
+class ManageSession extends Component {
   constructor() {
     super();
-    this.unsubscribe = null;
+    this.ref = firebase.firestore().collection("session");
     this.state = {
+      user_id: this.props.userContext.user,
+      location_id: "",
+      start: null,
+      end: null,
+      interval_minutes: null,
       isLoading: true
     };
   }
+
+  startSession = {};
 
   async componentWillMount() {
     await Font.loadAsync({
@@ -31,15 +38,9 @@ class Settings extends Component {
 
     this.setState({ isLoading: false });
   }
-  signOutUser = async () => {
-    try {
-      await firebase.auth().signOut();
-      this.props.navigation.navigate("LandingPage");
-    } catch (e) {
-      console.log(e);
-    }
-  };
+
   render() {
+    console.log(this.props.userContext.user);
     if (this.state.isLoading) {
       return (
         <View style={styles.activity}>
@@ -50,15 +51,16 @@ class Settings extends Component {
     return (
       <ScrollView style={styles.container}>
         <ListItem
-          title="Manage Session"
-          leftIcon={{ name: "tasks", type: "font-awesome", color: "grey" }}
-          onPress={() => this.props.navigation.navigate("ManageSession")}
+          title="Start Session"
+          leftIcon={{
+            name: "play-circle",
+            type: "font-awesome",
+            color: "green"
+          }}
         />
-
         <ListItem
-          title="Log Out"
-          leftIcon={{ name: "sign-out", type: "font-awesome", color: "red" }}
-          onPress={() => this.signOutUser()}
+          title="End Session"
+          leftIcon={{ name: "stop-circle", type: "font-awesome", color: "red" }}
         />
       </ScrollView>
     );
@@ -86,4 +88,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withUser(Settings);
+export default withUser(ManageSession);
