@@ -81,13 +81,14 @@ export default class ActiveCodeHome extends Component {
 
   onCollectionUpdate = doc => {
     const markers = [];
-    const { title, description, image, coordinate } = doc.data();
+    const { title, description, image, coordinate, desks } = doc.data();
     markers.push({
       key: doc.id,
       title,
       description,
       image,
-      coordinate
+      coordinate,
+      desks
     });
 
     this.setState({
@@ -233,7 +234,7 @@ export default class ActiveCodeHome extends Component {
                   borderRightColor: "#dddddd"
                 }}
               >
-                <Text>10 desks</Text>
+                <Text>{this.state.markers[0].desks} desks</Text>
               </View>
               <View
                 style={{
