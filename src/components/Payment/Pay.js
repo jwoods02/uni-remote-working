@@ -1,32 +1,50 @@
 import React, { Component } from "react";
 import StripeCheckout from "./StripeCheckout";
 import axios from "axios";
-
-const email = "new2@gmail.com";
+import firebase from "firebase";
 
 export default class Pay extends Component {
+  constructor(props) {
+    super(props);
+
+    const { navigation } = this.props;
+    const email = navigation.getParam("email", "");
+
+    this.state = { email };
+  }
+
   onPaymentSuccess = async token => {
-    console.log(token);
-    const newCustomer = await axios.post("/api/pay/customer", {
-      token,
-      email
-    });
-    console.log("CUSTOMER ID:", newCustomer.data.id);
+    try {
+      const newCustomer = await axios.post("/api/pay/customer", {
+        token,
+        email: this.state.email
+      });
 
-    const newSubscription = await axios.post("api/pay/subscription", {
-      customer: newCustomer.data.id
-    });
+      await axios.post("api/pay/subscription", {
+        customer: newCustomer.data.id
+      });
 
-    console.log("Subscription:", newSubscription.data.id);
+      const querySnapshot = await firebase
+        .firestore()
+        .collection("users")
+        .where("email", "==", this.state.email)
+        .get();
 
-    this.props.navigation.navigate("Settings");
+      querySnapshot.forEach(doc => {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(doc.id)
+          .update({ stripe_customer: newCustomer.data.id });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
+    this.props.navigation.navigate("Home");
   };
 
-  onClose = () => {
-    console.log("LOGGED");
-
-    this.props.navigation.navigate("Settings");
-  };
+  onClose = () => {};
   render() {
     return (
       <StripeCheckout
@@ -37,7 +55,7 @@ export default class Pay extends Component {
         description="Test"
         currency="GBP"
         allowRememberMe={false}
-        prepopulatedEmail={email}
+        prepopulatedEmail={this.state.email}
         onClose={this.onClose}
         onPaymentSuccess={this.onPaymentSuccess}
       />
