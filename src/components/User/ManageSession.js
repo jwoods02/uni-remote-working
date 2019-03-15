@@ -16,79 +16,25 @@ class ManageSession extends Component {
   constructor() {
     super();
     this.ref = firebase.firestore().collection("session");
-    this.state = {
-      user_id: "",
-      location_id: "",
-      start: null,
-      end: null,
-      interval_minutes: null,
-      isLoading: true
-    };
   }
 
   startSession() {
-    console.log("executed");
-    const querySnapshot = firebase
-      .firestore()
-      .collection("session")
-      .where("user_id", "==", "kNtxHB4eWaZ8VGb2NjSUTsYxIL23")
-      .get();
+    this.ref
+      .add({
+        user_id: this.props.userContext.user,
+        location_id: "w91B6KDWcF04jsybJgAP",
+        start: firebase.firestore.FieldValue.serverTimestamp(),
+        end: null,
+        interval_minutes: null
+      })
 
-    console.log(querySnapshot);
+      .catch(error => {
+        console.error("Error adding document: ", error);
+      });
   }
-
-  async componentWillMount() {
-    await Font.loadAsync({
-      FontAwesome: require("@expo/vector-icons/fonts/FontAwesome.ttf")
-    });
-    await Font.loadAsync({
-      "Material Icons": require("@expo/vector-icons/fonts/MaterialIcons.ttf")
-    });
-
-    this.setState({ isLoading: false });
-  }
-
-  componentDidMount() {
-    console.log(this.props.userContext.user);
-    console.log(
-      firebase
-        .firestore()
-        .collection("session")
-        .where("user_id", "==", "kNtxHB4eWaZ8VGb2NjSUTsYxIL23")
-        .get()
-    );
-    // .firestore()
-    // .collection("session")
-    // .where("user_id", "==", "kNtxHB4eWaZ8VGb2NjSUTsYxIL23")
-    // .get()
-    // .then(doc => {
-    //   if (doc.exists) {
-    //     const session = doc.data();
-    //     this.setState({
-    //       key: doc.id,
-    //       user_id: session.user_id,
-    //       location_id: session.location_id,
-    //       start: session.start,
-    //       end: session.end,
-    //       interval_minutes: session.interval_minutes,
-    //       isLoading: true
-    //     });
-    //     console.log(this.state);
-    //   } else {
-    //     console.log("No such document!");
-    //   }
-    // });
-  }
-
   render() {
     console.log(this.props.userContext.user);
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.activity}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      );
-    }
+
     return (
       <ScrollView style={styles.container}>
         <ListItem
@@ -98,7 +44,7 @@ class ManageSession extends Component {
             type: "font-awesome",
             color: "green"
           }}
-          onPress={() => this.startSession}
+          onPress={() => this.startSession()}
         />
         <ListItem
           title="End Session"
