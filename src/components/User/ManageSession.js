@@ -16,7 +16,45 @@ class ManageSession extends Component {
   constructor() {
     super();
     this.ref = firebase.firestore().collection("session");
+    this.state = {
+      user_id: "",
+      location_id: "",
+      start: null,
+      end: null,
+      interval_minutes: null
+    };
   }
+
+  componentDidMount() {
+    this.onPaymentSuccess();
+  }
+
+  onPaymentSuccess = async token => {
+    try {
+      const querySnapshot = await firebase
+        .firestore()
+        .collection("session")
+        .where("user_id", "==", this.props.userContext.user)
+        .get();
+      if (querySnapshot != null) {
+        querySnapshot.forEach(doc => {
+          let session = doc.data();
+          // console.log(session);
+        });
+      }
+      this.setState({
+        user_id: querySnapshot.doc.data.user_id,
+        location_id: querySnapshot.doc.data.location_id,
+        start: querySnapshot.doc.data.start,
+        end: querySnapshot.doc.data.end,
+        interval_minutes: querySnapshot.doc.data.interval_minutes
+      });
+
+      // console.log(querySnapshot);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   startSession() {
     this.ref
@@ -33,7 +71,8 @@ class ManageSession extends Component {
       });
   }
   render() {
-    console.log(this.props.userContext.user);
+    // console.log(this.props.userContext.user);
+    console.log(this.state);
 
     return (
       <ScrollView style={styles.container}>
@@ -48,6 +87,10 @@ class ManageSession extends Component {
         />
         <ListItem
           title="End Session"
+          leftIcon={{ name: "stop-circle", type: "font-awesome", color: "red" }}
+        />
+        <ListItem
+          title={this.state.user_id}
           leftIcon={{ name: "stop-circle", type: "font-awesome", color: "red" }}
         />
       </ScrollView>
