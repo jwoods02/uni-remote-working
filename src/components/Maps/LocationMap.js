@@ -35,6 +35,8 @@ export const getCurrentLocation = () => {
 class LocationMap extends Component {
   constructor() {
     super();
+    this.updateRegionFromSearch = this.updateRegionFromSearch.bind(this);
+
     this.ref = firebase.firestore().collection("locations");
     this.unsubscribe = null;
     this.state = {
@@ -91,12 +93,16 @@ class LocationMap extends Component {
     });
   };
 
-  // static navigationOptions = {
-  //   tabBarIcon: ({ focused }) => (
-  //     <Text style={focused ? { color: "#fff" } : { color: "#000" }}>Hi</Text>
-  //   ),
-  //   activeTintColor: "#fff"
-  // };
+  updateRegionFromSearch(lat, lng) {
+    this.setState({
+      region: {
+        latitude: lat,
+        longitude: lng,
+        latitudeDelta: 0.03,
+        longitudeDelta: 0.03
+      }
+    });
+  }
 
   render() {
     if (this.state.isLoading) {
@@ -116,8 +122,13 @@ class LocationMap extends Component {
           navigation={this.props.navigation} // not sure why you have to pass navigation as prop to children components.
         />
         <Callout>
-          {/* search */}
-          <MapSearch />
+          <View style={styles.searchContainer}>
+            {/* search */}
+            <MapSearch
+              updateRegionFromSearch={this.updateRegionFromSearch}
+              style={styles.callout}
+            />
+          </View>
         </Callout>
         {/* animation */}
         <Animated.ScrollView
@@ -160,6 +171,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingVertical: 10
+  },
+  searchContainer: {
+    width: width,
+    flexDirection: "row",
+    justifyContent: "center"
   },
   endPadding: {
     paddingRight: width - CARD_WIDTH
