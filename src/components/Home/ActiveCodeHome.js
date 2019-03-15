@@ -35,12 +35,12 @@ export const getCurrentLocation = () => {
 export default class ActiveCodeHome extends Component {
   static navigationOptions = { title: "Home", headerLeft: null };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.ref = firebase
       .firestore()
       .collection("locations")
-      .doc("DPLWA6yt1DEuOGtDUDgv");
+      .doc(props.navigation.state.params.docId);
     this.unsubscribe = null;
     this.state = {
       isLoading: true,

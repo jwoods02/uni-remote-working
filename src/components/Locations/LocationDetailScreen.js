@@ -67,7 +67,10 @@ class LocationDetailScreen extends Component {
 
   handleRequest = () => {
     this.setState({ dialogVisible: false });
-    this.props.navigation.navigate("ActiveCodeHome", { code: "1234" });
+    this.props.navigation.navigate("ActiveCodeHome", {
+      code: "1234",
+      docId: this.state.key
+    });
   };
 
   render() {
