@@ -122,8 +122,13 @@ class LocationMap extends Component {
           navigation={this.props.navigation} // not sure why you have to pass navigation as prop to children components.
         />
         <Callout>
-          {/* search */}
-          <MapSearch updateRegionFromSearch={this.updateRegionFromSearch} />
+          <View style={styles.searchContainer}>
+            {/* search */}
+            <MapSearch
+              updateRegionFromSearch={this.updateRegionFromSearch}
+              style={styles.callout}
+            />
+          </View>
         </Callout>
         {/* animation */}
         <Animated.ScrollView
@@ -166,6 +171,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingVertical: 10
+  },
+  searchContainer: {
+    width: width,
+    flexDirection: "row",
+    justifyContent: "center"
   },
   endPadding: {
     paddingRight: width - CARD_WIDTH
