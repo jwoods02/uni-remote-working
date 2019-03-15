@@ -50,7 +50,6 @@ class Show extends Component {
   }
 
   render() {
-    console.log(this.state.location);
     return (
       <div>
         <div className="container">
