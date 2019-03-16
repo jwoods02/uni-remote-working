@@ -41,6 +41,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     paddingBottom: 10,
     color: "gray"
+  },
+  firstInfoRow: {
+    paddingTop: 8,
+    paddingLeft: 8,
+    paddingRight: 8
   }
 });
 

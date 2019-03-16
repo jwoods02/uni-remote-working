@@ -131,17 +131,7 @@ export default class ActiveCodeHome extends Component {
           style={[styles.headerContainer, flex.column, justify.spaceBetween]}
         >
           {/* First row of header */}
-          <View
-            style={[
-              justify.spaceBetween,
-              flex.row,
-              {
-                paddingTop: 8,
-                paddingLeft: 8,
-                paddingRight: 8
-              }
-            ]}
-          >
+          <View style={[justify.spaceBetween, flex.row, styles.firstInfoRow]}>
             <Text style={[styles.title, colours.textPurple]}>
               {this.state.markers[0].title}
             </Text>
