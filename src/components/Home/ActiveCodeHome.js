@@ -60,6 +60,7 @@ export default class ActiveCodeHome extends Component {
     this.index = 0;
     this.animation = new Animated.Value(0);
   }
+
   componentDidMount() {
     this.state = this.unsubscribe = this.ref.onSnapshot(
       this.onCollectionUpdate
@@ -97,12 +98,10 @@ export default class ActiveCodeHome extends Component {
     });
   };
 
-  _feedback() {
-    Alert.alert("This is where feedback will be handled");
-  }
-
   _howTo() {
-    Alert.alert("This is where how to will be handled");
+    Alert.alert(
+      "The code in the top right of the screen is used to enter the building. When you enter the building, you will begin to be charged."
+    );
   }
 
   _removeCode = () => {
@@ -163,20 +162,9 @@ export default class ActiveCodeHome extends Component {
             </Text>
           </View>
         </View>
-        <ScrollView
-          style={{
-            flex: 1,
-            flexDirection: "column",
-            borderTopWidth: 1,
-            borderTopColor: "#dddddd"
-          }}
-        >
+        <ScrollView style={styles.scrollContainer}>
           <Button onPress={this._howTo} title="How do I use this code?" />
-          <View
-            style={{
-              minHeight: 300
-            }}
-          >
+          <View style={styles.mapContainer}>
             <MapViewItems //the map
               region={this.state.region}
               markers={this.state.markers}
@@ -185,44 +173,21 @@ export default class ActiveCodeHome extends Component {
             />
           </View>
           <View style={{ padding: 8 }}>
-            <Text
-              style={{
-                color: "#8A54A2",
-                fontSize: 20,
-                fontWeight: "700",
-                paddingBottom: 10,
-                paddingTop: 5
-              }}
-            >
-              {this.state.markers[0].title}
-            </Text>
+            <Text style={styles.infoTitle}>{this.state.markers[0].title}</Text>
             <Text style={{ fontSize: 15, paddingBottom: 10, color: "gray" }}>
               {this.state.markers[0].description}
             </Text>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                justifyContent: "center",
-                paddingBottom: 10
-              }}
-            >
-              <View
-                style={{
-                  paddingRight: 5,
-                  borderRightWidth: 2,
-                  borderRightColor: "#dddddd"
-                }}
-              >
+            <View style={styles.infoContainer}>
+              <View style={styles.infoBorderRight}>
                 <Text>{this.state.markers[0].desks} desks</Text>
               </View>
               <View
-                style={{
-                  paddingLeft: 5,
-                  paddingRight: 5,
-                  borderRightColor: "#dddddd",
-                  borderRightWidth: 2
-                }}
+                style={[
+                  styles.infoBorderRight,
+                  {
+                    paddingLeft: 5
+                  }
+                ]}
               >
                 <Text>24 / 7 Access</Text>
               </View>
@@ -257,16 +222,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  scrollView: {
-    position: "absolute",
-    bottom: 30,
-    left: 0,
-    right: 0,
-    paddingVertical: 10
-  },
-  endPadding: {
-    paddingRight: width - CARD_WIDTH
-  },
   headerContainer: {
     backgroundColor: "white",
     maxHeight: 80,
@@ -288,6 +243,33 @@ const styles = StyleSheet.create({
     color: "#8A54A2",
     fontWeight: "700",
     fontSize: 24
+  },
+  infoBorderRight: {
+    paddingRight: 5,
+    borderRightWidth: 2,
+    borderRightColor: "gray"
+  },
+  infoContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    paddingBottom: 10
+  },
+  infoTitle: {
+    color: "#8A54A2",
+    fontSize: 20,
+    fontWeight: "700",
+    paddingBottom: 10,
+    paddingTop: 5
+  },
+  scrollContainer: {
+    flex: 1,
+    flexDirection: "column",
+    borderTopWidth: 1,
+    borderTopColor: "#dddddd"
+  },
+  mapContainer: {
+    minHeight: 300
   }
 });
 
