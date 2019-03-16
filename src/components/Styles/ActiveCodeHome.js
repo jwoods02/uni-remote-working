@@ -9,14 +9,9 @@ const styles = StyleSheet.create({
     maxHeight: 80,
     borderBottomWidth: 1,
     borderBottomColor: "#dddddd",
-    justifyContent: "space-between",
     paddingLeft: 5,
     paddingRight: 5
   },
-  headerRow: {
-    justifyContent: "space-between"
-  },
-  code: { fontWeight: "700", fontSize: 24 },
   title: {
     fontWeight: "700",
     fontSize: 24
@@ -27,7 +22,6 @@ const styles = StyleSheet.create({
     borderRightColor: "gray"
   },
   infoContainer: {
-    justifyContent: "center",
     paddingBottom: 10
   },
   infoTitle: {

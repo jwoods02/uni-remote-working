@@ -16,4 +16,12 @@ const flex = StyleSheet.create({
   }
 });
 
-export { colours, flex };
+const justify = StyleSheet.create({
+  spaceBetween: { justifyContent: "space-between" }
+});
+
+const align = StyleSheet.create({
+  center: { alignItems: "center" }
+});
+
+export { colours, flex, justify, align };

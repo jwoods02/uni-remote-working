@@ -20,7 +20,7 @@ import MapViewItems from "../Maps/MapComponents/MapViewItems";
 import Dialog from "react-native-dialog";
 
 import { styles } from "../Styles/ActiveCodeHome";
-import { colours, flex } from "../Styles/Global";
+import { colours, flex, justify, align } from "../Styles/Global";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
@@ -131,10 +131,12 @@ export default class ActiveCodeHome extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={[styles.headerContainer, flex.column]}>
+        <View
+          style={[styles.headerContainer, flex.column, justify.spaceBetween]}
+        >
           <View
             style={[
-              styles.headerRow,
+              justify.spaceBetween,
               flex.row,
               {
                 paddingTop: 8,
@@ -146,13 +148,13 @@ export default class ActiveCodeHome extends Component {
             <Text style={[styles.title, colours.textPurple]}>
               {this.state.markers[0].title}
             </Text>
-            <Text style={styles.code}>
+            <Text style={styles.title}>
               {this.props.navigation.state.params.code}
             </Text>
           </View>
           <View
             style={[
-              styles.headerRow,
+              justify.spaceBetween,
               flex.row,
               {
                 alignItems: "center"
@@ -186,7 +188,7 @@ export default class ActiveCodeHome extends Component {
             <Text style={{ fontSize: 15, paddingBottom: 10, color: "gray" }}>
               {this.state.markers[0].description}
             </Text>
-            <View style={[styles.infoContainer, flex.row]}>
+            <View style={[styles.infoContainer, flex.row, align.center]}>
               <View style={styles.infoBorderRight}>
                 <Text>{this.state.markers[0].desks} desks</Text>
               </View>
