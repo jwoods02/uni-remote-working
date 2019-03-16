@@ -19,6 +19,9 @@ import firebase from "firebase";
 import MapViewItems from "../Maps/MapComponents/MapViewItems";
 import Dialog from "react-native-dialog";
 
+import { styles } from "../Styles/ActiveCodeHome";
+import { colours, flex } from "../Styles/Global";
+
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
@@ -128,10 +131,11 @@ export default class ActiveCodeHome extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.headerContainer}>
+        <View style={[styles.headerContainer, flex.column]}>
           <View
             style={[
               styles.headerRow,
+              flex.row,
               {
                 paddingTop: 8,
                 paddingLeft: 8,
@@ -139,7 +143,9 @@ export default class ActiveCodeHome extends Component {
               }
             ]}
           >
-            <Text style={styles.title}>{this.state.markers[0].title}</Text>
+            <Text style={[styles.title, colours.textPurple]}>
+              {this.state.markers[0].title}
+            </Text>
             <Text style={styles.code}>
               {this.props.navigation.state.params.code}
             </Text>
@@ -147,6 +153,7 @@ export default class ActiveCodeHome extends Component {
           <View
             style={[
               styles.headerRow,
+              flex.row,
               {
                 alignItems: "center"
               }
@@ -162,7 +169,7 @@ export default class ActiveCodeHome extends Component {
             </Text>
           </View>
         </View>
-        <ScrollView style={styles.scrollContainer}>
+        <ScrollView style={[styles.scrollContainer, flex.column]}>
           <Button onPress={this._howTo} title="How do I use this code?" />
           <View style={styles.mapContainer}>
             <MapViewItems //the map
@@ -173,11 +180,13 @@ export default class ActiveCodeHome extends Component {
             />
           </View>
           <View style={{ padding: 8 }}>
-            <Text style={styles.infoTitle}>{this.state.markers[0].title}</Text>
+            <Text style={[styles.infoTitle, colours.textPurple]}>
+              {this.state.markers[0].title}
+            </Text>
             <Text style={{ fontSize: 15, paddingBottom: 10, color: "gray" }}>
               {this.state.markers[0].description}
             </Text>
-            <View style={styles.infoContainer}>
+            <View style={[styles.infoContainer, flex.row]}>
               <View style={styles.infoBorderRight}>
                 <Text>{this.state.markers[0].desks} desks</Text>
               </View>
@@ -217,60 +226,5 @@ export default class ActiveCodeHome extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  headerContainer: {
-    backgroundColor: "white",
-    maxHeight: 80,
-    borderBottomWidth: 1,
-    borderBottomColor: "#dddddd",
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "space-between",
-    paddingLeft: 5,
-    paddingRight: 5
-  },
-  headerRow: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between"
-  },
-  code: { fontWeight: "700", fontSize: 24 },
-  title: {
-    color: "#8A54A2",
-    fontWeight: "700",
-    fontSize: 24
-  },
-  infoBorderRight: {
-    paddingRight: 5,
-    borderRightWidth: 2,
-    borderRightColor: "gray"
-  },
-  infoContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    paddingBottom: 10
-  },
-  infoTitle: {
-    color: "#8A54A2",
-    fontSize: 20,
-    fontWeight: "700",
-    paddingBottom: 10,
-    paddingTop: 5
-  },
-  scrollContainer: {
-    flex: 1,
-    flexDirection: "column",
-    borderTopWidth: 1,
-    borderTopColor: "#dddddd"
-  },
-  mapContainer: {
-    minHeight: 300
-  }
-});
 
 AppRegistry.registerComponent("ActiveCodeHome", () => ActiveCodeHome);
