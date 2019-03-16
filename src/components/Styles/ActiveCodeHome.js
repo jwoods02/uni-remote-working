@@ -36,6 +36,11 @@ const styles = StyleSheet.create({
   },
   mapContainer: {
     minHeight: 300
+  },
+  description: {
+    fontSize: 15,
+    paddingBottom: 10,
+    color: "gray"
   }
 });
 

@@ -17,7 +17,8 @@ const flex = StyleSheet.create({
 });
 
 const justify = StyleSheet.create({
-  spaceBetween: { justifyContent: "space-between" }
+  spaceBetween: { justifyContent: "space-between" },
+  center: { justifyContent: "center" }
 });
 
 const align = StyleSheet.create({

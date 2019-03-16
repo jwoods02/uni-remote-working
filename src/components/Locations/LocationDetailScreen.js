@@ -69,7 +69,8 @@ class LocationDetailScreen extends Component {
     this.setState({ dialogVisible: false });
     this.props.navigation.navigate("ActiveCodeHome", {
       code: "1234",
-      docId: this.state.key
+      docId: this.state.key,
+      validFor: "24"
     });
   };
 

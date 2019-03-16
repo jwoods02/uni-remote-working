@@ -4,11 +4,9 @@
 import React, { Component } from "react";
 import {
   AppRegistry,
-  StyleSheet,
   Text,
   View,
   Animated,
-  Dimensions,
   ActivityIndicator,
   Button,
   Alert,
@@ -20,11 +18,7 @@ import MapViewItems from "../Maps/MapComponents/MapViewItems";
 import Dialog from "react-native-dialog";
 
 import { styles } from "../Styles/ActiveCodeHome";
-import { colours, flex, justify, align } from "../Styles/Global";
-
-const { width, height } = Dimensions.get("window");
-const CARD_HEIGHT = height / 4;
-const CARD_WIDTH = CARD_HEIGHT - 50;
+import { colours, flex, justify } from "../Styles/Global";
 
 export const getCurrentLocation = () => {
   return new Promise((resolve, reject) => {
@@ -85,14 +79,15 @@ export default class ActiveCodeHome extends Component {
 
   onCollectionUpdate = doc => {
     const markers = [];
-    const { title, description, image, coordinate, desks } = doc.data();
+    const { title, description, image, coordinate, desks, info } = doc.data();
     markers.push({
       key: doc.id,
       title,
       description,
       image,
       coordinate,
-      desks
+      desks,
+      info
     });
 
     this.setState({
@@ -131,9 +126,11 @@ export default class ActiveCodeHome extends Component {
 
     return (
       <View style={styles.container}>
+        {/* Header */}
         <View
           style={[styles.headerContainer, flex.column, justify.spaceBetween]}
         >
+          {/* First row of header */}
           <View
             style={[
               justify.spaceBetween,
@@ -152,6 +149,7 @@ export default class ActiveCodeHome extends Component {
               {this.props.navigation.state.params.code}
             </Text>
           </View>
+          {/* Second row of header */}
           <View
             style={[
               justify.spaceBetween,
@@ -167,10 +165,11 @@ export default class ActiveCodeHome extends Component {
               color="#FF0000"
             />
             <Text style={{ fontSize: 20, paddingRight: 10 }}>
-              Valid for: 24hr
+              Valid for: {this.props.navigation.state.params.validFor}hrs
             </Text>
           </View>
         </View>
+        {/* Start of body */}
         <ScrollView style={[styles.scrollContainer, flex.column]}>
           <Button onPress={this._howTo} title="How do I use this code?" />
           <View style={styles.mapContainer}>
@@ -178,17 +177,18 @@ export default class ActiveCodeHome extends Component {
               region={this.state.region}
               markers={this.state.markers}
               animation={this.animation}
-              navigation={this.props.navigation} // not sure why you have to pass navigation as prop to children components.
+              navigation={this.props.navigation}
             />
           </View>
+          {/* Information below map container */}
           <View style={{ padding: 8 }}>
             <Text style={[styles.infoTitle, colours.textPurple]}>
               {this.state.markers[0].title}
             </Text>
-            <Text style={{ fontSize: 15, paddingBottom: 10, color: "gray" }}>
+            <Text style={styles.description}>
               {this.state.markers[0].description}
             </Text>
-            <View style={[styles.infoContainer, flex.row, align.center]}>
+            <View style={[styles.infoContainer, flex.row, justify.center]}>
               <View style={styles.infoBorderRight}>
                 <Text>{this.state.markers[0].desks} desks</Text>
               </View>
@@ -206,16 +206,9 @@ export default class ActiveCodeHome extends Component {
                 <Text>Kitchen Area</Text>
               </View>
             </View>
-            <Text>
-              Information - Lorem ipsum dolor sit amet, consectetur adipiscing
-              elit. Nam sollicitudin, tortor vitae ultrices eleifend, risus erat
-              blandit sem, quis cursus orci lorem eget odio. Aliquam nulla arcu,
-              sagittis non hendrerit interdum, feugiat vel sapien. Proin at
-              tellus risus. Ut scelerisque non odio eget convallis. Aenean nec
-              accumsan libero. Nunc hendrerit est eu varius viverra.
-            </Text>
+            <Text>{this.state.markers[0].info}</Text>
           </View>
-
+          {/* Dialog box that shows when remove code btn is pressed */}
           <Dialog.Container visible={this.state.dialogVisible}>
             <Dialog.Description>
               Are you sure you want to remove your access code?
