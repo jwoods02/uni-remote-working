@@ -116,6 +116,12 @@ class LocationDetailScreen extends Component {
                     />
                   </Dialog.Container>
                 </View>
+                <Text style={{ fontWeight: "100", marginTop: 10 }}>
+                  {this.state.location.info}
+                </Text>
+                <Text style={{ fontWeight: "100", marginTop: 10 }}>
+                  Desks Available: {this.state.location.desks}
+                </Text>
               </View>
             </View>
           </ScrollView>
