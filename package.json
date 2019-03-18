@@ -12,10 +12,13 @@
     "ci": "eslint src/**/*.js && jest"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "roots": [
+      "src/",
+      "__mocks__"
+    ]
   },
   "dependencies": {
-    "babel-loader": "^8.0.5",
     "@expo/vector-icons": "^9.0.0",
     "axios": "^0.18.0",
     "babel-loader": "^8.0.0-beta.6",
@@ -41,6 +44,7 @@
     "react-native-swiper": "^1.5.14",
     "react-navigation": "^3.0.9",
     "react-navigation-material-bottom-tabs": "^1.0.0",
+    "react-test-renderer": "^16.8.4",
     "stripe": "^6.25.1"
   },
   "devDependencies": {
