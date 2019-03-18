@@ -16,16 +16,11 @@ class ManageSession extends Component {
   constructor(props) {
     super(props);
     this.ref = firebase.firestore().collection("session");
-    console.log(this.props.userContext.user);
     this.userRef = firebase
       .firestore()
       .collection("users")
       .where("auth", "==", this.props.userContext.user);
 
-    this.accessCodeRef = firebase
-      .firestore()
-      .collection("access_codes")
-      .where("user", "==", "users/" + this.props.userContext.user);
     this.state = {
       user: {},
       access_code: {}
@@ -34,59 +29,47 @@ class ManageSession extends Component {
 
   async componentDidMount() {
     try {
-      // const querySnapshot = await this.userRef.get();
+      const querySnapshot = await this.userRef.get();
 
-      // querySnapshot.forEach(doc => {
-      //   this.setState({
-      //     user: doc.data()
-      //   });
-      // });
-      // console.log(this.state.user);
-
-      const userQuerySnapshot = await firebase
-        .firestore()
-        .collection("access_codes")
-        .where("user", "==", this.userRef)
-        .get();
-
-      userQuerySnapshot.forEach(doc => {
-        console.log("DOC DATA: " + doc.data);
+      querySnapshot.forEach(doc => {
         this.setState({
-          access_code: doc.data()
+          user: doc.id
         });
       });
-      console.log(this.state.access_code);
+      console.log(this.state.user);
     } catch (err) {
       console.log(err);
     }
   }
 
-  startSession() {
-    this.ref
-      .add({
-        user_id: this.props.userContext.user,
-        location: "/w91B6KDWcF04jsybJg",
-        start: firebase.firestore.FieldValue.serverTimestamp(),
-        end: null,
-        interval_minutes: null
-      })
+  async startSession() {
+    let userDocRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(this.state.user);
 
-      .catch(error => {
-        console.error("Error adding document: ", error);
-      });
+    console.log(userDocRef);
+
+    const querySnapshot = await firebase
+      .firestore()
+      .collection("sessions")
+      .where("user", "==", userDocRef)
+      .get();
+
+    querySnapshot.docs[0].ref.update({
+      start: firebase.firestore.FieldValue.serverTimestamp()
+    });
   }
 
   endSession() {
     firebase
       .firestore()
-      .collection("session")
+      .collection("sessions")
       .where("user_id", "==", this.props.userContext.user)
       .update({ end: firebase.firestore.FieldValue.serverTimestamp() });
   }
 
   render() {
-    console.log(this.props.userContext.user);
-
     return (
       <ScrollView style={styles.container}>
         <ListItem
