@@ -17,6 +17,7 @@ import Icon from "@expo/vector-icons/Ionicons";
 import { withUser } from "../Auth/Context/withUser";
 
 import firebase from "firebase";
+import Dialog from "react-native-dialog";
 
 const { height, width } = Dimensions.get("window");
 
@@ -32,7 +33,8 @@ class LocationDetailScreen extends Component {
       isLoading: true,
       location: {},
       key: "",
-      user: ""
+      user: "",
+      dialogVisible: false
     };
   }
 
@@ -102,6 +104,23 @@ class LocationDetailScreen extends Component {
         console.error("Error adding document: ", error);
       });
   }
+  showDialog = () => {
+    this.setState({ dialogVisible: true });
+  };
+
+  handleCancel = () => {
+    this.setState({ dialogVisible: false });
+  };
+
+  handleRequest = () => {
+    this.handleRequestCode();
+    this.setState({ dialogVisible: false });
+    this.props.navigation.navigate("ActiveCodeHome", {
+      code: "1234",
+      docId: this.state.key,
+      validFor: "24"
+    });
+  };
 
   render() {
     return (
@@ -130,14 +149,27 @@ class LocationDetailScreen extends Component {
                     source={{ uri: this.state.location.image }}
                   />
                   <Button
-                    onPress={() => {
-                      this.handleRequestCode();
-                      Alert.alert("Code Granted: 1234");
-                    }}
+                    onPress={this.showDialog}
                     title="Request Code"
                     type="outline"
                   />
+                  <Dialog.Container visible={this.state.dialogVisible}>
+                    <Dialog.Description>
+                      Are you sure you want to get access to this building?
+                    </Dialog.Description>
+                    <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                    <Dialog.Button
+                      label="Request"
+                      onPress={this.handleRequest}
+                    />
+                  </Dialog.Container>
                 </View>
+                <Text style={{ fontWeight: "100", marginTop: 10 }}>
+                  {this.state.location.info}
+                </Text>
+                <Text style={{ fontWeight: "100", marginTop: 10 }}>
+                  Desks Available: {this.state.location.desks}
+                </Text>
               </View>
             </View>
           </ScrollView>

@@ -29,6 +29,8 @@ class Edit extends Component {
           title: location.title,
           description: location.description,
           image: location.image,
+          desks: location.desks,
+          info: location.info,
           long: location.coordinate.longitude,
           lat: location.coordinate.latitude
         });
@@ -47,7 +49,7 @@ class Edit extends Component {
   onSubmit = e => {
     e.preventDefault();
 
-    const { title, description, image, long, lat } = this.state;
+    const { title, description, image, desks, info, long, lat } = this.state;
     let coordinate = {
       latitude: parseFloat(this.state.lat),
       longitude: parseFloat(this.state.long)
@@ -62,13 +64,17 @@ class Edit extends Component {
         title,
         description,
         image,
-        coordinate
+        coordinate,
+        desks,
+        info
       })
       .then(docRef => {
         this.setState({
           title: "",
           description: "",
           image: "",
+          desks: "",
+          info: "",
           long: "",
           lat: ""
         });
@@ -115,6 +121,31 @@ class Edit extends Component {
                   rows="3"
                 >
                   {this.state.description}
+                </textArea>
+              </div>
+              <div className="form-group">
+                <label for="desks">Desks:</label>
+                <input
+                  type="number"
+                  step="any"
+                  className="form-control"
+                  name="desks"
+                  value={this.state.desks}
+                  onChange={this.onChange}
+                  placeholder="Desks"
+                />
+              </div>
+              <div className="form-group">
+                <label for="info">Info:</label>
+                <textArea
+                  className="form-control"
+                  name="info"
+                  onChange={this.onChange}
+                  placeholder="Info"
+                  cols="80"
+                  rows="3"
+                >
+                  {this.state.info}
                 </textArea>
               </div>
               <div className="form-group">

@@ -16,14 +16,16 @@ class App extends Component {
   onCollectionUpdate = querySnapshot => {
     const locations = [];
     querySnapshot.forEach(doc => {
-      const { title, description, image, coordinate } = doc.data();
+      const { title, description, image, coordinate, info, desks } = doc.data();
       locations.push({
         key: doc.id,
         doc, // DocumentSnapshot
         title,
         description,
         image,
-        coordinate
+        coordinate,
+        info,
+        desks
       });
     });
     this.setState({
@@ -38,42 +40,40 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <div className="panel panel-default">
-          <div className="panel-heading">
-            <h2 className="panel-title">All Locations</h2>
-          </div>
-          <div className="panel-body">
-            <h4>
-              <Link to="/create" className="btn btn-primary">
-                Add location
-              </Link>
-            </h4>
-            <table className="table table-stripe">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Description</th>
-                  <th>Image URL</th>
-                  <th>Longitude</th>
-                  <th>Latitude</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.locations.map(location => (
-                  <tr>
-                    <td>
-                      <Link to={`/show/${location.key}`}>{location.title}</Link>
-                    </td>
-                    <td>{location.description}</td>
-                    <td>{location.image}</td>
-                    <td>{location.coordinate.longitude}</td>
-                    <td>{location.coordinate.latitude}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <h2 className="title">All Locations</h2>
+        <h4>
+          <Link to="/create" className="btn btn-primary">
+            Add location
+          </Link>
+        </h4>
+        <table className="table table-stripe">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Image URL</th>
+              <th>Desks</th>
+              {/* <th>Info</th> */}
+              <th>Longitude</th>
+              <th>Latitude</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.locations.map(location => (
+              <tr>
+                <td>
+                  <Link to={`/show/${location.key}`}>{location.title}</Link>
+                </td>
+                <td>{location.description}</td>
+                <td>{location.image}</td>
+                <td>{location.desks}</td>
+                {/* <td>{location.info}</td> */}
+                <td>{location.coordinate.longitude}</td>
+                <td>{location.coordinate.latitude}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     );
   }

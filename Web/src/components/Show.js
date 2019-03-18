@@ -59,9 +59,7 @@ class Show extends Component {
                 <Link to="/">View All Locations</Link>
               </h4>
               <h1 className="mt-4">{this.state.location.title}</h1>
-
               <hr />
-
               <img
                 className="img-fluid rounded"
                 src={("https:", this.state.location.image + "?fm=jpg&q=90")}
@@ -70,6 +68,10 @@ class Show extends Component {
               />
               <hr />
               <p class="lead">Description: {this.state.location.description}</p>
+              <hr />
+              <p class="lead">Information: {this.state.location.info}</p>
+              <hr />
+              <p class="lead">Desks: {this.state.location.desks}</p>
               <hr />
               <p class="lead">Image URL: {this.state.location.image}</p>
               <hr />
