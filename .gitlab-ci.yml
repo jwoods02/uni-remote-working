@@ -12,12 +12,11 @@ stages:
   - build
   - deploy
 
-merge-install:
+npm-install:
   stage: install
   only:
     - merge_requests
   script:
-    - git merge origin/development
     - npm install
 
 npm-test:
