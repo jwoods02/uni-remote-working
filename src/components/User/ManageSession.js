@@ -42,7 +42,7 @@ class ManageSession extends Component {
     }
   }
 
-  async startSession() {
+  async manageSession(action) {
     let userDocRef = firebase
       .firestore()
       .collection("users")
@@ -56,9 +56,18 @@ class ManageSession extends Component {
       .where("user", "==", userDocRef)
       .get();
 
-    querySnapshot.docs[0].ref.update({
-      start: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    let snapshot = querySnapshot.docs[0];
+
+    if (action === "start") {
+      snapshot.ref.update({
+        start: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } else {
+      snapshot.ref.update({
+        end: firebase.firestore.FieldValue.serverTimestamp()
+        // minutes: parseInt(snapshot.end - snapshot.start)
+      });
+    }
   }
 
   endSession() {
@@ -79,12 +88,12 @@ class ManageSession extends Component {
             type: "font-awesome",
             color: "green"
           }}
-          onPress={() => this.startSession()}
+          onPress={() => this.manageSession("start")}
         />
         <ListItem
           title="End Session"
           leftIcon={{ name: "stop-circle", type: "font-awesome", color: "red" }}
-          onPress={() => this.endSession()}
+          onPress={() => this.manageSession("end")}
         />
       </ScrollView>
     );
