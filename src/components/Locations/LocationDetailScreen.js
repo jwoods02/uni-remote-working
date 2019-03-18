@@ -14,6 +14,7 @@ import {
   Alert
 } from "react-native";
 import Icon from "@expo/vector-icons/Ionicons";
+import { withUser } from "../Auth/Context/withUser";
 
 import firebase from "firebase";
 import Dialog from "react-native-dialog";
@@ -21,12 +22,18 @@ import Dialog from "react-native-dialog";
 const { height, width } = Dimensions.get("window");
 
 class LocationDetailScreen extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.ref = firebase.firestore().collection("sessions");
+    this.userRef = firebase
+      .firestore()
+      .collection("users")
+      .where("auth", "==", this.props.userContext.user);
     this.state = {
       isLoading: true,
       location: {},
       key: "",
+      user: "",
       dialogVisible: false
     };
   }
@@ -57,6 +64,46 @@ class LocationDetailScreen extends Component {
     });
   }
 
+  async handleRequestCode() {
+    const { navigation } = this.props;
+
+    const querySnapshot = await this.userRef.get();
+
+    querySnapshot.forEach(doc => {
+      this.setState({
+        user: doc.id
+      });
+    });
+    console.log(this.state.user);
+
+    let userDocRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(this.state.user);
+
+    let locationRef = firebase
+      .firestore()
+      .collection("locations")
+      .doc(JSON.parse(navigation.getParam("locationkey")));
+
+    this.ref
+      .add({
+        access_code: {
+          code: 1234,
+          requested: firebase.firestore.FieldValue.serverTimestamp(),
+          expiry: null,
+          location: locationRef
+        },
+        user: userDocRef,
+        start: null,
+        end: null,
+        minutes: null
+      })
+
+      .catch(error => {
+        console.error("Error adding document: ", error);
+      });
+  }
   showDialog = () => {
     this.setState({ dialogVisible: true });
   };
@@ -66,6 +113,7 @@ class LocationDetailScreen extends Component {
   };
 
   handleRequest = () => {
+    this.handleRequestCode();
     this.setState({ dialogVisible: false });
     this.props.navigation.navigate("ActiveCodeHome", {
       code: "1234",
@@ -130,7 +178,7 @@ class LocationDetailScreen extends Component {
     );
   }
 }
-export default LocationDetailScreen;
+export default withUser(LocationDetailScreen);
 
 const styles = StyleSheet.create({
   container: {
