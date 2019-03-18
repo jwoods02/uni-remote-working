@@ -13,16 +13,59 @@ import firebase from "firebase";
 import { withUser } from "../Auth/Context/withUser";
 
 class ManageSession extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.ref = firebase.firestore().collection("session");
+    console.log(this.props.userContext.user);
+    this.userRef = firebase
+      .firestore()
+      .collection("users")
+      .where("auth", "==", this.props.userContext.user);
+
+    this.accessCodeRef = firebase
+      .firestore()
+      .collection("access_codes")
+      .where("user", "==", "users/" + this.props.userContext.user);
+    this.state = {
+      user: {},
+      access_code: {}
+    };
+  }
+
+  async componentDidMount() {
+    try {
+      // const querySnapshot = await this.userRef.get();
+
+      // querySnapshot.forEach(doc => {
+      //   this.setState({
+      //     user: doc.data()
+      //   });
+      // });
+      // console.log(this.state.user);
+
+      const userQuerySnapshot = await firebase
+        .firestore()
+        .collection("access_codes")
+        .where("user", "==", this.userRef)
+        .get();
+
+      userQuerySnapshot.forEach(doc => {
+        console.log("DOC DATA: " + doc.data);
+        this.setState({
+          access_code: doc.data()
+        });
+      });
+      console.log(this.state.access_code);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   startSession() {
     this.ref
       .add({
         user_id: this.props.userContext.user,
-        location_id: "w91B6KDWcF04jsybJgAP",
+        // location: this.state.location,
         start: firebase.firestore.FieldValue.serverTimestamp(),
         end: null,
         interval_minutes: null
