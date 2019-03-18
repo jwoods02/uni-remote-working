@@ -64,18 +64,10 @@ class ManageSession extends Component {
       });
     } else {
       snapshot.ref.update({
-        end: firebase.firestore.FieldValue.serverTimestamp()
-        // minutes: parseInt(snapshot.end - snapshot.start)
+        end: firebase.firestore.FieldValue.serverTimestamp(),
+        minutes: parseInt(snapshot.end - snapshot.start)
       });
     }
-  }
-
-  endSession() {
-    firebase
-      .firestore()
-      .collection("sessions")
-      .where("user_id", "==", this.props.userContext.user)
-      .update({ end: firebase.firestore.FieldValue.serverTimestamp() });
   }
 
   render() {
