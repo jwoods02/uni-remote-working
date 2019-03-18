@@ -14,5 +14,5 @@ export default function setupFirebase() {
   };
   firebase.initializeApp(config);
 
-  firebase.firestore().settings(settings);
+  // firebase.firestore().settings(settings);
 }

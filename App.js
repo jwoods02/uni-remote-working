@@ -1,13 +1,13 @@
 import React from "react";
-
+import axios from "axios";
 import { Button, Text, View, TouchableOpacity, StyleSheet } from "react-native";
-
 import { Ionicons } from "@expo/vector-icons";
 
 import {
   createStackNavigator,
   createBottomTabNavigator,
-  createAppContainer
+  createAppContainer,
+  createSwitchNavigator
 } from "react-navigation";
 
 import BoardScreen from "./src/components/CRUD/BoardScreen";
@@ -21,6 +21,7 @@ import Main from "./src/components/Auth/Main";
 import Settings from "./src/components/User/Settings";
 
 import setupFirebase from "./Firebase";
+import Pay from "./src/components/Payment/Pay";
 import LocationMap from "./src/components/Maps/LocationMap";
 import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
 import ActiveCodeHome from "./src/components/Home/ActiveCodeHome";
@@ -28,18 +29,17 @@ import DefaultHome from "./src/components/Home/DefaultHome";
 import Home from "./src/components/Home/Home";
 
 import LandingPage from "./src/components/Auth/LandingPage";
+import UserProvider from "./src/components/Auth/Context/UserProvider";
 
 setupFirebase();
+axios.defaults.baseURL = "http://192.168.0.70:4000";
 
 const HomeStack = createStackNavigator(
   {
     Home: Home,
     ActiveCodeHome: ActiveCodeHome,
     DefaultHome: DefaultHome,
-    Board: BoardScreen,
-    BoardDetails: BoardDetailScreen,
-    AddBoard: AddBoardScreen,
-    EditBoard: EditBoardScreen,
+
     Main: Main,
     Loading: Loading,
     SignUp: SignUp,
@@ -61,10 +61,7 @@ const HomeStack = createStackNavigator(
 const MapStack = createStackNavigator(
   {
     LocationMap: LocationMap,
-    Board: BoardScreen,
-    BoardDetails: BoardDetailScreen,
-    AddBoard: AddBoardScreen,
-    EditBoard: EditBoardScreen,
+
     Main: Main,
     Loading: Loading,
     SignUp: SignUp,
@@ -84,8 +81,7 @@ const MapStack = createStackNavigator(
 
 const SettingsStack = createStackNavigator(
   {
-    Settings: Settings,
-    LandingPage: LandingPage
+    Settings: Settings
   },
   {
     defaultNavigationOptions: {
@@ -98,7 +94,7 @@ const SettingsStack = createStackNavigator(
   }
 );
 
-const App = createBottomTabNavigator(
+const AppStack = createBottomTabNavigator(
   {
     Home: { screen: HomeStack },
     Map: { screen: MapStack },
@@ -127,4 +123,26 @@ const App = createBottomTabNavigator(
   }
 );
 
-export default createAppContainer(App);
+const AuthStack = createStackNavigator({
+  Loading: Loading,
+  LandingPage: LandingPage,
+  Login: Login,
+  SignUp: SignUp,
+  Pay: Pay
+});
+
+const RootStack = createSwitchNavigator({
+  Auth: AuthStack,
+  App: AppStack
+});
+
+let AppContainer = createAppContainer(RootStack);
+export default class App extends React.Component {
+  render() {
+    return (
+      <UserProvider>
+        <AppContainer />
+      </UserProvider>
+    );
+  }
+}
