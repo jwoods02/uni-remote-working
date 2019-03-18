@@ -65,7 +65,7 @@ class ManageSession extends Component {
     this.ref
       .add({
         user_id: this.props.userContext.user,
-        // location: this.state.location,
+        location: "/w91B6KDWcF04jsybJg",
         start: firebase.firestore.FieldValue.serverTimestamp(),
         end: null,
         interval_minutes: null
