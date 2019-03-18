@@ -11,6 +11,8 @@ class Create extends Component {
       title: "",
       description: "",
       image: "",
+      desks: "",
+      info: "",
       long: "",
       lat: ""
     };
@@ -24,7 +26,7 @@ class Create extends Component {
   onSubmit = e => {
     e.preventDefault();
 
-    const { title, description, image, long, lat } = this.state;
+    const { title, description, image, info, desks, long, lat } = this.state;
     var coordinate = {
       latitude: parseFloat(this.state.lat),
       longitude: parseFloat(this.state.long)
@@ -34,13 +36,17 @@ class Create extends Component {
         title,
         description,
         image,
-        coordinate
+        coordinate,
+        info,
+        desks
       })
       .then(docRef => {
         this.setState({
           title: "",
           description: "",
           image: "",
+          desks: "",
+          info: "",
           long: "",
           lat: ""
         });
@@ -52,7 +58,7 @@ class Create extends Component {
   };
 
   render() {
-    const { title, description, image, long, lat } = this.state;
+    const { title, description, image, desks, info, long, lat } = this.state;
     return (
       <div className="container">
         <div className="panel panel-default">
@@ -89,6 +95,31 @@ class Create extends Component {
                 >
                   {description}
                 </textArea>
+              </div>
+              <div className="form-group">
+                <label for="info">Information:</label>
+                <textArea
+                  className="form-control"
+                  name="info"
+                  onChange={this.onChange}
+                  placeholder="Information"
+                  cols="80"
+                  rows="3"
+                >
+                  {info}
+                </textArea>
+              </div>
+              <div className="form-group">
+                <label for="image">Desks:</label>
+                <input
+                  type="number"
+                  step="any"
+                  className="form-control"
+                  name="desks"
+                  value={desks}
+                  onChange={this.onChange}
+                  placeholder="desks"
+                />
               </div>
               <div className="form-group">
                 <label for="image">image:</label>

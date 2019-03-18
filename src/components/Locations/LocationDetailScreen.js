@@ -16,7 +16,7 @@ import {
 import Icon from "@expo/vector-icons/Ionicons";
 
 import firebase from "firebase";
-import { generateAccessCode } from "../../lib/Session";
+import Dialog from "react-native-dialog";
 
 const { height, width } = Dimensions.get("window");
 
@@ -26,7 +26,8 @@ class LocationDetailScreen extends Component {
     this.state = {
       isLoading: true,
       location: {},
-      key: ""
+      key: "",
+      dialogVisible: false
     };
   }
 
@@ -56,6 +57,23 @@ class LocationDetailScreen extends Component {
     });
   }
 
+  showDialog = () => {
+    this.setState({ dialogVisible: true });
+  };
+
+  handleCancel = () => {
+    this.setState({ dialogVisible: false });
+  };
+
+  handleRequest = () => {
+    this.setState({ dialogVisible: false });
+    this.props.navigation.navigate("ActiveCodeHome", {
+      code: "1234",
+      docId: this.state.key,
+      validFor: "24"
+    });
+  };
+
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -83,13 +101,27 @@ class LocationDetailScreen extends Component {
                     source={{ uri: this.state.location.image }}
                   />
                   <Button
-                    onPress={() => {
-                      Alert.alert(`Code Granted: ${generateAccessCode()}`);
-                    }}
+                    onPress={this.showDialog}
                     title="Request Code"
                     type="outline"
                   />
+                  <Dialog.Container visible={this.state.dialogVisible}>
+                    <Dialog.Description>
+                      Are you sure you want to get access to this building?
+                    </Dialog.Description>
+                    <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                    <Dialog.Button
+                      label="Request"
+                      onPress={this.handleRequest}
+                    />
+                  </Dialog.Container>
                 </View>
+                <Text style={{ fontWeight: "100", marginTop: 10 }}>
+                  {this.state.location.info}
+                </Text>
+                <Text style={{ fontWeight: "100", marginTop: 10 }}>
+                  Desks Available: {this.state.location.desks}
+                </Text>
               </View>
             </View>
           </ScrollView>
