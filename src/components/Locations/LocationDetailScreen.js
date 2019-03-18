@@ -16,6 +16,7 @@ import {
 import Icon from "@expo/vector-icons/Ionicons";
 
 import firebase from "firebase";
+import { generateAccessCode } from "../../lib/Session";
 
 const { height, width } = Dimensions.get("window");
 
@@ -83,7 +84,7 @@ class LocationDetailScreen extends Component {
                   />
                   <Button
                     onPress={() => {
-                      Alert.alert("Code Granted: 1234");
+                      Alert.alert(`Code Granted: ${generateAccessCode()}`);
                     }}
                     title="Request Code"
                     type="outline"
