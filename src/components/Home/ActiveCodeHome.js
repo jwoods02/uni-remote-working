@@ -37,7 +37,7 @@ export default class ActiveCodeHome extends Component {
     this.ref = firebase
       .firestore()
       .collection("locations")
-      .doc(props.navigation.state.params.docId);
+      .doc("RqcOjBVIM9rNG6SF07Hu");
     this.unsubscribe = null;
     this.state = {
       isLoading: true,
@@ -136,7 +136,8 @@ export default class ActiveCodeHome extends Component {
               {this.state.markers[0].title}
             </Text>
             <Text style={styles.title}>
-              {this.props.navigation.state.params.code}
+              1234
+              {/* {this.props.navigation.state.params.code} */}
             </Text>
           </View>
           {/* Second row of header */}
@@ -155,7 +156,8 @@ export default class ActiveCodeHome extends Component {
               color="#FF0000"
             />
             <Text style={{ fontSize: 20, paddingRight: 10 }}>
-              Valid for: {this.props.navigation.state.params.validFor}hrs
+              Valid for: 24 hrs
+              {/* {this.props.navigation.state.params.validFor}hrs */}
             </Text>
           </View>
         </View>
