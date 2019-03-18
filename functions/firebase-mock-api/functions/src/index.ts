@@ -70,7 +70,7 @@ app.post("/access_persons", (req, res) => {
 
 
 // Deactivate access code
-app.patch("/access_persons/:id", (req, res) => {
+app.patch("/access_persons/:id/deactivate", (req, res) => {
 
   db.collection("data").doc(req.params.id).update( { "attributes.active": false })
   .then(() => {
