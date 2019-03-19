@@ -50,7 +50,7 @@ class Home extends Component {
   }
 
   componentWillUnmount() {
-    this._ub.remove();
+    this.sub.remove();
   }
 
   componentFocused = async () => {
