@@ -32,9 +32,11 @@ local.properties
 
 # node.js
 #
-node_modules/
+node_modules/**/*
+.expo/*
 npm-debug.log
 yarn-error.log
+
 
 # BUCK
 buck-out/
@@ -54,3 +56,29 @@ buck-out/
 
 # Bundle artifact
 *.jsbundle
+
+
+
+
+# WEB
+
+#dependencies
+Web/node_modules/**/*
+
+# testing
+Web/coverage
+
+# production
+Web/build
+
+# misc
+Web/.DS_Store
+Web/.env.local
+Web/.env.development.local
+Web/.env.test.local
+Web/.env.production.local
+
+Web/npm-debug.log*
+Webyarn-debug.log*
+Webyarn-error.log*
+

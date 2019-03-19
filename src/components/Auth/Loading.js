@@ -4,16 +4,14 @@ import firebase from "firebase";
 
 export default class Loading extends React.Component {
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      this.props.navigation.navigate(user ? "Board" : "LandingPage");
-    });
+    this.props.navigation.navigate("LandingPage");
   }
 
   render() {
     return (
       <View style={styles.container}>
         <Text>Loading</Text>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color="rgba(130,4,150, 0.4)" />
       </View>
     );
   }

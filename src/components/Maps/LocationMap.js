@@ -5,6 +5,7 @@ import React, { Component } from "react";
 import {
   AppRegistry,
   StyleSheet,
+  Text,
   View,
   Animated,
   Dimensions,
@@ -16,6 +17,7 @@ import firebase from "firebase";
 import ScrollViewItems from "./MapComponents/ScrollViewItems";
 import MapSearch from "./MapComponents/MapSearch";
 import MapViewItems from "./MapComponents/MapViewItems";
+import { withUser } from "../Auth/Context/withUser";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
@@ -30,9 +32,11 @@ export const getCurrentLocation = () => {
   });
 };
 
-export default class LocationMap extends Component {
+class LocationMap extends Component {
   constructor() {
     super();
+    this.updateRegionFromSearch = this.updateRegionFromSearch.bind(this);
+
     this.ref = firebase.firestore().collection("locations");
     this.unsubscribe = null;
     this.state = {
@@ -89,6 +93,17 @@ export default class LocationMap extends Component {
     });
   };
 
+  updateRegionFromSearch(lat, lng) {
+    this.setState({
+      region: {
+        latitude: lat,
+        longitude: lng,
+        latitudeDelta: 0.03,
+        longitudeDelta: 0.03
+      }
+    });
+  }
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -107,8 +122,13 @@ export default class LocationMap extends Component {
           navigation={this.props.navigation} // not sure why you have to pass navigation as prop to children components.
         />
         <Callout>
-          {/* search */}
-          <MapSearch />
+          <View style={styles.searchContainer}>
+            {/* search */}
+            <MapSearch
+              updateRegionFromSearch={this.updateRegionFromSearch}
+              style={styles.callout}
+            />
+          </View>
         </Callout>
         {/* animation */}
         <Animated.ScrollView
@@ -152,9 +172,13 @@ const styles = StyleSheet.create({
     right: 0,
     paddingVertical: 10
   },
+  searchContainer: {
+    width: width,
+    flexDirection: "row",
+    justifyContent: "center"
+  },
   endPadding: {
     paddingRight: width - CARD_WIDTH
   }
 });
-
-AppRegistry.registerComponent("LocationMap", () => LocationMap);
+export default withUser(LocationMap);

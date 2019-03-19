@@ -1,8 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 import firebase from "firebase";
+import { withUser } from "../Auth/Context/withUser";
 
-export default class Login extends React.Component {
+class Login extends React.Component {
+  static navigationOptions = { header: null };
+
   state = { email: "", password: "", errorMessage: null };
 
   handleLogin = () => {
@@ -10,7 +13,7 @@ export default class Login extends React.Component {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate("Main"))
+      .then(() => this.props.navigation.navigate("Home"))
       .catch(error => this.setState({ errorMessage: error.message }));
   };
 
@@ -47,6 +50,8 @@ export default class Login extends React.Component {
     );
   }
 }
+
+export default withUser(Login);
 
 const styles = StyleSheet.create({
   container: {
