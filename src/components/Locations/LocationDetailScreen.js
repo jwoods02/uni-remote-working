@@ -91,7 +91,7 @@ class LocationDetailScreen extends Component {
         access_code: {
           code: Math.floor(1000 + Math.random() * 9000),
           requested: firebase.firestore.FieldValue.serverTimestamp(),
-          expiry: null,
+          expiry: firebase.firestore.FieldValue.serverTimestamp(),
           location: locationRef
         },
         user: userDocRef,

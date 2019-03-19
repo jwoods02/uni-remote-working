@@ -121,7 +121,27 @@ export default class ActiveCodeHome extends Component {
 
   handleRemove = () => {
     this.setState({ dialogVisible: false });
-    this.props.navigation.navigate("Home");
+    this.setState({
+      isLoading: true
+    });
+    firebase
+      .firestore()
+      .collection("sessions")
+      .doc(this.props.session.id)
+      .delete()
+      .then(() => {
+        console.log("Document successfully deleted!");
+        this.setState({
+          isLoading: false
+        });
+        this.props.navigation.navigate("Home");
+      })
+      .catch(error => {
+        console.error("Error removing document: ", error);
+        this.setState({
+          isLoading: false
+        });
+      });
   };
 
   render() {
