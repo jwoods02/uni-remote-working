@@ -30,11 +30,12 @@ export const getCurrentLocation = () => {
 };
 
 export default class ActiveCodeHome extends Component {
-  static navigationOptions = { title: "Home", headerLeft: null };
+  static navigationOptions = { title: "Your Code", headerLeft: null };
 
   constructor(props) {
     super(props);
-    console.log("SESSION IN CODE HOME", this.props.session.data().user.id);
+    console.log("SESSION: " + this.props.session.id);
+
     this.ref = firebase
       .firestore()
       .collection("locations")
@@ -43,6 +44,7 @@ export default class ActiveCodeHome extends Component {
     this.state = {
       isLoading: true,
       markers: [],
+      location: {},
       region: {
         //just a default incase snapshot fails - Cardiff
         latitude: 51.481583,
@@ -59,10 +61,20 @@ export default class ActiveCodeHome extends Component {
     this.animation = new Animated.Value(0);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.state = this.unsubscribe = this.ref.onSnapshot(
       this.onCollectionUpdate
     );
+
+    const doc = await this.props.session.data().access_code.location.get();
+
+    if (doc.exists) {
+      this.setState({
+        location: doc.data()
+      });
+    } else {
+      console.log("No such document!");
+    }
 
     getCurrentLocation().then(position => {
       if (position) {
@@ -117,6 +129,7 @@ export default class ActiveCodeHome extends Component {
   };
 
   render() {
+    console.log(this.state.location);
     if (this.state.isLoading) {
       return (
         <View style={styles.activity}>
