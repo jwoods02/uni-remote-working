@@ -48,7 +48,7 @@ class Home extends Component {
           user: doc.id
         });
       });
-      console.log(this.state.user);
+      // console.log(this.state.user);
     } catch (err) {
       console.log(err);
     }
@@ -62,7 +62,7 @@ class Home extends Component {
       .collection("users")
       .doc(this.state.user);
 
-    console.log(userDocRef);
+    // console.log(userDocRef);
 
     const querySnapshot = await firebase
       .firestore()
@@ -70,15 +70,16 @@ class Home extends Component {
       .where("user", "==", userDocRef)
       .get();
 
-    let snapshot = querySnapshot.docs[0];
-
-    if (snapshot != null) {
+    if (querySnapshot.empty) {
+      console.log("no documents found");
       this.setState({
-        hasCode: true,
+        hasCode: false,
         loading: false
       });
     } else {
       this.setState({
+        session: querySnapshot.docs[0].data(),
+        hasCode: true,
         loading: false
       });
     }
@@ -94,7 +95,12 @@ class Home extends Component {
       );
     } else {
       if (this.state.hasCode) {
-        return <ActiveCodeHome navigation={this.props.navigation} />;
+        return (
+          <ActiveCodeHome
+            navigation={this.props.navigation}
+            location={this.state.session.access_code.location}
+          />
+        );
       }
       return <DefaultHome navigation={this.props.navigation} />;
     }
