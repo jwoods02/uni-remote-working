@@ -2,7 +2,7 @@ import React from "react";
 import { Text, TextInput, View, Button, Image } from "react-native";
 import firebase from "firebase";
 import { withUser } from "../Auth/Context/withUser";
-import { styles } from "../Styles/Login";
+import { styles } from "../Styles/Register";
 import { colours } from "../Styles/Global";
 import AwesomeButton from "react-native-really-awesome-button";
 
@@ -58,7 +58,7 @@ class Login extends React.Component {
             Login
           </AwesomeButton>
         </View>
-        <View style={styles.signUp}>
+        <View style={styles.bottomLink}>
           <Button
             title="Don't have an account? Sign Up"
             color="#edeeef"

@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     margin: 10
   },
-  signUp: {
+  bottomLink: {
     position: "absolute",
     bottom: 15
   }
