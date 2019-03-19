@@ -34,6 +34,7 @@ export default class ActiveCodeHome extends Component {
 
   constructor(props) {
     super(props);
+    console.log("SESSION IN CODE HOME", this.props.session.data().user.id);
     this.ref = firebase
       .firestore()
       .collection("locations")

@@ -67,7 +67,7 @@ class Home extends Component {
   };
 
   async handleRender() {
-    const userDocRef = await firebase
+    const userDocRef = firebase
       .firestore()
       .collection("users")
       .doc(this.state.user);
@@ -85,8 +85,9 @@ class Home extends Component {
         loading: false
       });
     } else {
+      const session = sessionQuerySnapshot.docs[0];
       this.setState({
-        session: sessionQuerySnapshot.docs[0].data(),
+        session,
         hasCode: true,
         loading: false
       });
@@ -106,7 +107,7 @@ class Home extends Component {
         return (
           <ActiveCodeHome
             navigation={this.props.navigation}
-            location={this.state.session.access_code.location}
+            session={this.state.session}
           />
         );
       }
