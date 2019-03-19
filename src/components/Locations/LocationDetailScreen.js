@@ -74,7 +74,6 @@ class LocationDetailScreen extends Component {
         user: doc.id
       });
     });
-    console.log(this.state.user);
 
     let userDocRef = firebase
       .firestore()

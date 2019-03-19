@@ -36,7 +36,6 @@ class ManageSession extends Component {
           user: doc.id
         });
       });
-      console.log(this.state.user);
     } catch (err) {
       console.log(err);
     }
@@ -47,8 +46,6 @@ class ManageSession extends Component {
       .firestore()
       .collection("users")
       .doc(this.state.user);
-
-    console.log(userDocRef);
 
     const querySnapshot = await firebase
       .firestore()

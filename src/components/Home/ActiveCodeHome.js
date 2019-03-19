@@ -34,8 +34,6 @@ export default class ActiveCodeHome extends Component {
 
   constructor(props) {
     super(props);
-    console.log("SESSION: " + this.props.session.id);
-
     this.unsubscribe = null;
     this.state = {
       isLoading: true,
@@ -130,11 +128,10 @@ export default class ActiveCodeHome extends Component {
       .doc(this.props.session.id)
       .delete()
       .then(() => {
-        console.log("Document successfully deleted!");
         this.setState({
           isLoading: false
         });
-        this.props.navigation.navigate("Home");
+        this.props.navigation.replace("Home");
       })
       .catch(error => {
         console.error("Error removing document: ", error);

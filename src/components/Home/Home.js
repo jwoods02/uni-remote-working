@@ -54,6 +54,9 @@ class Home extends Component {
   }
 
   componentFocused = async () => {
+    this.setState({
+      loading: true
+    });
     try {
       const userQuerySnapshot = await this.userRef.get();
       this.setState({
