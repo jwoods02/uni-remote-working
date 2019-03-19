@@ -22,6 +22,7 @@ import DefaultHome from "./DefaultHome";
 import { withUser } from "../Auth/Context/withUser";
 import { Font, AppLoading } from "expo";
 import Loading from "../Auth/Loading";
+import { NavigationEvents } from "react-navigation";
 
 const { height, width } = Dimensions.get("window");
 
@@ -40,37 +41,44 @@ class Home extends Component {
   }
 
   async componentDidMount() {
-    try {
-      const querySnapshot = await this.userRef.get();
+    this.componentFocused();
 
-      querySnapshot.forEach(doc => {
-        this.setState({
-          user: doc.id
-        });
+    this.sub = this.props.navigation.addListener(
+      "didFocus",
+      this.componentFocused
+    );
+  }
+
+  componentWillUnmount() {
+    this._ub.remove();
+  }
+
+  componentFocused = async () => {
+    try {
+      const userQuerySnapshot = await this.userRef.get();
+      this.setState({
+        user: userQuerySnapshot.docs[0].id
       });
-      // console.log(this.state.user);
     } catch (err) {
       console.log(err);
     }
 
-    this.handleRender();
-  }
+    await this.handleRender();
+  };
 
   async handleRender() {
-    let userDocRef = firebase
+    const userDocRef = await firebase
       .firestore()
       .collection("users")
       .doc(this.state.user);
 
-    // console.log(userDocRef);
-
-    const querySnapshot = await firebase
+    const sessionQuerySnapshot = await firebase
       .firestore()
       .collection("sessions")
       .where("user", "==", userDocRef)
       .get();
 
-    if (querySnapshot.empty) {
+    if (sessionQuerySnapshot.empty) {
       console.log("no documents found");
       this.setState({
         hasCode: false,
@@ -78,7 +86,7 @@ class Home extends Component {
       });
     } else {
       this.setState({
-        session: querySnapshot.docs[0].data(),
+        session: sessionQuerySnapshot.docs[0].data(),
         hasCode: true,
         loading: false
       });
