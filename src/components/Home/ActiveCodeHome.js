@@ -36,10 +36,6 @@ export default class ActiveCodeHome extends Component {
     super(props);
     console.log("SESSION: " + this.props.session.id);
 
-    this.ref = firebase
-      .firestore()
-      .collection("locations")
-      .doc("RqcOjBVIM9rNG6SF07Hu");
     this.unsubscribe = null;
     this.state = {
       isLoading: true,
@@ -62,9 +58,9 @@ export default class ActiveCodeHome extends Component {
   }
 
   async componentDidMount() {
-    this.state = this.unsubscribe = this.ref.onSnapshot(
-      this.onCollectionUpdate
-    );
+    this.state = this.unsubscribe = this.props.session
+      .data()
+      .access_code.location.onSnapshot(this.onCollectionUpdate);
 
     const doc = await this.props.session.data().access_code.location.get();
 
