@@ -37,7 +37,9 @@ class DefaultHome extends Component {
     }
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.ref.onSnapshot(this.onCollectionUpdate);
+  }
 
   onCollectionUpdate = querySnapshot => {
     const locations = [];
