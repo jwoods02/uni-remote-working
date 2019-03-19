@@ -27,6 +27,7 @@ import LocationDetailScreen from "./src/components/Locations/LocationDetailScree
 import ActiveCodeHome from "./src/components/Home/ActiveCodeHome";
 import DefaultHome from "./src/components/Home/DefaultHome";
 import Home from "./src/components/Home/Home";
+import ActiveSession from "./src/components/Home/ActiveSession";
 
 import LandingPage from "./src/components/Auth/LandingPage";
 import UserProvider from "./src/components/Auth/Context/UserProvider";
@@ -40,6 +41,7 @@ const HomeStack = createStackNavigator(
     Home: Home,
     ActiveCodeHome: ActiveCodeHome,
     DefaultHome: DefaultHome,
+    ActiveSession: ActiveSession,
     Main: Main,
     Loading: Loading,
     SignUp: SignUp,
