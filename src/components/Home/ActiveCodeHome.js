@@ -125,7 +125,6 @@ export default class ActiveCodeHome extends Component {
   };
 
   render() {
-    console.log(this.state.location);
     if (this.state.isLoading) {
       return (
         <View style={styles.activity}>
@@ -136,21 +135,17 @@ export default class ActiveCodeHome extends Component {
 
     return (
       <View style={styles.container}>
-        {/* Header */}
         <View
           style={[styles.headerContainer, flex.column, justify.spaceBetween]}
         >
-          {/* First row of header */}
           <View style={[justify.spaceBetween, flex.row, styles.firstInfoRow]}>
             <Text style={[styles.title, colours.textPurple]}>
               {this.state.markers[0].title}
             </Text>
             <Text style={styles.title}>
-              1234
-              {/* {this.props.navigation.state.params.code} */}
+              {this.props.session.data().access_code.code}
             </Text>
           </View>
-          {/* Second row of header */}
           <View
             style={[
               justify.spaceBetween,
@@ -165,13 +160,18 @@ export default class ActiveCodeHome extends Component {
               title="X Remove code"
               color="#FF0000"
             />
-            <Text style={{ fontSize: 20, paddingRight: 10 }}>
-              Valid for: 24 hrs
-              {/* {this.props.navigation.state.params.validFor}hrs */}
+            <Text style={{ fontSize: 12, paddingRight: 10 }}>
+              Valid until:
+              {new Date(
+                this.props.session.data().access_code.expiry.seconds * 1000
+              ).toLocaleDateString("en-US") +
+                " " +
+                new Date(
+                  this.props.session.data().access_code.expiry.seconds * 1000
+                ).toLocaleTimeString("en-US")}
             </Text>
           </View>
         </View>
-        {/* Start of body */}
         <ScrollView style={[styles.scrollContainer, flex.column]}>
           <Button onPress={this._howTo} title="How do I use this code?" />
           <View style={styles.mapContainer}>
@@ -182,7 +182,6 @@ export default class ActiveCodeHome extends Component {
               navigation={this.props.navigation}
             />
           </View>
-          {/* Information below map container */}
           <View style={{ padding: 8 }}>
             <Text style={[styles.infoTitle, colours.textPurple]}>
               {this.state.markers[0].title}
@@ -210,7 +209,6 @@ export default class ActiveCodeHome extends Component {
             </View>
             <Text>{this.state.markers[0].info}</Text>
           </View>
-          {/* Dialog box that shows when remove code btn is pressed */}
           <Dialog.Container visible={this.state.dialogVisible}>
             <Dialog.Description>
               Are you sure you want to remove your access code?
