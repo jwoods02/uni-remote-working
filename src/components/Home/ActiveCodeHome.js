@@ -178,14 +178,15 @@ export default class ActiveCodeHome extends Component {
               color="#FF0000"
             />
             <Text style={{ fontSize: 12, paddingRight: 10 }}>
-              Valid until:
-              {new Date(
-                this.props.session.data().access_code.expiry.seconds * 1000
-              ).toLocaleDateString("en-US") +
-                " " +
+              Expiry:
+              {" " +
                 new Date(
                   this.props.session.data().access_code.expiry.seconds * 1000
-                ).toLocaleTimeString("en-US")}
+                ).toLocaleTimeString("en-US") +
+                " on " +
+                new Date(
+                  this.props.session.data().access_code.expiry.seconds * 1000
+                ).toLocaleDateString("en-UK")}
             </Text>
           </View>
         </View>
