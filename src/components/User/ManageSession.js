@@ -36,7 +36,6 @@ class ManageSession extends Component {
           user: doc.id
         });
       });
-      console.log(this.state.user);
     } catch (err) {
       console.log(err);
     }
@@ -48,25 +47,27 @@ class ManageSession extends Component {
       .collection("users")
       .doc(this.state.user);
 
-    console.log(userDocRef);
-
     const querySnapshot = await firebase
       .firestore()
       .collection("sessions")
       .where("user", "==", userDocRef)
       .get();
 
-    let snapshot = querySnapshot.docs[0];
-
-    if (action === "start") {
-      snapshot.ref.update({
-        start: firebase.firestore.FieldValue.serverTimestamp()
-      });
+    if (querySnapshot.empty) {
+      console.log("no documents found");
     } else {
-      snapshot.ref.update({
-        end: firebase.firestore.FieldValue.serverTimestamp(),
-        minutes: parseInt(snapshot.end - snapshot.start)
-      });
+      let snapshot = querySnapshot.docs[0];
+
+      if (action === "start") {
+        snapshot.ref.update({
+          start: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      } else {
+        snapshot.ref.update({
+          end: firebase.firestore.FieldValue.serverTimestamp(),
+          minutes: parseInt(snapshot.end - snapshot.start)
+        });
+      }
     }
   }
 

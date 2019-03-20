@@ -74,7 +74,6 @@ class LocationDetailScreen extends Component {
         user: doc.id
       });
     });
-    console.log(this.state.user);
 
     let userDocRef = firebase
       .firestore()
@@ -89,9 +88,9 @@ class LocationDetailScreen extends Component {
     this.ref
       .add({
         access_code: {
-          code: 1234,
+          code: Math.floor(1000 + Math.random() * 9000),
           requested: firebase.firestore.FieldValue.serverTimestamp(),
-          expiry: null,
+          expiry: firebase.firestore.FieldValue.serverTimestamp(),
           location: locationRef
         },
         user: userDocRef,
@@ -115,7 +114,7 @@ class LocationDetailScreen extends Component {
   handleRequest = () => {
     this.handleRequestCode();
     this.setState({ dialogVisible: false });
-    this.props.navigation.navigate("ActiveCodeHome", {
+    this.props.navigation.navigate("Home", {
       code: "1234",
       docId: this.state.key,
       validFor: "24"

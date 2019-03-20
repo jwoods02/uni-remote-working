@@ -30,18 +30,15 @@ export const getCurrentLocation = () => {
 };
 
 export default class ActiveCodeHome extends Component {
-  static navigationOptions = { title: "Home", headerLeft: null };
+  static navigationOptions = { title: "Your Code", headerLeft: null };
 
   constructor(props) {
     super(props);
-    this.ref = firebase
-      .firestore()
-      .collection("locations")
-      .doc(props.navigation.state.params.docId);
     this.unsubscribe = null;
     this.state = {
       isLoading: true,
       markers: [],
+      location: {},
       region: {
         //just a default incase snapshot fails - Cardiff
         latitude: 51.481583,
@@ -58,10 +55,20 @@ export default class ActiveCodeHome extends Component {
     this.animation = new Animated.Value(0);
   }
 
-  componentDidMount() {
-    this.state = this.unsubscribe = this.ref.onSnapshot(
-      this.onCollectionUpdate
-    );
+  async componentDidMount() {
+    this.state = this.unsubscribe = this.props.session
+      .data()
+      .access_code.location.onSnapshot(this.onCollectionUpdate);
+
+    const doc = await this.props.session.data().access_code.location.get();
+
+    if (doc.exists) {
+      this.setState({
+        location: doc.data()
+      });
+    } else {
+      console.log("No such document!");
+    }
 
     getCurrentLocation().then(position => {
       if (position) {
@@ -112,7 +119,26 @@ export default class ActiveCodeHome extends Component {
 
   handleRemove = () => {
     this.setState({ dialogVisible: false });
-    this.props.navigation.navigate("Home");
+    this.setState({
+      isLoading: true
+    });
+    firebase
+      .firestore()
+      .collection("sessions")
+      .doc(this.props.session.id)
+      .delete()
+      .then(() => {
+        this.setState({
+          isLoading: false
+        });
+        this.props.navigation.replace("Home");
+      })
+      .catch(error => {
+        console.error("Error removing document: ", error);
+        this.setState({
+          isLoading: false
+        });
+      });
   };
 
   render() {
@@ -126,20 +152,17 @@ export default class ActiveCodeHome extends Component {
 
     return (
       <View style={styles.container}>
-        {/* Header */}
         <View
           style={[styles.headerContainer, flex.column, justify.spaceBetween]}
         >
-          {/* First row of header */}
           <View style={[justify.spaceBetween, flex.row, styles.firstInfoRow]}>
             <Text style={[styles.title, colours.textPurple]}>
               {this.state.markers[0].title}
             </Text>
             <Text style={styles.title}>
-              {this.props.navigation.state.params.code}
+              {this.props.session.data().access_code.code}
             </Text>
           </View>
-          {/* Second row of header */}
           <View
             style={[
               justify.spaceBetween,
@@ -154,12 +177,18 @@ export default class ActiveCodeHome extends Component {
               title="X Remove code"
               color="#FF0000"
             />
-            <Text style={{ fontSize: 20, paddingRight: 10 }}>
-              Valid for: {this.props.navigation.state.params.validFor}hrs
+            <Text style={{ fontSize: 12, paddingRight: 10 }}>
+              Valid until:
+              {new Date(
+                this.props.session.data().access_code.expiry.seconds * 1000
+              ).toLocaleDateString("en-US") +
+                " " +
+                new Date(
+                  this.props.session.data().access_code.expiry.seconds * 1000
+                ).toLocaleTimeString("en-US")}
             </Text>
           </View>
         </View>
-        {/* Start of body */}
         <ScrollView style={[styles.scrollContainer, flex.column]}>
           <Button onPress={this._howTo} title="How do I use this code?" />
           <View style={styles.mapContainer}>
@@ -170,7 +199,6 @@ export default class ActiveCodeHome extends Component {
               navigation={this.props.navigation}
             />
           </View>
-          {/* Information below map container */}
           <View style={{ padding: 8 }}>
             <Text style={[styles.infoTitle, colours.textPurple]}>
               {this.state.markers[0].title}
@@ -198,7 +226,6 @@ export default class ActiveCodeHome extends Component {
             </View>
             <Text>{this.state.markers[0].info}</Text>
           </View>
-          {/* Dialog box that shows when remove code btn is pressed */}
           <Dialog.Container visible={this.state.dialogVisible}>
             <Dialog.Description>
               Are you sure you want to remove your access code?
