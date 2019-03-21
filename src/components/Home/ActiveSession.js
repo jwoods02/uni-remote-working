@@ -35,11 +35,18 @@ export default class ActiveSession extends Component {
 
   constructor(props) {
     super(props);
+    console.log("USER:", this.props.user);
     this.unsubscribe = null;
+    this.userRef = firebase
+      .firestore()
+      .collection("users")
+      .where("auth", "==", this.props.user);
     this.state = {
       isLoading: true,
       markers: [],
       location: {},
+      user: {},
+
       region: {
         //just a default incase snapshot fails - Cardiff
         latitude: 51.481583,
@@ -57,6 +64,17 @@ export default class ActiveSession extends Component {
   }
 
   async componentDidMount() {
+    try {
+      const querySnapshot = await this.userRef.get();
+
+      querySnapshot.forEach(doc => {
+        this.setState({
+          user: doc.id
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
     this.state = this.unsubscribe = this.props.session
       .data()
       .access_code.location.onSnapshot(this.onCollectionUpdate);
@@ -103,6 +121,32 @@ export default class ActiveSession extends Component {
       isLoading: false
     });
   };
+
+  async manageSession() {
+    let userDocRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(this.state.user);
+
+    const querySnapshot = await firebase
+      .firestore()
+      .collection("sessions")
+      .where("user", "==", userDocRef)
+      .get();
+
+    if (querySnapshot.empty) {
+      console.log("no documents found");
+    } else {
+      let snapshot = querySnapshot.docs[0];
+      snapshot.ref.update({
+        end: firebase.firestore.FieldValue.serverTimestamp(),
+        minutes: parseInt(snapshot.end - snapshot.start)
+      });
+
+      this.setState({ dialogVisible: false });
+      this.props.navigation.navigate("Settings");
+    }
+  }
 
   render() {
     if (this.state.isLoading) {
@@ -161,13 +205,25 @@ export default class ActiveSession extends Component {
 
             <Text>{this.state.markers[0].info}</Text>
           </View>
-          <Dialog.Container visible={this.state.dialogVisible}>
-            <Dialog.Description>
-              Are you sure you want to remove your access code?
-            </Dialog.Description>
-            <Dialog.Button label="Cancel" onPress={this.handleCancel} />
-            <Dialog.Button label="Remove" onPress={this.handleRemove} />
-          </Dialog.Container>
+          <View style={[flex.column, justify.center, align.center]}>
+            <AwesomeButton
+              backgroundColor={"#42a7f4"}
+              width={200}
+              onPress={() => this.setState({ dialogVisible: true })}
+            >
+              End session
+            </AwesomeButton>
+            <Dialog.Container visible={this.state.dialogVisible}>
+              <Dialog.Description>
+                Are you sure you want to end your session?
+              </Dialog.Description>
+              <Dialog.Button
+                label="Cancel"
+                onPress={() => this.setState({ dialogVisible: false })}
+              />
+              <Dialog.Button label="End" onPress={this.manageSession} />
+            </Dialog.Container>
+          </View>
         </ScrollView>
       </View>
     );
