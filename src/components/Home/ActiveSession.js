@@ -16,6 +16,7 @@ import {
 import firebase from "firebase";
 import MapViewItems from "../Maps/MapComponents/MapViewItems";
 import Dialog from "react-native-dialog";
+import { withUser } from "../Auth/Context/withUser";
 
 import { styles } from "../Styles/ActiveCodeHome";
 import { colours, flex, justify, align } from "../Styles/Global";
@@ -30,23 +31,23 @@ export const getCurrentLocation = () => {
   });
 };
 
-export default class ActiveSession extends Component {
+class ActiveSession extends Component {
   static navigationOptions = { title: "Your Code", headerLeft: null };
 
   constructor(props) {
     super(props);
-    console.log("USER:", this.props.user);
+    console.log("USER BY CONTEXT:", this.props.userContext.user);
+
     this.unsubscribe = null;
     this.userRef = firebase
       .firestore()
       .collection("users")
-      .where("auth", "==", this.props.user);
+      .where("auth", "==", this.props.userContext.user);
     this.state = {
       isLoading: true,
       markers: [],
       location: {},
       user: {},
-
       region: {
         //just a default incase snapshot fails - Cardiff
         latitude: 51.481583,
@@ -64,17 +65,6 @@ export default class ActiveSession extends Component {
   }
 
   async componentDidMount() {
-    try {
-      const querySnapshot = await this.userRef.get();
-
-      querySnapshot.forEach(doc => {
-        this.setState({
-          user: doc.id
-        });
-      });
-    } catch (err) {
-      console.log(err);
-    }
     this.state = this.unsubscribe = this.props.session
       .data()
       .access_code.location.onSnapshot(this.onCollectionUpdate);
@@ -101,6 +91,19 @@ export default class ActiveSession extends Component {
         });
       }
     });
+
+    try {
+      const querySnapshot = await this.userRef.get();
+
+      querySnapshot.forEach(doc => {
+        this.setState({
+          user: doc.id
+        });
+      });
+      console.log("user after set state in DidMount", this.state.user);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   onCollectionUpdate = doc => {
@@ -123,6 +126,7 @@ export default class ActiveSession extends Component {
   };
 
   async manageSession() {
+    console.log("user in manageSession", this.state.user);
     let userDocRef = firebase
       .firestore()
       .collection("users")
@@ -230,4 +234,4 @@ export default class ActiveSession extends Component {
   }
 }
 
-AppRegistry.registerComponent("ActiveSession", () => ActiveSession);
+export default withUser(ActiveSession);
