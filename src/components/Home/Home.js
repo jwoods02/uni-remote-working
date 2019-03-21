@@ -18,6 +18,8 @@ import Icon from "@expo/vector-icons/Ionicons";
 import FavouritesCarousel from "./FavouritesCarousel";
 import firebase from "firebase";
 import ActiveCodeHome from "./ActiveCodeHome";
+import ActiveSession from "./ActiveSession";
+
 import DefaultHome from "./DefaultHome";
 import { withUser } from "../Auth/Context/withUser";
 import { Font, AppLoading } from "expo";
@@ -106,15 +108,24 @@ class Home extends Component {
         </View>
       );
     } else {
-      if (this.state.hasCode) {
+      console.log("HOME SESSION START", this.state.session.data().start);
+      if (this.state.hasCode && this.state.session.data().start === null) {
         return (
           <ActiveCodeHome
             navigation={this.props.navigation}
             session={this.state.session}
           />
         );
+      } else if (this.state.hasCode) {
+        return (
+          <ActiveSession
+            navigation={this.props.navigation}
+            session={this.state.session}
+          />
+        );
+      } else {
+        return <DefaultHome navigation={this.props.navigation} />;
       }
-      return <DefaultHome navigation={this.props.navigation} />;
     }
   }
 }

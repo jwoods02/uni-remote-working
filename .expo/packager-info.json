@@ -2,9 +2,9 @@
   "expoServerPort": 19000,
   "expoServerNgrokUrl": "https://cz-rtv.anonymous.remote-working.exp.direct",
   "packagerNgrokUrl": "https://packager.cz-rtv.anonymous.remote-working.exp.direct",
-  "ngrokPid": 778,
-  "devToolsPort": 19003,
+  "ngrokPid": 13516,
+  "devToolsPort": 19002,
   "packagerPort": 19001,
-  "packagerPid": 752,
+  "packagerPid": 13504,
   "webpackServerPort": null
 }

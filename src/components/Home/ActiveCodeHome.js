@@ -20,6 +20,7 @@ import Dialog from "react-native-dialog";
 import { styles } from "../Styles/ActiveCodeHome";
 import { colours, flex, justify, align } from "../Styles/Global";
 import AwesomeButton from "react-native-really-awesome-button";
+import ActiveSession from "./ActiveSession";
 
 export const getCurrentLocation = () => {
   return new Promise((resolve, reject) => {
@@ -151,121 +152,94 @@ export default class ActiveCodeHome extends Component {
       );
     }
     console.log("end", this.props.session.data().end);
-    if (true) {
-      return (
-        <View style={[flex.column, justify.center, align.center]}>
-          <Text style={{ fontSize: 30 }}> {this.state.markers[0].title}</Text>
-          <Text style={{ fontSize: 24, paddingBottom: 20 }}>
-            Session length: 2hrs
-          </Text>
-          <AwesomeButton
-            backgroundColor={"red"}
-            width={200}
-            onPress={() => this.setState({ dialogVisible: true })}
+
+    return (
+      <View style={styles.container}>
+        <View
+          style={[styles.headerContainer, flex.column, justify.spaceBetween]}
+        >
+          <View style={[justify.spaceBetween, flex.row, styles.firstInfoRow]}>
+            <Text style={[styles.title, colours.textPurple]}>
+              {this.state.markers[0].title}
+            </Text>
+            <Text style={styles.title}>
+              {this.props.session.data().access_code.code}
+            </Text>
+          </View>
+          <View
+            style={[
+              justify.spaceBetween,
+              flex.row,
+              {
+                alignItems: "center"
+              }
+            ]}
           >
-            End session
-          </AwesomeButton>
+            <Button
+              onPress={this._removeCode}
+              title="X Remove code"
+              color="#FF0000"
+            />
+            <Text style={{ fontSize: 12, paddingRight: 10 }}>
+              Expiry:
+              {" " +
+                new Date(
+                  this.props.session.data().access_code.expiry.seconds * 1000
+                ).toLocaleTimeString("en-US") +
+                " on " +
+                new Date(
+                  this.props.session.data().access_code.expiry.seconds * 1000
+                ).toLocaleDateString("en-UK")}
+            </Text>
+          </View>
+        </View>
+        <ScrollView style={[styles.scrollContainer, flex.column]}>
+          <Button onPress={this._howTo} title="How do I use this code?" />
+          <View style={styles.mapContainer}>
+            <MapViewItems //the map
+              region={this.state.region}
+              markers={this.state.markers}
+              animation={this.animation}
+              navigation={this.props.navigation}
+            />
+          </View>
+          <View style={{ padding: 8 }}>
+            <Text style={[styles.infoTitle, colours.textPurple]}>
+              {this.state.markers[0].title}
+            </Text>
+            <Text style={styles.description}>
+              {this.state.markers[0].description}
+            </Text>
+            <View style={[styles.infoContainer, flex.row, justify.center]}>
+              <View style={styles.infoBorderRight}>
+                <Text>{this.state.markers[0].desks} desks</Text>
+              </View>
+              <View
+                style={[
+                  styles.infoBorderRight,
+                  {
+                    paddingLeft: 5
+                  }
+                ]}
+              >
+                <Text>24 / 7 Access</Text>
+              </View>
+              <View style={{ paddingLeft: 5 }}>
+                <Text>Kitchen Area</Text>
+              </View>
+            </View>
+            <Text>{this.state.markers[0].info}</Text>
+          </View>
           <Dialog.Container visible={this.state.dialogVisible}>
             <Dialog.Description>
-              Are you sure you want to end your session?
+              Are you sure you want to remove your access code?
             </Dialog.Description>
-            <Dialog.Button
-              label="Cancel"
-              onPress={() => this.setState({ dialogVisible: false })}
-            />
-            <Dialog.Button label="End" onPress={this.end} />
+            <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+            <Dialog.Button label="Remove" onPress={this.handleRemove} />
           </Dialog.Container>
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.container}>
-          <View
-            style={[styles.headerContainer, flex.column, justify.spaceBetween]}
-          >
-            <View style={[justify.spaceBetween, flex.row, styles.firstInfoRow]}>
-              <Text style={[styles.title, colours.textPurple]}>
-                {this.state.markers[0].title}
-              </Text>
-              <Text style={styles.title}>
-                {this.props.session.data().access_code.code}
-              </Text>
-            </View>
-            <View
-              style={[
-                justify.spaceBetween,
-                flex.row,
-                {
-                  alignItems: "center"
-                }
-              ]}
-            >
-              <Button
-                onPress={this._removeCode}
-                title="X Remove code"
-                color="#FF0000"
-              />
-              <Text style={{ fontSize: 12, paddingRight: 10 }}>
-                Expiry:
-                {" " +
-                  new Date(
-                    this.props.session.data().access_code.expiry.seconds * 1000
-                  ).toLocaleTimeString("en-US") +
-                  " on " +
-                  new Date(
-                    this.props.session.data().access_code.expiry.seconds * 1000
-                  ).toLocaleDateString("en-UK")}
-              </Text>
-            </View>
-          </View>
-          <ScrollView style={[styles.scrollContainer, flex.column]}>
-            <Button onPress={this._howTo} title="How do I use this code?" />
-            <View style={styles.mapContainer}>
-              <MapViewItems //the map
-                region={this.state.region}
-                markers={this.state.markers}
-                animation={this.animation}
-                navigation={this.props.navigation}
-              />
-            </View>
-            <View style={{ padding: 8 }}>
-              <Text style={[styles.infoTitle, colours.textPurple]}>
-                {this.state.markers[0].title}
-              </Text>
-              <Text style={styles.description}>
-                {this.state.markers[0].description}
-              </Text>
-              <View style={[styles.infoContainer, flex.row, justify.center]}>
-                <View style={styles.infoBorderRight}>
-                  <Text>{this.state.markers[0].desks} desks</Text>
-                </View>
-                <View
-                  style={[
-                    styles.infoBorderRight,
-                    {
-                      paddingLeft: 5
-                    }
-                  ]}
-                >
-                  <Text>24 / 7 Access</Text>
-                </View>
-                <View style={{ paddingLeft: 5 }}>
-                  <Text>Kitchen Area</Text>
-                </View>
-              </View>
-              <Text>{this.state.markers[0].info}</Text>
-            </View>
-            <Dialog.Container visible={this.state.dialogVisible}>
-              <Dialog.Description>
-                Are you sure you want to remove your access code?
-              </Dialog.Description>
-              <Dialog.Button label="Cancel" onPress={this.handleCancel} />
-              <Dialog.Button label="Remove" onPress={this.handleRemove} />
-            </Dialog.Container>
-          </ScrollView>
-        </View>
-      );
-    }
+        </ScrollView>
+      </View>
+    );
   }
 }
 
