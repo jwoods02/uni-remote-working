@@ -116,7 +116,11 @@ class Home extends Component {
             session={this.state.session}
           />
         );
-      } else if (this.state.hasCode) {
+      } else if (
+        this.state.hasCode &&
+        this.state.session.data().start != null &&
+        this.state.session.data().end === null
+      ) {
         return (
           <ActiveSession
             navigation={this.props.navigation}

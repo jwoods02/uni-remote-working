@@ -17,10 +17,13 @@ import firebase from "firebase";
 import MapViewItems from "../Maps/MapComponents/MapViewItems";
 import Dialog from "react-native-dialog";
 import { withUser } from "../Auth/Context/withUser";
+import { FontAwesome } from "@expo/vector-icons";
 
 import { styles } from "../Styles/ActiveCodeHome";
 import { colours, flex, justify, align } from "../Styles/Global";
 import AwesomeButton from "react-native-really-awesome-button";
+import ManageSession from "../User/ManageSession";
+import EndSession from "./EndSession";
 
 export const getCurrentLocation = () => {
   return new Promise((resolve, reject) => {
@@ -208,6 +211,7 @@ class ActiveSession extends Component {
             </Text>
 
             <Text>{this.state.markers[0].info}</Text>
+            <EndSession />
           </View>
           <View style={[flex.column, justify.center, align.center]}>
             <AwesomeButton
