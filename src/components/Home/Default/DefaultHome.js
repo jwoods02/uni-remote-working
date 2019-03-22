@@ -16,7 +16,7 @@ import {
 import Icon from "@expo/vector-icons/Ionicons";
 import FavouritesCarousel from "./FavouritesCarousel";
 import firebase from "firebase";
-import { withUser } from "../Auth/Context/withUser";
+import { withUser } from "../../Auth/Context/withUser";
 
 const { height, width } = Dimensions.get("window");
 
@@ -150,7 +150,7 @@ class DefaultHome extends Component {
                       borderWidth: 1,
                       borderColor: "#dddddd"
                     }}
-                    source={require("../../../assets/locationD.jpg")}
+                    source={require("../../../../assets/locationD.jpg")}
                   />
                 </View>
               </View>

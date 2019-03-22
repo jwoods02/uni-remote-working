@@ -3,24 +3,21 @@
 
 import React, { Component } from "react";
 import {
-  AppRegistry,
   Text,
   View,
   Animated,
   ActivityIndicator,
-  Button,
-  Alert,
   ScrollView
 } from "react-native";
 
-import firebase from "firebase";
-import MapViewItems from "../Maps/MapComponents/MapViewItems";
+import MapViewItems from "../../../Maps/MapComponents/MapViewItems";
 import Dialog from "react-native-dialog";
+import { withUser } from "../../../Auth/Context/withUser";
 
-import { styles } from "../Styles/ActiveCodeHome";
-import { colours, flex, justify, align } from "../Styles/Global";
+import { styles } from "../../../Styles/ActiveCodeHome";
+import { colours, flex, justify, align } from "../../../Styles/Global";
 import AwesomeButton from "react-native-really-awesome-button";
-import ActiveSession from "./ActiveSession";
+import EndSession from "./EndSession";
 
 export const getCurrentLocation = () => {
   return new Promise((resolve, reject) => {
@@ -31,16 +28,19 @@ export const getCurrentLocation = () => {
   });
 };
 
-export default class ActiveCodeHome extends Component {
+class ActiveSession extends Component {
   static navigationOptions = { title: "Your Code", headerLeft: null };
 
   constructor(props) {
     super(props);
+
     this.unsubscribe = null;
+
     this.state = {
       isLoading: true,
       markers: [],
       location: {},
+      user: {},
       region: {
         //just a default incase snapshot fails - Cardiff
         latitude: 51.481583,
@@ -105,44 +105,6 @@ export default class ActiveCodeHome extends Component {
     });
   };
 
-  _howTo() {
-    Alert.alert(
-      "The code in the top right of the screen is used to enter the building. When you enter the building, you will begin to be charged."
-    );
-  }
-
-  _removeCode = () => {
-    this.setState({ dialogVisible: true });
-  };
-
-  handleCancel = () => {
-    this.setState({ dialogVisible: false });
-  };
-
-  handleRemove = () => {
-    this.setState({ dialogVisible: false });
-    this.setState({
-      isLoading: true
-    });
-    firebase
-      .firestore()
-      .collection("sessions")
-      .doc(this.props.session.id)
-      .delete()
-      .then(() => {
-        this.setState({
-          isLoading: false
-        });
-        this.props.navigation.replace("Home");
-      })
-      .catch(error => {
-        console.error("Error removing document: ", error);
-        this.setState({
-          isLoading: false
-        });
-      });
-  };
-
   render() {
     if (this.state.isLoading) {
       return (
@@ -151,7 +113,6 @@ export default class ActiveCodeHome extends Component {
         </View>
       );
     }
-    console.log("end", this.props.session.data().end);
 
     return (
       <View style={styles.container}>
@@ -160,10 +121,7 @@ export default class ActiveCodeHome extends Component {
         >
           <View style={[justify.spaceBetween, flex.row, styles.firstInfoRow]}>
             <Text style={[styles.title, colours.textPurple]}>
-              {this.state.markers[0].title}
-            </Text>
-            <Text style={styles.title}>
-              {this.props.session.data().access_code.code}
+              You current have an active session
             </Text>
           </View>
           <View
@@ -174,27 +132,9 @@ export default class ActiveCodeHome extends Component {
                 alignItems: "center"
               }
             ]}
-          >
-            <Button
-              onPress={this._removeCode}
-              title="X Remove code"
-              color="#FF0000"
-            />
-            <Text style={{ fontSize: 12, paddingRight: 10 }}>
-              Expiry:
-              {" " +
-                new Date(
-                  this.props.session.data().access_code.expiry.seconds * 1000
-                ).toLocaleTimeString("en-US") +
-                " on " +
-                new Date(
-                  this.props.session.data().access_code.expiry.seconds * 1000
-                ).toLocaleDateString("en-UK")}
-            </Text>
-          </View>
+          />
         </View>
         <ScrollView style={[styles.scrollContainer, flex.column]}>
-          <Button onPress={this._howTo} title="How do I use this code?" />
           <View style={styles.mapContainer}>
             <MapViewItems //the map
               region={this.state.region}
@@ -208,39 +148,43 @@ export default class ActiveCodeHome extends Component {
               {this.state.markers[0].title}
             </Text>
             <Text style={styles.description}>
-              {this.state.markers[0].description}
+              Session Start Time :
+              {" " +
+                new Date(
+                  this.props.session.data().access_code.expiry.seconds * 1000
+                ).toLocaleTimeString("en-UK") +
+                " on " +
+                new Date(
+                  this.props.session.data().access_code.expiry.seconds * 1000
+                ).toLocaleDateString("en-UK")}{" "}
             </Text>
-            <View style={[styles.infoContainer, flex.row, justify.center]}>
-              <View style={styles.infoBorderRight}>
-                <Text>{this.state.markers[0].desks} desks</Text>
-              </View>
-              <View
-                style={[
-                  styles.infoBorderRight,
-                  {
-                    paddingLeft: 5
-                  }
-                ]}
-              >
-                <Text>24 / 7 Access</Text>
-              </View>
-              <View style={{ paddingLeft: 5 }}>
-                <Text>Kitchen Area</Text>
-              </View>
-            </View>
+
             <Text>{this.state.markers[0].info}</Text>
+            <EndSession />
           </View>
-          <Dialog.Container visible={this.state.dialogVisible}>
-            <Dialog.Description>
-              Are you sure you want to remove your access code?
-            </Dialog.Description>
-            <Dialog.Button label="Cancel" onPress={this.handleCancel} />
-            <Dialog.Button label="Remove" onPress={this.handleRemove} />
-          </Dialog.Container>
+          <View style={[flex.column, justify.center, align.center]}>
+            <AwesomeButton
+              backgroundColor={"#42a7f4"}
+              width={200}
+              onPress={() => this.setState({ dialogVisible: true })}
+            >
+              End session
+            </AwesomeButton>
+            <Dialog.Container visible={this.state.dialogVisible}>
+              <Dialog.Description>
+                Are you sure you want to end your session?
+              </Dialog.Description>
+              <Dialog.Button
+                label="Cancel"
+                onPress={() => this.setState({ dialogVisible: false })}
+              />
+              <Dialog.Button label="End" onPress={this.manageSession} />
+            </Dialog.Container>
+          </View>
         </ScrollView>
       </View>
     );
   }
 }
 
-AppRegistry.registerComponent("ActiveCodeHome", () => ActiveCodeHome);
+export default withUser(ActiveSession);

@@ -1,32 +1,11 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TextInput,
-  Platform,
-  StatusBar,
-  ScrollView,
-  Image,
-  Dimensions,
-  Button,
-  TouchableOpacity,
-  ActivityIndicator
-} from "react-native";
-import Icon from "@expo/vector-icons/Ionicons";
-import FavouritesCarousel from "./FavouritesCarousel";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import firebase from "firebase";
-import ActiveCodeHome from "./ActiveCodeHome";
-import ActiveSession from "./ActiveSession";
+import ActiveCodeHome from "./Code Requested/ActiveCodeHome";
+import ActiveSession from "./Code Requested/Session Active/ActiveSession";
 
-import DefaultHome from "./DefaultHome";
+import DefaultHome from "./Default/DefaultHome";
 import { withUser } from "../Auth/Context/withUser";
-import { Font, AppLoading } from "expo";
-import Loading from "../Auth/Loading";
-import { NavigationEvents } from "react-navigation";
-
-const { height, width } = Dimensions.get("window");
 
 class Home extends Component {
   constructor(props) {
