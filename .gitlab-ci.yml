@@ -1,0 +1,41 @@
+image: node:8
+
+# This folder is cached between builds
+# http://docs.gitlab.com/ce/ci/yaml/README.html#cache
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - install
+  - test
+  - build
+  - deploy
+
+npm-install:
+  stage: install
+  only:
+    - merge_requests
+  script:
+    - npm install
+
+npm-test:
+  stage: test
+  only:
+    - merge_requests
+  script:
+    - npm run ci
+
+expo-build:
+  stage: build
+  only:
+    - development
+  script:
+    - echo "Build"
+
+expo-deploy:
+  stage: deploy
+  only:
+    - master
+  script:
+    - echo "Deployed"

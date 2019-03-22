@@ -17,7 +17,7 @@ export default class UserProvider extends React.Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user =>
       this.setState({
-        user: user
+        user: firebase.auth().currentUser.uid
       })
     );
   }

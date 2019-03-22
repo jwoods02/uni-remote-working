@@ -27,19 +27,21 @@ import LocationDetailScreen from "./src/components/Locations/LocationDetailScree
 import ActiveCodeHome from "./src/components/Home/ActiveCodeHome";
 import DefaultHome from "./src/components/Home/DefaultHome";
 import Home from "./src/components/Home/Home";
+import ActiveSession from "./src/components/Home/ActiveSession";
 
 import LandingPage from "./src/components/Auth/LandingPage";
 import UserProvider from "./src/components/Auth/Context/UserProvider";
+import ManageSession from "./src/components/User/ManageSession";
 
 setupFirebase();
-axios.defaults.baseURL = "http://192.168.0.70:4000";
+axios.defaults.baseURL = "http://10.247.39.92:4000";
 
 const HomeStack = createStackNavigator(
   {
     Home: Home,
     ActiveCodeHome: ActiveCodeHome,
     DefaultHome: DefaultHome,
-
+    ActiveSession: ActiveSession,
     Main: Main,
     Loading: Loading,
     LocationMap: LocationMap,
@@ -77,7 +79,8 @@ const MapStack = createStackNavigator(
 
 const SettingsStack = createStackNavigator(
   {
-    Settings: Settings
+    Settings: Settings,
+    ManageSession: ManageSession
   },
   {
     defaultNavigationOptions: {

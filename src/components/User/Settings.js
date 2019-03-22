@@ -50,8 +50,14 @@ class Settings extends Component {
     return (
       <ScrollView style={styles.container}>
         <ListItem
+          title="Manage Session"
+          leftIcon={{ name: "tasks", type: "font-awesome", color: "grey" }}
+          onPress={() => this.props.navigation.navigate("ManageSession")}
+        />
+
+        <ListItem
           title="Log Out"
-          leftIcon={{ name: "sign-out", type: "font-awesome" }}
+          leftIcon={{ name: "sign-out", type: "font-awesome", color: "red" }}
           onPress={() => this.signOutUser()}
         />
       </ScrollView>

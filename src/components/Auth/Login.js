@@ -18,7 +18,6 @@ class Login extends React.Component {
       .signInWithEmailAndPassword(email, password)
       .then(() => this.props.navigation.navigate("Home"))
       .catch(error => this.setState({ errorMessage: error.message }));
-    this.props.userContext.setUser(this.state);
   };
 
   doSignInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider);

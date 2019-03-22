@@ -38,7 +38,7 @@ class DefaultHome extends Component {
   }
 
   componentDidMount() {
-    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+    this.ref.onSnapshot(this.onCollectionUpdate);
   }
 
   onCollectionUpdate = querySnapshot => {
