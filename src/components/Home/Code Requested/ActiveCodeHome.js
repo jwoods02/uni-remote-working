@@ -151,7 +151,6 @@ export default class ActiveCodeHome extends Component {
         </View>
       );
     }
-    console.log("end", this.props.session.data().end);
 
     return (
       <View style={styles.container}>

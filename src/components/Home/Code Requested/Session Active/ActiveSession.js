@@ -158,8 +158,6 @@ class ActiveSession extends Component {
                   this.props.session.data().access_code.expiry.seconds * 1000
                 ).toLocaleDateString("en-UK")}{" "}
             </Text>
-
-            <Text>{this.state.markers[0].info}</Text>
             <EndSession />
           </View>
           <View style={[flex.column, justify.center, align.center]}>

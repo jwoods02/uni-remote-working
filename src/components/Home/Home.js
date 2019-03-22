@@ -87,7 +87,6 @@ class Home extends Component {
         </View>
       );
     } else {
-      // console.log("HOME SESSION START", this.state.session.data().start);
       if (this.state.hasCode && this.state.session.data().start === null) {
         return (
           <ActiveCodeHome
