@@ -39,13 +39,9 @@ class ActiveSession extends Component {
 
   constructor(props) {
     super(props);
-    console.log("USER BY CONTEXT:", this.props.userContext.user);
 
     this.unsubscribe = null;
-    this.userRef = firebase
-      .firestore()
-      .collection("users")
-      .where("auth", "==", this.props.userContext.user);
+
     this.state = {
       isLoading: true,
       markers: [],
@@ -94,19 +90,6 @@ class ActiveSession extends Component {
         });
       }
     });
-
-    try {
-      const querySnapshot = await this.userRef.get();
-
-      querySnapshot.forEach(doc => {
-        this.setState({
-          user: doc.id
-        });
-      });
-      console.log("user after set state in DidMount", this.state.user);
-    } catch (err) {
-      console.log(err);
-    }
   }
 
   onCollectionUpdate = doc => {
@@ -128,33 +111,6 @@ class ActiveSession extends Component {
     });
   };
 
-  async manageSession() {
-    console.log("user in manageSession", this.state.user);
-    let userDocRef = firebase
-      .firestore()
-      .collection("users")
-      .doc(this.state.user);
-
-    const querySnapshot = await firebase
-      .firestore()
-      .collection("sessions")
-      .where("user", "==", userDocRef)
-      .get();
-
-    if (querySnapshot.empty) {
-      console.log("no documents found");
-    } else {
-      let snapshot = querySnapshot.docs[0];
-      snapshot.ref.update({
-        end: firebase.firestore.FieldValue.serverTimestamp(),
-        minutes: parseInt(snapshot.end - snapshot.start)
-      });
-
-      this.setState({ dialogVisible: false });
-      this.props.navigation.navigate("Settings");
-    }
-  }
-
   render() {
     if (this.state.isLoading) {
       return (
@@ -163,7 +119,6 @@ class ActiveSession extends Component {
         </View>
       );
     }
-    console.log("end", this.props.session.data().end);
 
     return (
       <View style={styles.container}>
