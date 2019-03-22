@@ -1,14 +1,7 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  ScrollView,
-  ActivityIndicator,
-  View,
-  Text
-} from "react-native";
+import { StyleSheet, ScrollView, ActivityIndicator, View } from "react-native";
 import { Font } from "expo";
-import { ListItem, Button, Icon } from "react-native-elements";
-import { FontAwesome } from "@expo/vector-icons";
+import { ListItem } from "react-native-elements";
 import firebase from "firebase";
 import { withUser } from "../Auth/Context/withUser";
 

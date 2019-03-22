@@ -7,10 +7,8 @@ import {
   Text
 } from "react-native";
 import { Font } from "expo";
-import { ListItem, Button, Icon } from "react-native-elements";
-import { FontAwesome } from "@expo/vector-icons";
 import Dialog from "react-native-dialog";
-import { colours, flex, justify, align } from "../../Styles/Global";
+import { flex, justify, align } from "../../Styles/Global";
 import AwesomeButton from "react-native-really-awesome-button";
 
 import firebase from "firebase";

@@ -20,7 +20,7 @@ import Dialog from "react-native-dialog";
 
 import { styles } from "../../Styles/ActiveCodeHome";
 
-import { colours, flex, justify, align } from "../../Styles/Global";
+import { colours, flex, justify } from "../../Styles/Global";
 
 export const getCurrentLocation = () => {
   return new Promise((resolve, reject) => {
