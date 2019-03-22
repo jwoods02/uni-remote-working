@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import { Button, Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import {
@@ -10,10 +9,6 @@ import {
   createSwitchNavigator
 } from "react-navigation";
 
-import BoardScreen from "./src/components/CRUD/BoardScreen";
-import BoardDetailScreen from "./src/components/CRUD/BoardDetailScreen";
-import AddBoardScreen from "./src/components/CRUD/AddBoardScreen";
-import EditBoardScreen from "./src/components/CRUD/EditBoardScreen";
 import Loading from "./src/components/Auth/Loading";
 import SignUp from "./src/components/Auth/SignUp";
 import Login from "./src/components/Auth/Login";
@@ -25,10 +20,10 @@ import setupFirebase from "./Firebase";
 import Pay from "./src/components/Payment/Pay";
 import LocationMap from "./src/components/Maps/LocationMap";
 import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
-import ActiveCodeHome from "./src/components/Home/ActiveCodeHome";
-import DefaultHome from "./src/components/Home/DefaultHome";
+import ActiveCodeHome from "./src/components/Home/CodeRequested/ActiveCodeHome";
+import DefaultHome from "./src/components/Home/Default/DefaultHome";
 import Home from "./src/components/Home/Home";
-import ActiveSession from "./src/components/Home/ActiveSession";
+import ActiveSession from "./src/components/Home/SessionActive/ActiveSession";
 
 import LandingPage from "./src/components/Auth/LandingPage";
 import UserProvider from "./src/components/Auth/Context/UserProvider";
