@@ -186,11 +186,15 @@ class LocationDetailScreen extends Component {
                     }}
                     source={{ uri: this.state.location.image }}
                   />
-                  <Button
-                    onPress={this.showDialog}
-                    title="Request Code"
-                    type="outline"
-                  />
+                  {!this.state.hasCode && (
+                    <Button
+                      onPress={this.showDialog}
+                      title="Request Code"
+                      type="outline"
+                      visisble={this.state.hasCode}
+                    />
+                  )}
+
                   <Dialog.Container visible={this.state.dialogVisible}>
                     <Dialog.Description>
                       Are you sure you want to get access to this building?
