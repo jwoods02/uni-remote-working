@@ -44,8 +44,7 @@ const HomeStack = createStackNavigator(
     ActiveSession: ActiveSession,
     Main: Main,
     Loading: Loading,
-    SignUp: SignUp,
-    Login: Login,
+    LocationMap: LocationMap,
     LocationDetailScreen: LocationDetailScreen
   },
   {
@@ -65,8 +64,6 @@ const MapStack = createStackNavigator(
 
     Main: Main,
     Loading: Loading,
-    SignUp: SignUp,
-    Login: Login,
     LocationDetailScreen: LocationDetailScreen
   },
   {
