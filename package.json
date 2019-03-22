@@ -9,7 +9,8 @@
     "ios": "expo start --ios",
     "test": "node_modules/.bin/jest",
     "eject": "expo eject",
-    "ci": "eslint src/**/*.js && jest"
+    "ci": "eslint src/**/*.js && jest",
+    "server": "nodemon server/app.js"
   },
   "jest": {
     "preset": "jest-expo",
@@ -27,6 +28,7 @@
     "express": "^4.16.4",
     "firebase": "^5.8.6",
     "link": "^0.1.5",
+    "node-fetch": "^2.3.0",
     "nodemon": "^1.18.10",
     "prop-types": "^15.6.0",
     "react": "16.5.0",
