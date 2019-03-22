@@ -10,11 +10,11 @@ import { Font } from "expo";
 import { ListItem, Button, Icon } from "react-native-elements";
 import { FontAwesome } from "@expo/vector-icons";
 import Dialog from "react-native-dialog";
-import { colours, flex, justify, align } from "../../../Styles/Global";
+import { colours, flex, justify, align } from "../../Styles/Global";
 import AwesomeButton from "react-native-really-awesome-button";
 
 import firebase from "firebase";
-import { withUser } from "../../../Auth/Context/withUser";
+import { withUser } from "../../Auth/Context/withUser";
 
 class EndSession extends Component {
   constructor(props) {

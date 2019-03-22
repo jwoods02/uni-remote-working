@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import firebase from "firebase";
-import ActiveCodeHome from "./Code Requested/ActiveCodeHome";
-import ActiveSession from "./Code Requested/Session Active/ActiveSession";
+import ActiveCodeHome from "./CodeRequested/ActiveCodeHome";
+import ActiveSession from "./SessionActive/ActiveSession";
 
 import DefaultHome from "./Default/DefaultHome";
 import { withUser } from "../Auth/Context/withUser";

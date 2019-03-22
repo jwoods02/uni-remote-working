@@ -10,11 +10,11 @@ import {
   ScrollView
 } from "react-native";
 
-import MapViewItems from "../../../Maps/MapComponents/MapViewItems";
-import { withUser } from "../../../Auth/Context/withUser";
+import MapViewItems from "../../Maps/MapComponents/MapViewItems";
+import { withUser } from "../../Auth/Context/withUser";
 
-import { styles } from "../../../Styles/ActiveCodeHome";
-import { colours, flex, justify, align } from "../../../Styles/Global";
+import { styles } from "../../Styles/ActiveCodeHome";
+import { colours, flex, justify, align } from "../../Styles/Global";
 import EndSession from "./EndSession";
 
 export const getCurrentLocation = () => {
