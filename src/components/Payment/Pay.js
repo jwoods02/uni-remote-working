@@ -4,6 +4,8 @@ import axios from "axios";
 import firebase from "firebase";
 
 export default class Pay extends Component {
+  static navigationOptions = { headerLeft: null };
+
   constructor(props) {
     super(props);
 
@@ -41,7 +43,7 @@ export default class Pay extends Component {
       console.log(err);
     }
 
-    this.props.navigation.navigate("Home");
+    this.props.navigation.navigate("Steps", { page: 2 });
   };
 
   onClose = () => {};

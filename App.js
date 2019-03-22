@@ -18,6 +18,7 @@ import Loading from "./src/components/Auth/Loading";
 import SignUp from "./src/components/Auth/SignUp";
 import Login from "./src/components/Auth/Login";
 import Main from "./src/components/Auth/Main";
+import Steps from "./src/components/Auth/Steps";
 import Settings from "./src/components/User/Settings";
 
 import setupFirebase from "./Firebase";
@@ -125,6 +126,7 @@ const AppStack = createBottomTabNavigator(
 const AuthStack = createStackNavigator({
   Loading: Loading,
   LandingPage: LandingPage,
+  Steps: Steps,
   Login: Login,
   SignUp: SignUp,
   Pay: Pay
