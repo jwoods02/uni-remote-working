@@ -9,7 +9,8 @@
     "ios": "expo start --ios",
     "test": "node_modules/.bin/jest",
     "eject": "expo eject",
-    "ci": "eslint src/**/*.js && jest"
+    "ci": "eslint src/**/*.js && jest",
+    "server": "nodemon server/app.js"
   },
   "jest": {
     "preset": "jest-expo",

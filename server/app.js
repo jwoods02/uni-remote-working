@@ -30,6 +30,9 @@ app.post("/api/pay/subscription", async function(req, res) {
       items: [
         {
           plan: "plan_EZ1HJglPYy02ck"
+        },
+        {
+          plan: "plan_EkGpxQ1xXOelsh"
         }
       ]
     })
@@ -38,6 +41,23 @@ app.post("/api/pay/subscription", async function(req, res) {
     });
 
   res.send(subscription);
+});
+
+app.post("/api/pay/usage", async function(req, res) {
+  console.log(req.body);
+
+  const customer = await stripe.customers.retrieve(req.body.customer);
+
+  const plan = customer.subscriptions.data[0].items.data.find(
+    item => item.plan.id == "plan_EkGpxQ1xXOelsh"
+  );
+
+  await stripe.usageRecords.create(plan.id, {
+    quantity: req.body.minutes,
+    timestamp: Math.round(+new Date() / 1000)
+  });
+
+  res.send(customer);
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
