@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { flex } from "../Styles/Global";
+import { flex, colours } from "../Styles/Global";
 import AwesomeButton from "react-native-really-awesome-button";
 import CustomIcon from "../../../assets/fonts/CustomIcon";
 
@@ -47,48 +47,90 @@ export default class Steps extends React.Component {
 
   render() {
     return (
-      <View style={[flex.column, styles.container]}>
-        <Text
-          style={[
-            styles.step,
-            pageCounter > 0 ? styles.complete : styles.active
-          ]}
-        >
-          Step 1: Login details
-          {pageCounter > 0 && <CustomIcon name="check-circle-o" size={25} />}
-        </Text>
+      <View style={[flex.column, styles.container, colours.backgroundPurple]}>
+        <View style={styles.step}>
+          <Text
+            style={[
+              styles.stepText,
+              pageCounter > 0 ? styles.complete : styles.active
+            ]}
+          >
+            Step 1: Login details{" "}
+          </Text>
+          <Text
+            style={[
+              styles.stepText,
+              { position: "absolute", right: 15, top: 19 },
+              pageCounter > 0 ? styles.complete : styles.active
+            ]}
+          >
+            {pageCounter > 0 && <CustomIcon name="check-circle-o" size={25} />}
+          </Text>
+        </View>
 
-        <Text
-          style={[
-            styles.step,
-            pageCounter === 1
-              ? styles.active
-              : pageCounter > 1
-              ? styles.complete
-              : styles.inactive
-          ]}
-        >
-          Step 2: Payment details
-          {pageCounter > 1 && <CustomIcon name="check-circle-o" size={25} />}
-        </Text>
+        <View style={styles.step}>
+          <Text
+            style={[
+              styles.stepText,
+              pageCounter === 1
+                ? styles.active
+                : pageCounter > 1
+                ? styles.complete
+                : styles.inactive
+            ]}
+          >
+            Step 2: Payment details
+          </Text>
+          <Text
+            style={[
+              styles.stepText,
+              { position: "absolute", right: 15, top: 19 },
+              pageCounter === 1
+                ? styles.active
+                : pageCounter > 1
+                ? styles.complete
+                : styles.inactive
+            ]}
+          >
+            {pageCounter > 1 && <CustomIcon name="check-circle-o" size={25} />}
+          </Text>
+        </View>
 
-        <Text
-          style={[
-            styles.step,
-            pageCounter === 2
-              ? styles.active
-              : pageCounter > 2
-              ? styles.complete
-              : styles.inactive
-          ]}
-        >
-          Step 3: Enjoy!
-          {pageCounter > 2 && <CustomIcon name="check-circle-o" size={25} />}
-        </Text>
+        <View style={styles.step}>
+          <Text
+            style={[
+              styles.stepText,
+              pageCounter === 2
+                ? styles.active
+                : pageCounter > 2
+                ? styles.complete
+                : styles.inactive
+            ]}
+          >
+            Step 3: Enjoy
+          </Text>
+          <Text
+            style={[
+              styles.stepText,
+              { position: "absolute", right: 15, top: 19 },
+              pageCounter === 2
+                ? styles.active
+                : pageCounter > 2
+                ? styles.complete
+                : styles.inactive
+            ]}
+          >
+            {pageCounter > 2 && <CustomIcon name="check-circle-o" size={25} />}
+          </Text>
+        </View>
 
         <View style={styles.btnContainer}>
-          <AwesomeButton backgroundColor={"#42a7f4"} onPress={this._navigateTo}>
-            Go to next step
+          <AwesomeButton
+            backgroundColor={"#42a7f4"}
+            width={150}
+            onPress={this._navigateTo}
+          >
+            <Text style={styles.btnTxt}>Go to step {pageCounter + 1}</Text>
           </AwesomeButton>
         </View>
       </View>
@@ -101,9 +143,15 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   step: {
-    fontSize: 30,
-    paddingBottom: 15,
-    paddingLeft: 10
+    padding: 15,
+    borderWidth: 2,
+    borderColor: "#dedede",
+    borderRadius: 5,
+    margin: 10,
+    backgroundColor: "#fff"
+  },
+  stepText: {
+    fontSize: 30
   },
   active: {
     color: "#111"
@@ -115,6 +163,13 @@ const styles = StyleSheet.create({
     color: "green"
   },
   btnContainer: {
-    paddingLeft: 10
+    paddingLeft: 10,
+    alignItems: "center",
+    marginTop: 10
+  },
+  btnTxt: {
+    color: "#fff",
+    fontSize: 25,
+    padding: 5
   }
 });
