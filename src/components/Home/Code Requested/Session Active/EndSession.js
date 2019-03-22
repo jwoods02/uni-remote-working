@@ -91,11 +91,6 @@ class EndSession extends Component {
     }
     return (
       <ScrollView>
-        <ListItem
-          title="End Session"
-          leftIcon={{ name: "stop-circle", type: "font-awesome", color: "red" }}
-          onPress={() => this.manageSession("end")}
-        />
         <View style={[flex.column, justify.center, align.center]}>
           <AwesomeButton
             backgroundColor={"red"}

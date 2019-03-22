@@ -11,12 +11,10 @@ import {
 } from "react-native";
 
 import MapViewItems from "../../../Maps/MapComponents/MapViewItems";
-import Dialog from "react-native-dialog";
 import { withUser } from "../../../Auth/Context/withUser";
 
 import { styles } from "../../../Styles/ActiveCodeHome";
 import { colours, flex, justify, align } from "../../../Styles/Global";
-import AwesomeButton from "react-native-really-awesome-button";
 import EndSession from "./EndSession";
 
 export const getCurrentLocation = () => {
@@ -158,27 +156,8 @@ class ActiveSession extends Component {
                   this.props.session.data().access_code.expiry.seconds * 1000
                 ).toLocaleDateString("en-UK")}{" "}
             </Text>
-            <EndSession />
+            <EndSession navigation={this.props.navigation} />
           </View>
-          {/* <View style={[flex.column, justify.center, align.center]}>
-            <AwesomeButton
-              backgroundColor={"#42a7f4"}
-              width={200}
-              onPress={() => this.setState({ dialogVisible: true })}
-            >
-              End session
-            </AwesomeButton>
-            <Dialog.Container visible={this.state.dialogVisible}>
-              <Dialog.Description>
-                Are you sure you want to end your session?
-              </Dialog.Description>
-              <Dialog.Button
-                label="Cancel"
-                onPress={() => this.setState({ dialogVisible: false })}
-              />
-              <Dialog.Button label="End" onPress={this.manageSession} />
-            </Dialog.Container>
-          </View> */}
         </ScrollView>
       </View>
     );
