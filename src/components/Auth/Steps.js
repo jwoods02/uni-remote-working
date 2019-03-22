@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { flex, colours } from "../Styles/Global";
 import AwesomeButton from "react-native-really-awesome-button";
 import CustomIcon from "../../../assets/fonts/CustomIcon";
+import { styles } from "../Styles/Step";
 
 var pageCounter = 0;
 
@@ -137,39 +138,3 @@ export default class Steps extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center"
-  },
-  step: {
-    padding: 15,
-    borderWidth: 2,
-    borderColor: "#dedede",
-    borderRadius: 5,
-    margin: 10,
-    backgroundColor: "#fff"
-  },
-  stepText: {
-    fontSize: 30
-  },
-  active: {
-    color: "#111"
-  },
-  inactive: {
-    color: "#dddddd"
-  },
-  complete: {
-    color: "green"
-  },
-  btnContainer: {
-    paddingLeft: 10,
-    alignItems: "center",
-    marginTop: 10
-  },
-  btnTxt: {
-    color: "#fff",
-    fontSize: 25,
-    padding: 5
-  }
-});
