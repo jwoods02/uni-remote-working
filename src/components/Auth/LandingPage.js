@@ -61,7 +61,9 @@ export default class LandingPage extends React.Component {
           <AwesomeButton
             backgroundColor={"#42a7f4"}
             width={100}
-            onPress={() => this.props.navigation.navigate("Steps")}
+            onPress={() =>
+              this.props.navigation.navigate("Steps", { reset: true })
+            }
           >
             Get Started
           </AwesomeButton>

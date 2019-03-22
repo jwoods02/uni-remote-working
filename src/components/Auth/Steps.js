@@ -9,6 +9,13 @@ var pageCounter = 0;
 export default class Steps extends React.Component {
   static navigationOptions = { header: null };
 
+  constructor(props) {
+    super(props);
+    if (this.props.navigation.getParam("reset", "") === true) {
+      pageCounter = 0;
+    }
+  }
+
   _navigateTo = () => {
     const { navigation } = this.props;
 
