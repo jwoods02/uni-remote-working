@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import { flex, colours } from "../Styles/Global";
 import AwesomeButton from "react-native-really-awesome-button";
 import CustomIcon from "../../../assets/fonts/CustomIcon";

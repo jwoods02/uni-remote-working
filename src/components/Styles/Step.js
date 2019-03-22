@@ -10,7 +10,10 @@ const styles = StyleSheet.create({
     borderColor: "#dedede",
     borderRadius: 5,
     margin: 10,
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
+    shadowOffset: { width: 4, height: 4 },
+    shadowColor: "black",
+    shadowOpacity: 1.0
   },
   stepText: {
     fontSize: 30
