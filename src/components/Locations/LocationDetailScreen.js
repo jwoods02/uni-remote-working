@@ -34,6 +34,7 @@ class LocationDetailScreen extends Component {
       location: {},
       key: "",
       user: "",
+      session: {},
       dialogVisible: false
     };
   }
@@ -45,7 +46,8 @@ class LocationDetailScreen extends Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    await this.getSession();
     const { navigation } = this.props;
     const ref = firebase
       .firestore()
@@ -62,6 +64,43 @@ class LocationDetailScreen extends Component {
         console.log("No such document!");
       }
     });
+  }
+
+  async getSession() {
+    try {
+      const userQuerySnapshot = await this.userRef.get();
+      this.setState({
+        user: userQuerySnapshot.docs[0].id
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    const userDocRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(this.state.user);
+
+    const sessionQuerySnapshot = await firebase
+      .firestore()
+      .collection("sessions")
+      .where("user", "==", userDocRef)
+      .where("end", "==", null)
+      .get();
+
+    if (sessionQuerySnapshot.empty) {
+      console.log("no documents found");
+      this.setState({
+        hasCode: false
+      });
+    } else {
+      console.log("Session already requested");
+
+      const session = sessionQuerySnapshot.docs[0];
+      this.setState({
+        session,
+        hasCode: true
+      });
+    }
   }
 
   async handleRequestCode() {
