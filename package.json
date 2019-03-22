@@ -29,6 +29,7 @@
     "firebase": "^5.8.6",
     "link": "^0.1.5",
     "node-fetch": "^2.3.0",
+    "node-schedule": "^1.3.2",
     "nodemon": "^1.18.10",
     "prop-types": "^15.6.0",
     "react": "16.5.0",
