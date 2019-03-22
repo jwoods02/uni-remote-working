@@ -1,30 +1,11 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TextInput,
-  Platform,
-  StatusBar,
-  ScrollView,
-  Image,
-  Dimensions,
-  Button,
-  TouchableOpacity,
-  ActivityIndicator
-} from "react-native";
-import Icon from "@expo/vector-icons/Ionicons";
-import FavouritesCarousel from "./FavouritesCarousel";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import firebase from "firebase";
-import ActiveCodeHome from "./ActiveCodeHome";
-import DefaultHome from "./DefaultHome";
-import { withUser } from "../Auth/Context/withUser";
-import { Font, AppLoading } from "expo";
-import Loading from "../Auth/Loading";
-import { NavigationEvents } from "react-navigation";
+import ActiveCodeHome from "./CodeRequested/ActiveCodeHome";
+import ActiveSession from "./SessionActive/ActiveSession";
 
-const { height, width } = Dimensions.get("window");
+import DefaultHome from "./Default/DefaultHome";
+import { withUser } from "../Auth/Context/withUser";
 
 class Home extends Component {
   constructor(props) {
@@ -79,6 +60,7 @@ class Home extends Component {
       .firestore()
       .collection("sessions")
       .where("user", "==", userDocRef)
+      .where("end", "==", null)
       .get();
 
     if (sessionQuerySnapshot.empty) {
@@ -106,15 +88,27 @@ class Home extends Component {
         </View>
       );
     } else {
-      if (this.state.hasCode) {
+      if (this.state.hasCode && this.state.session.data().start === null) {
         return (
           <ActiveCodeHome
             navigation={this.props.navigation}
             session={this.state.session}
           />
         );
+      } else if (
+        this.state.hasCode &&
+        this.state.session.data().start != null
+      ) {
+        return (
+          <ActiveSession
+            navigation={this.props.navigation}
+            session={this.state.session}
+            user={this.state.user}
+          />
+        );
+      } else {
+        return <DefaultHome navigation={this.props.navigation} />;
       }
-      return <DefaultHome navigation={this.props.navigation} />;
     }
   }
 }

@@ -14,11 +14,13 @@ import {
 } from "react-native";
 
 import firebase from "firebase";
-import MapViewItems from "../Maps/MapComponents/MapViewItems";
+import MapViewItems from "../../Maps/MapComponents/MapViewItems";
+
 import Dialog from "react-native-dialog";
 
-import { styles } from "../Styles/ActiveCodeHome";
-import { colours, flex, justify } from "../Styles/Global";
+import { styles } from "../../Styles/ActiveCodeHome";
+
+import { colours, flex, justify } from "../../Styles/Global";
 
 export const getCurrentLocation = () => {
   return new Promise((resolve, reject) => {
