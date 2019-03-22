@@ -121,7 +121,7 @@ class ActiveSession extends Component {
         >
           <View style={[justify.spaceBetween, flex.row, styles.firstInfoRow]}>
             <Text style={[styles.title, colours.textPurple]}>
-              You current have an active session
+              Your current session
             </Text>
           </View>
           <View
@@ -160,7 +160,7 @@ class ActiveSession extends Component {
             </Text>
             <EndSession />
           </View>
-          <View style={[flex.column, justify.center, align.center]}>
+          {/* <View style={[flex.column, justify.center, align.center]}>
             <AwesomeButton
               backgroundColor={"#42a7f4"}
               width={200}
@@ -178,7 +178,7 @@ class ActiveSession extends Component {
               />
               <Dialog.Button label="End" onPress={this.manageSession} />
             </Dialog.Container>
-          </View>
+          </View> */}
         </ScrollView>
       </View>
     );

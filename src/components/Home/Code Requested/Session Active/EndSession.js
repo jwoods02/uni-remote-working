@@ -9,6 +9,10 @@ import {
 import { Font } from "expo";
 import { ListItem, Button, Icon } from "react-native-elements";
 import { FontAwesome } from "@expo/vector-icons";
+import Dialog from "react-native-dialog";
+import { colours, flex, justify, align } from "../../../Styles/Global";
+import AwesomeButton from "react-native-really-awesome-button";
+
 import firebase from "firebase";
 import { withUser } from "../../../Auth/Context/withUser";
 
@@ -23,7 +27,8 @@ class EndSession extends Component {
 
     this.state = {
       user: {},
-      access_code: {}
+      access_code: {},
+      dialogVisible: false
     };
   }
   async componentWillMount() {
@@ -51,7 +56,7 @@ class EndSession extends Component {
     }
   }
 
-  async manageSession(action) {
+  async manageSession() {
     let userDocRef = firebase
       .firestore()
       .collection("users")
@@ -68,16 +73,11 @@ class EndSession extends Component {
     } else {
       let snapshot = querySnapshot.docs[0];
 
-      if (action === "start") {
-        snapshot.ref.update({
-          start: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      } else {
-        snapshot.ref.update({
-          end: firebase.firestore.FieldValue.serverTimestamp(),
-          minutes: parseInt(snapshot.end - snapshot.start)
-        });
-      }
+      snapshot.ref.update({
+        end: firebase.firestore.FieldValue.serverTimestamp(),
+        minutes: parseInt(snapshot.end - snapshot.start)
+      });
+      this.props.navigation.replace("Home");
     }
   }
 
@@ -96,6 +96,25 @@ class EndSession extends Component {
           leftIcon={{ name: "stop-circle", type: "font-awesome", color: "red" }}
           onPress={() => this.manageSession("end")}
         />
+        <View style={[flex.column, justify.center, align.center]}>
+          <AwesomeButton
+            backgroundColor={"red"}
+            width={200}
+            onPress={() => this.setState({ dialogVisible: true })}
+          >
+            End session
+          </AwesomeButton>
+          <Dialog.Container visible={this.state.dialogVisible}>
+            <Dialog.Description>
+              Are you sure you want to end your session?
+            </Dialog.Description>
+            <Dialog.Button
+              label="Cancel"
+              onPress={() => this.setState({ dialogVisible: false })}
+            />
+            <Dialog.Button label="End" onPress={() => this.manageSession()} />
+          </Dialog.Container>
+        </View>
       </ScrollView>
     );
   }
