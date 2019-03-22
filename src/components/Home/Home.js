@@ -60,6 +60,7 @@ class Home extends Component {
       .firestore()
       .collection("sessions")
       .where("user", "==", userDocRef)
+      .where("end", "==", null)
       .get();
 
     if (sessionQuerySnapshot.empty) {
@@ -96,8 +97,7 @@ class Home extends Component {
         );
       } else if (
         this.state.hasCode &&
-        this.state.session.data().start != null &&
-        this.state.session.data().end === null
+        this.state.session.data().start != null
       ) {
         return (
           <ActiveSession

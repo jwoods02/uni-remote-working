@@ -65,6 +65,7 @@ class EndSession extends Component {
     const querySnapshot = await firebase
       .firestore()
       .collection("sessions")
+      .where("end", "==", null)
       .where("user", "==", userDocRef)
       .get();
 
