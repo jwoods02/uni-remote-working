@@ -29,15 +29,13 @@ export default class SessionListItem extends Component {
 
     if (doc.exists) {
       console.log("doc exists");
-      this.setState({
-        location: doc.data()
-      });
-      if (doc.data().end == null) {
+
+      if (doc.data().end === null) {
         console.log("END IS NULL");
         this.setState({
+          location: doc.data(),
           active: true,
-          isLoading: false,
-          active: true
+          isLoading: false
         });
       } else {
         console.log("END IS NOT NULL");
@@ -50,9 +48,9 @@ export default class SessionListItem extends Component {
           )
           .humanize();
         this.setState({
-          active: true,
-          isLoading: false,
+          location: doc.data(),
           active: false,
+          isLoading: false,
           duration
         });
       }
