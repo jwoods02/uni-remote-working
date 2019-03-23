@@ -96,6 +96,7 @@ export default class PreviousSessions extends Component {
     } else {
       allSessions = [];
       this.state.previousSessions.forEach(session => {
+        console.log("TOP TIER SESSION END: ", session.data().end);
         allSessions.push(<SessionListItem session={session} />);
       });
       return (

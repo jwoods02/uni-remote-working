@@ -26,20 +26,23 @@ export default class SessionListItem extends Component {
   }
 
   async componentDidMount() {
-    const doc = await this.props.session.data().access_code.location.get();
+    const locationDoc = await this.props.session
+      .data()
+      .access_code.location.get(); //GETTING LOCATION NOT SESSION
 
-    if (doc.exists) {
-      console.log("doc exists");
+    if (locationDoc.exists) {
+      console.log("location Doc exists");
+      console.log("Session prop end value: ", this.props.session.data().end);
 
-      if (doc.data().end === null) {
-        console.log("END IS NULL");
+      if (this.props.session.data().end == null) {
+        console.log("SESSION END IS NULL");
         this.setState({
-          location: doc.data(),
+          location: locationDoc.data(),
           active: true,
           isLoading: false
         });
       } else {
-        console.log("END IS NOT NULL");
+        console.log("SESSION END IS NOT NULL");
 
         const duration = moment
           .duration(
@@ -49,14 +52,14 @@ export default class SessionListItem extends Component {
           )
           .humanize();
         this.setState({
-          location: doc.data(),
+          location: locationDoc.data(),
           active: false,
           isLoading: false,
           duration
         });
       }
     } else {
-      console.log("No such document!");
+      console.log("No such location Doc!");
     }
   }
 
@@ -96,7 +99,6 @@ export default class SessionListItem extends Component {
               source={{ uri: this.state.location.image }}
             />
           </View>
-          <SessionTimeline session={this.props.session} />
           {this.state.active && (
             <Text style={{ fontWeight: "100", marginTop: 10 }}>
               Code still active!
@@ -104,6 +106,8 @@ export default class SessionListItem extends Component {
           )}
           {!this.state.active && (
             <View>
+              <SessionTimeline session={this.props.session} />
+
               <Text
                 style={{
                   color: "grey",
