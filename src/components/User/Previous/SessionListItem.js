@@ -12,6 +12,7 @@ import {
 
 const { width } = Dimensions.get("window");
 import moment from "moment";
+import SessionTimeline from "./SessionTimeline";
 
 export default class SessionListItem extends Component {
   constructor(props) {
@@ -88,6 +89,7 @@ export default class SessionListItem extends Component {
               source={{ uri: this.state.location.image }}
             />
           </View>
+          <SessionTimeline session={this.props.session} />
 
           <Text style={{ fontWeight: "100", marginTop: 10 }}>
             Requested:

@@ -43,6 +43,7 @@
     "react-native-snap-carousel": "^3.7.5",
     "react-native-svg-transformer": "^0.12.1",
     "react-native-swiper": "^1.5.14",
+    "react-native-timeline-listview": "^0.2.3",
     "react-navigation": "^3.0.9",
     "react-navigation-material-bottom-tabs": "^1.0.0",
     "react-test-renderer": "^16.8.4",
