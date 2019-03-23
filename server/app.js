@@ -66,36 +66,6 @@ opn(
     lockCallbackUrl
 );
 
-app.get("/api/lock/oauth_callback", function(req, res) {
-  console.log(req.query);
-  res.send(req.query);
-
-  const params = new URLSearchParams();
-  params.append("code", req.query.code);
-  params.append("client_id", clientId);
-  params.append("client_secret", clientSecret);
-  params.append("redirect_uri", lockCallbackUrl);
-  params.append("grant_type", "authorization_code");
-
-  fetch("https://smartconnectuk.devicewebmanager.com/oauth/token", {
-    method: "post",
-    body: params,
-    headers: { "Content-Type": "application/x-www-form-urlencoded" }
-  })
-    .then(res => res.json())
-    .then(json => {
-      console.log(json);
-      lockAccessToken = json.access_token;
-      lockRefreshToken = json.refresh_token;
-    })
-    .then(() =>
-      schedule.scheduleJob("*/118 * * * * ", () => {
-        refreshToken();
-      })
-    )
-    .catch(err => console.log(err));
-});
-
 const refreshToken = () => {
   const params = new URLSearchParams();
   params.append("refresh_token", lockRefreshToken);
@@ -123,16 +93,44 @@ const checkStatus = res => {
   } else if (res.status === 401) {
     // Invalid auth
     refreshToken();
-    res.status(500).send("Please try again!");
-    throw "Error!";
+    throw "Error";
   } else if (res.status === 402) {
     // Pin already exists
-    res.status(500).send("Please try again!");
-    throw "Error!";
+    throw "Error: " + res.statusText;
   } else {
-    throw "Error!";
+    throw "Error: " + res.statusText;
   }
 };
+
+app.get("/api/lock/oauth_callback", function(req, res) {
+  console.log(req.query);
+  res.send(req.query);
+
+  const params = new URLSearchParams();
+  params.append("code", req.query.code);
+  params.append("client_id", clientId);
+  params.append("client_secret", clientSecret);
+  params.append("redirect_uri", lockCallbackUrl);
+  params.append("grant_type", "authorization_code");
+
+  fetch("https://smartconnectuk.devicewebmanager.com/oauth/token", {
+    method: "post",
+    body: params,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  })
+    .then(res => res.json())
+    .then(json => {
+      console.log(json);
+      lockAccessToken = json.access_token;
+      lockRefreshToken = json.refresh_token;
+    })
+    .then(() =>
+      schedule.scheduleJob("*/118 * * * *", () => {
+        refreshToken();
+      })
+    )
+    .catch(err => console.error(err));
+});
 
 app.post("/api/lock/guest", function(req, res) {
   console.log(req.body);
@@ -145,20 +143,22 @@ app.post("/api/lock/guest", function(req, res) {
       }
     };
 
-    fetch("https://api.remotelock.com/access_persons/" + id + "/accesses", {
-      method: "post",
-      body: JSON.stringify(body),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/vnd.lockstate+json; version=1",
-        Authorization: "Bearer " + lockAccessToken
+    return fetch(
+      "https://api.remotelock.com/access_persons/" + id + "/accesses",
+      {
+        method: "post",
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/vnd.lockstate+json; version=1",
+          Authorization: "Bearer " + lockAccessToken
+        }
       }
-    })
+    )
+      .then(checkStatus)
       .then(res => res.json())
-      .then(json => {
-        console.log(json);
-      })
-      .catch(err => console.error(err));
+      .then(json => console.log(json))
+      .then(() => id);
   };
 
   const body = {
@@ -182,13 +182,11 @@ app.post("/api/lock/guest", function(req, res) {
   })
     .then(checkStatus)
     .then(res => res.json())
-    .then(json => {
-      guestAccessLock(json.data.id);
-      return json.data.id;
-    })
-    .then(id => res.status(200).send(id))
+    .then(json => guestAccessLock(json.data.id))
+    .then(id => res.status(200).json({ id: id }))
     .catch(err => {
       console.error(err);
+      res.status(500).send("Server error");
     });
 });
 
