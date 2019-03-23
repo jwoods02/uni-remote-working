@@ -10,6 +10,7 @@ import {
 } from "react-native";
 
 const { width } = Dimensions.get("window");
+import moment from "moment";
 
 export default class SessionListItem extends Component {
   constructor(props) {
@@ -36,6 +37,13 @@ export default class SessionListItem extends Component {
   }
 
   render() {
+    const duration = moment
+      .duration(
+        moment
+          .unix(this.props.session.data().end.seconds)
+          .diff(moment.unix(this.props.session.data().start.seconds))
+      )
+      .humanize();
     // console.log("PROPS SECONDS", this.props.session.data().start.seconds);
     if (this.state.loading) {
       return (
@@ -98,6 +106,17 @@ export default class SessionListItem extends Component {
               new Date(
                 this.props.session.data().end.seconds * 1000
               ).toLocaleDateString("en-UK")}{" "}
+          </Text>
+          <Text style={{ fontWeight: "100", marginTop: 10 }}>
+            Duration: {duration}
+            {/* {" " +
+              new Date(
+                this.props.session.data().end.seconds * 1000
+              ).toLocaleTimeString("en-US") +
+              " on " +
+              new Date(
+                this.props.session.data().end.seconds * 1000
+              ).toLocaleDateString("en-UK")}{" "} */}
           </Text>
         </View>
       );

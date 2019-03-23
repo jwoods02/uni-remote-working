@@ -27,6 +27,7 @@
     "express": "^4.16.4",
     "firebase": "^5.8.6",
     "link": "^0.1.5",
+    "moment": "^2.24.0",
     "nodemon": "^1.18.10",
     "prop-types": "^15.6.0",
     "react": "16.5.0",
