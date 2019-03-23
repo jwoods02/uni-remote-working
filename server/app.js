@@ -9,7 +9,6 @@ const opn = require("opn");
 
 const { URLSearchParams } = require("url");
 
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -21,7 +20,6 @@ const clientSecret =
 const lockCallbackUrl = "https://d8588e05.ngrok.io/api/lock/oauth_callback";
 let lockAccessToken;
 let lockRefreshToken;
-
 
 /////////////////////////////////// STRIPE
 
@@ -60,15 +58,15 @@ app.post("/api/pay/subscription", async function(req, res) {
 
 /////////////////////////////////// LOCK
 
-opn("https://smartconnectuk.devicewebmanager.com/oauth/authorize?client_id=" +
+opn(
+  "https://smartconnectuk.devicewebmanager.com/oauth/authorize?client_id=" +
     clientId +
     "&response_type=code" +
     "&redirect_uri=" +
-    lockCallbackUrl);
+    lockCallbackUrl
+);
 
-
-app.get("/api/lock/oauth_callback", function (req, res) {
-
+app.get("/api/lock/oauth_callback", function(req, res) {
   console.log(req.query);
   res.send(req.query);
 
@@ -89,16 +87,16 @@ app.get("/api/lock/oauth_callback", function (req, res) {
       console.log(json);
       lockAccessToken = json.access_token;
       lockRefreshToken = json.refresh_token;
-    }).then(() => schedule.scheduleJob("*/118 * * * * ", () => { refreshToken() }))
+    })
+    .then(() =>
+      schedule.scheduleJob("*/118 * * * * ", () => {
+        refreshToken();
+      })
+    )
     .catch(err => console.log(err));
-
 });
 
-
-
-
 const refreshToken = () => {
-
   const params = new URLSearchParams();
   params.append("refresh_token", lockRefreshToken);
   params.append("client_id", clientId);
@@ -119,8 +117,6 @@ const refreshToken = () => {
     .catch(err => console.log(err));
 };
 
-
-
 const checkStatus = res => {
   if (res.status >= 200 && res.status < 300) {
     return res;
@@ -128,7 +124,7 @@ const checkStatus = res => {
     // Invalid auth
     refreshToken();
     res.status(500).send("Please try again!");
-    throw "Error!"
+    throw "Error!";
   } else if (res.status === 402) {
     // Pin already exists
     res.status(500).send("Please try again!");
@@ -149,17 +145,15 @@ app.post("/api/lock/guest", function(req, res) {
       }
     };
 
-    fetch("https://api.remotelock.com/access_persons/" + id + "/accesses",
-      {
-        method: "post",
-        body: JSON.stringify(body),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/vnd.lockstate+json; version=1",
-          Authorization: "Bearer " + lockAccessToken
-        }
+    fetch("https://api.remotelock.com/access_persons/" + id + "/accesses", {
+      method: "post",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/vnd.lockstate+json; version=1",
+        Authorization: "Bearer " + lockAccessToken
       }
-    )
+    })
       .then(res => res.json())
       .then(json => {
         console.log(json);
