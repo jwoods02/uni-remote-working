@@ -9,7 +9,7 @@ import {
 } from "react-native";
 
 import firebase from "firebase";
-import SessionListItem from "./SessionListItem";
+import SessionListItem from "./SessionListItems/SessionListItem";
 
 export default class PreviousSessions extends Component {
   constructor(props) {

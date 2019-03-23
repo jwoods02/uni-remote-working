@@ -46,7 +46,15 @@ export default class SessionTimeline extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Timeline style={styles.list} data={this.data} />
+        <Timeline
+          style={styles.list}
+          data={this.data}
+          circleColor="grey"
+          lineColor="grey"
+          timeStyle={{ color: "purple" }}
+          descriptionStyle={{ color: "grey" }}
+          titleStyle={{ color: "rgba(130,4,150, 0.7)" }}
+        />
       </View>
     );
   }

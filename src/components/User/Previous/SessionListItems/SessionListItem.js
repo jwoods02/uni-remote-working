@@ -97,18 +97,6 @@ export default class SessionListItem extends Component {
             />
           </View>
           <SessionTimeline session={this.props.session} />
-
-          <Text style={{ fontWeight: "100", marginTop: 10 }}>
-            Requested:
-            {" " +
-              new Date(
-                this.props.session.data().access_code.requested.seconds * 1000
-              ).toLocaleTimeString("en-US") +
-              " on " +
-              new Date(
-                this.props.session.data().access_code.requested.seconds * 1000
-              ).toLocaleDateString("en-UK")}
-          </Text>
           {this.state.active && (
             <Text style={{ fontWeight: "100", marginTop: 10 }}>
               Code still active!
@@ -116,7 +104,14 @@ export default class SessionListItem extends Component {
           )}
           {!this.state.active && (
             <View>
-              <Text style={{ fontWeight: "100", marginTop: 10 }}>
+              <Text
+                style={{
+                  color: "grey",
+                  fontSize: 14,
+                  fontWeight: "300",
+                  marginTop: 10
+                }}
+              >
                 Duration: {this.state.duration}
               </Text>
             </View>
