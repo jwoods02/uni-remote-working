@@ -32,17 +32,28 @@ export default class SessionListItem extends Component {
       this.setState({
         location: doc.data()
       });
-      if (doc.data().end === null) {
+      if (doc.data().end == null) {
+        console.log("END IS NULL");
         this.setState({
           active: true,
           isLoading: false,
           active: true
         });
       } else {
+        console.log("END IS NOT NULL");
+
+        const duration = moment
+          .duration(
+            moment
+              .unix(this.props.session.data().end.seconds)
+              .diff(moment.unix(this.props.session.data().start.seconds))
+          )
+          .humanize();
         this.setState({
           active: true,
           isLoading: false,
-          active: false
+          active: false,
+          duration
         });
       }
     } else {
@@ -51,13 +62,6 @@ export default class SessionListItem extends Component {
   }
 
   render() {
-    const duration = moment
-      .duration(
-        moment
-          .unix(this.props.session.data().end.seconds)
-          .diff(moment.unix(this.props.session.data().start.seconds))
-      )
-      .humanize();
     if (this.state.loading) {
       return (
         <View style={styles.container}>
@@ -99,37 +103,39 @@ export default class SessionListItem extends Component {
               ).toLocaleDateString("en-UK")}
           </Text>
           {this.state.active && (
-            <Button
-              onPress={this.showDialog}
-              title="Request Code"
-              type="outline"
-            />
+            <Text style={{ fontWeight: "100", marginTop: 10 }}>
+              Code still active!
+            </Text>
           )}
-          <Text style={{ fontWeight: "100", marginTop: 10 }}>
-            Session Start:
-            {" " +
-              new Date(
-                this.props.session.data().start.seconds * 1000
-              ).toLocaleTimeString("en-US") +
-              " on " +
-              new Date(
-                this.props.session.data().start.seconds * 1000
-              ).toLocaleDateString("en-UK")}{" "}
-          </Text>
-          <Text style={{ fontWeight: "100", marginTop: 10 }}>
-            Session End:
-            {" " +
-              new Date(
-                this.props.session.data().end.seconds * 1000
-              ).toLocaleTimeString("en-US") +
-              " on " +
-              new Date(
-                this.props.session.data().end.seconds * 1000
-              ).toLocaleDateString("en-UK")}{" "}
-          </Text>
-          <Text style={{ fontWeight: "100", marginTop: 10 }}>
-            Duration: {duration}
-          </Text>
+          {!this.state.active && (
+            <View>
+              <Text style={{ fontWeight: "100", marginTop: 10 }}>
+                Session Start:
+                {" " +
+                  new Date(
+                    this.props.session.data().start.seconds * 1000
+                  ).toLocaleTimeString("en-US") +
+                  " on " +
+                  new Date(
+                    this.props.session.data().start.seconds * 1000
+                  ).toLocaleDateString("en-UK")}{" "}
+              </Text>
+              <Text style={{ fontWeight: "100", marginTop: 10 }}>
+                Session End:
+                {" " +
+                  new Date(
+                    this.props.session.data().end.seconds * 1000
+                  ).toLocaleTimeString("en-US") +
+                  " on " +
+                  new Date(
+                    this.props.session.data().end.seconds * 1000
+                  ).toLocaleDateString("en-UK")}{" "}
+              </Text>
+              <Text style={{ fontWeight: "100", marginTop: 10 }}>
+                Duration: {this.state.duration}
+              </Text>
+            </View>
+          )}
         </View>
       );
     }
