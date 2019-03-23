@@ -6,7 +6,8 @@ import {
   Platform,
   StatusBar,
   Image,
-  Dimensions
+  Dimensions,
+  Button
 } from "react-native";
 
 const { width } = Dimensions.get("window");
@@ -18,7 +19,8 @@ export default class SessionListItem extends Component {
 
     this.state = {
       isLoading: true,
-      location: {}
+      location: {},
+      active: false
     };
   }
 
@@ -28,9 +30,21 @@ export default class SessionListItem extends Component {
     if (doc.exists) {
       console.log("doc exists");
       this.setState({
-        location: doc.data(),
-        isLoading: false
+        location: doc.data()
       });
+      if (doc.data().end === null) {
+        this.setState({
+          active: true,
+          isLoading: false,
+          active: true
+        });
+      } else {
+        this.setState({
+          active: true,
+          isLoading: false,
+          active: false
+        });
+      }
     } else {
       console.log("No such document!");
     }
@@ -44,7 +58,6 @@ export default class SessionListItem extends Component {
           .diff(moment.unix(this.props.session.data().start.seconds))
       )
       .humanize();
-    // console.log("PROPS SECONDS", this.props.session.data().start.seconds);
     if (this.state.loading) {
       return (
         <View style={styles.container}>
@@ -85,6 +98,13 @@ export default class SessionListItem extends Component {
                 this.props.session.data().access_code.requested.seconds * 1000
               ).toLocaleDateString("en-UK")}
           </Text>
+          {this.state.active && (
+            <Button
+              onPress={this.showDialog}
+              title="Request Code"
+              type="outline"
+            />
+          )}
           <Text style={{ fontWeight: "100", marginTop: 10 }}>
             Session Start:
             {" " +
@@ -109,14 +129,6 @@ export default class SessionListItem extends Component {
           </Text>
           <Text style={{ fontWeight: "100", marginTop: 10 }}>
             Duration: {duration}
-            {/* {" " +
-              new Date(
-                this.props.session.data().end.seconds * 1000
-              ).toLocaleTimeString("en-US") +
-              " on " +
-              new Date(
-                this.props.session.data().end.seconds * 1000
-              ).toLocaleDateString("en-UK")}{" "} */}
           </Text>
         </View>
       );
