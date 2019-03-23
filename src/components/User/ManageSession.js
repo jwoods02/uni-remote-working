@@ -50,6 +50,7 @@ class ManageSession extends Component {
     const querySnapshot = await firebase
       .firestore()
       .collection("sessions")
+      .where("start", "==", null)
       .where("user", "==", userDocRef)
       .get();
 

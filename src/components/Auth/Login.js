@@ -1,7 +1,10 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { Text, TextInput, View, Button, Image } from "react-native";
 import firebase from "firebase";
 import { withUser } from "../Auth/Context/withUser";
+import { styles } from "../Styles/Register";
+import { colours } from "../Styles/Global";
+import AwesomeButton from "react-native-really-awesome-button";
 
 class Login extends React.Component {
   static navigationOptions = { header: null };
@@ -21,11 +24,14 @@ class Login extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Login</Text>
+      <View style={[styles.container, colours.backgroundPurple]}>
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
         )}
+        <Image
+          style={{ marginBottom: 20 }}
+          source={require("../../../assets/airbnb.png")}
+        />
         <TextInput
           style={styles.textInput}
           autoCapitalize="none"
@@ -41,29 +47,26 @@ class Login extends React.Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <Button title="Login" onPress={this.handleLogin} />
-        <Button
-          title="Don't have an account? Sign Up"
-          onPress={() => this.props.navigation.navigate("SignUp")}
-        />
+        <View style={styles.buttonContainer}>
+          <AwesomeButton
+            backgroundColor={"#edeeef"}
+            textColor={"#8A54A2"}
+            width={100}
+            onPress={this.handleLogin}
+          >
+            Login
+          </AwesomeButton>
+        </View>
+        <View style={styles.bottomLink}>
+          <Button
+            title="Don't have an account? Sign Up"
+            color="#edeeef"
+            onPress={() => this.props.navigation.navigate("SignUp")}
+          />
+        </View>
       </View>
     );
   }
 }
 
 export default withUser(Login);
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  textInput: {
-    height: 40,
-    width: "90%",
-    borderColor: "gray",
-    borderWidth: 1,
-    marginTop: 8
-  }
-});
