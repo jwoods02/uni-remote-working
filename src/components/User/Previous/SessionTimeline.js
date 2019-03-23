@@ -15,16 +15,34 @@ const { width } = Dimensions.get("window");
 import moment from "moment";
 
 export default class SessionTimeline extends Component {
-  constructor() {
-    super();
-    this.data = [
-      { time: "09:00", title: "Event 1", description: "Event 1 Description" },
-      { time: "10:45", title: "Event 2", description: "Event 2 Description" },
-      { time: "12:00", title: "Event 3", description: "Event 3 Description" },
-      { time: "14:00", title: "Event 4", description: "Event 4 Description" },
-      { time: "16:30", title: "Event 5", description: "Event 5 Description" }
-    ];
+  constructor(props) {
+    super(props);
+    this.data = [];
+    this.data.push(
+      {
+        time: new Date(
+          this.props.session.data().access_code.requested.seconds * 1000
+        ).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" }),
+        title: "Code Requested",
+        description: "You requested a code for this venue"
+      },
+      {
+        time: new Date(
+          this.props.session.data().start.seconds * 1000
+        ).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" }),
+        title: "Session Start",
+        description: "You entered the code and the session started"
+      },
+      {
+        time: new Date(
+          this.props.session.data().end.seconds * 1000
+        ).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" }),
+        title: "Session End",
+        description: "You ended the session"
+      }
+    );
   }
+
   render() {
     return (
       <View style={styles.container}>

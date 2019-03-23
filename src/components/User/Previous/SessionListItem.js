@@ -70,9 +70,16 @@ export default class SessionListItem extends Component {
       );
     } else {
       return (
-        <View style={{ marginTop: 40, paddingHorizontal: 20 }}>
+        <View
+          style={{ marginTop: 10, paddingHorizontal: 20, paddingBottom: 30 }}
+        >
           <Text style={{ color: "#8A54A2", fontSize: 24, fontWeight: "700" }}>
             {this.state.location.title}
+          </Text>
+          <Text style={{ color: "grey", fontSize: 14, fontWeight: "300" }}>
+            {new Date(
+              this.props.session.data().access_code.requested.seconds * 1000
+            ).toLocaleDateString("en-UK")}{" "}
           </Text>
 
           <View style={{ width: width - 40, height: 100, marginTop: 20 }}>
@@ -109,28 +116,6 @@ export default class SessionListItem extends Component {
           )}
           {!this.state.active && (
             <View>
-              <Text style={{ fontWeight: "100", marginTop: 10 }}>
-                Session Start:
-                {" " +
-                  new Date(
-                    this.props.session.data().start.seconds * 1000
-                  ).toLocaleTimeString("en-US") +
-                  " on " +
-                  new Date(
-                    this.props.session.data().start.seconds * 1000
-                  ).toLocaleDateString("en-UK")}{" "}
-              </Text>
-              <Text style={{ fontWeight: "100", marginTop: 10 }}>
-                Session End:
-                {" " +
-                  new Date(
-                    this.props.session.data().end.seconds * 1000
-                  ).toLocaleTimeString("en-US") +
-                  " on " +
-                  new Date(
-                    this.props.session.data().end.seconds * 1000
-                  ).toLocaleDateString("en-UK")}{" "}
-              </Text>
               <Text style={{ fontWeight: "100", marginTop: 10 }}>
                 Duration: {this.state.duration}
               </Text>
