@@ -49,6 +49,12 @@ class Settings extends Component {
         />
 
         <ListItem
+          title="Previous Sessions"
+          leftIcon={{ name: "history", type: "font-awesome", color: "purple" }}
+          onPress={() => this.props.navigation.navigate("PreviousSessions")}
+        />
+
+        <ListItem
           title="Log Out"
           leftIcon={{ name: "sign-out", type: "font-awesome", color: "red" }}
           onPress={() => this.signOutUser()}

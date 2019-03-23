@@ -1,20 +1,25 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  ActivityIndicator,
+  ScrollView
+} from "react-native";
+
 import firebase from "firebase";
-import ActiveCodeHome from "./CodeRequested/ActiveCodeHome";
-import ActiveSession from "./SessionActive/ActiveSession";
+import SessionListItem from "./SessionListItem";
 
-import DefaultHome from "./Default/DefaultHome";
-import { withUser } from "../Auth/Context/withUser";
-
-class Home extends Component {
+export default class PreviousSessions extends Component {
   constructor(props) {
     super(props);
-    console.log("USER ID FROM HOME USING CONTEXT", this.props.userContext.user);
+    console.log("current user firebase auth", firebase.auth().currentUser.uid);
     this.userRef = firebase
       .firestore()
       .collection("users")
-      .where("auth", "==", this.props.userContext.user);
+      .where("auth", "==", firebase.auth().currentUser.uid);
+
     this.state = {
       user: null,
       hasCode: false,
@@ -61,7 +66,6 @@ class Home extends Component {
       .firestore()
       .collection("sessions")
       .where("user", "==", userDocRef)
-      .where("end", "==", null)
       .get();
 
     if (sessionQuerySnapshot.empty) {
@@ -71,9 +75,9 @@ class Home extends Component {
         loading: false
       });
     } else {
-      const session = sessionQuerySnapshot.docs[0];
+      const previousSessions = sessionQuerySnapshot.docs;
       this.setState({
-        session,
+        previousSessions,
         hasCode: true,
         loading: false
       });
@@ -81,6 +85,7 @@ class Home extends Component {
   }
 
   render() {
+    // console.log(this.state.previousSessions);
     if (this.state.loading) {
       return (
         <View style={styles.container}>
@@ -89,32 +94,26 @@ class Home extends Component {
         </View>
       );
     } else {
-      if (this.state.hasCode && this.state.session.data().start === null) {
-        return (
-          <ActiveCodeHome
-            navigation={this.props.navigation}
-            session={this.state.session}
-          />
-        );
-      } else if (
-        this.state.hasCode &&
-        this.state.session.data().start != null
-      ) {
-        return (
-          <ActiveSession
-            navigation={this.props.navigation}
-            session={this.state.session}
-            user={this.state.user}
-          />
-        );
-      } else {
-        return <DefaultHome navigation={this.props.navigation} />;
-      }
+      allSessions = [];
+      this.state.previousSessions.forEach(session => {
+        allSessions.push(<SessionListItem session={session} />);
+      });
+      return (
+        <SafeAreaView style={{ flex: 1 }}>
+          <View style={{ flex: 1 }}>
+            <ScrollView scrollEventThrottle={16}>
+              <View
+                style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}
+              >
+                {allSessions}
+              </View>
+            </ScrollView>
+          </View>
+        </SafeAreaView>
+      );
     }
   }
 }
-
-export default withUser(Home);
 
 const styles = StyleSheet.create({
   container: {
