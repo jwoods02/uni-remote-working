@@ -5,9 +5,9 @@ const app = express();
 const port = 4000;
 const schedule = require("node-schedule");
 const fetch = require("node-fetch");
-const opn = require('opn');
+const opn = require("opn");
 
-const { URLSearchParams } = require('url');
+const { URLSearchParams } = require("url");
 
 
 app.use(bodyParser.json());
@@ -60,29 +60,27 @@ app.post("/api/pay/subscription", async function(req, res) {
 
 /////////////////////////////////// LOCK
 
-
-
-opn('https://smartconnectuk.devicewebmanager.com/oauth/authorize?client_id=' +
+opn("https://smartconnectuk.devicewebmanager.com/oauth/authorize?client_id=" +
     clientId +
-    '&response_type=code' +
-    '&redirect_uri=' +
+    "&response_type=code" +
+    "&redirect_uri=" +
     lockCallbackUrl);
 
 
-app.get('/api/lock/oauth_callback', function (req, res) {
+app.get("/api/lock/oauth_callback", function (req, res) {
 
   console.log(req.query);
   res.send(req.query);
 
   const params = new URLSearchParams();
-  params.append('code', req.query.code);
-  params.append('client_id', clientId);
-  params.append('client_secret', clientSecret);
-  params.append('redirect_uri', lockCallbackUrl);
-  params.append('grant_type', 'authorization_code');
+  params.append("code", req.query.code);
+  params.append("client_id", clientId);
+  params.append("client_secret", clientSecret);
+  params.append("redirect_uri", lockCallbackUrl);
+  params.append("grant_type", "authorization_code");
 
-  fetch('https://smartconnectuk.devicewebmanager.com/oauth/token', {
-    method: 'post',
+  fetch("https://smartconnectuk.devicewebmanager.com/oauth/token", {
+    method: "post",
     body: params,
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
@@ -91,7 +89,7 @@ app.get('/api/lock/oauth_callback', function (req, res) {
       console.log(json);
       lockAccessToken = json.access_token;
       lockRefreshToken = json.refresh_token;
-    }).then(() => schedule.scheduleJob('*/118 * * * * ', () => { refreshToken() }))
+    }).then(() => schedule.scheduleJob("*/118 * * * * ", () => { refreshToken() }))
     .catch(err => console.log(err));
 
 });
@@ -102,10 +100,10 @@ app.get('/api/lock/oauth_callback', function (req, res) {
 const refreshToken = () => {
 
   const params = new URLSearchParams();
-  params.append('refresh_token', lockRefreshToken);
-  params.append('client_id', clientId);
-  params.append('client_secret', clientSecret);
-  params.append('grant_type', 'refresh_token');
+  params.append("refresh_token", lockRefreshToken);
+  params.append("client_id", clientId);
+  params.append("client_secret", clientSecret);
+  params.append("grant_type", "refresh_token");
 
   fetch("https://smartconnectuk.devicewebmanager.com/oauth/token", {
     method: "post",
@@ -127,15 +125,20 @@ const checkStatus = res => {
   if (res.status >= 200 && res.status < 300) {
     return res;
   } else if (res.status === 401) {
+    // Invalid auth
     refreshToken();
-    // res.send(500, "Please try again!")
+    res.status(500).send("Please try again!");
     throw "Error!"
+  } else if (res.status === 402) {
+    // Pin already exists
+    res.status(500).send("Please try again!");
+    throw "Error!";
   } else {
     throw "Error!";
   }
 };
 
-app.post("/api/lock/guest", async function(req, res) {
+app.post("/api/lock/guest", function(req, res) {
   console.log(req.body);
 
   const guestAccessLock = id => {
@@ -189,7 +192,7 @@ app.post("/api/lock/guest", async function(req, res) {
       guestAccessLock(json.data.id);
       return json.data.id;
     })
-    .then(id => res.send(200, id))
+    .then(id => res.status(200).send(id))
     .catch(err => {
       console.error(err);
     });
