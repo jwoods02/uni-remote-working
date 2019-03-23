@@ -5,19 +5,23 @@ const app = express();
 const port = 4000;
 const schedule = require("node-schedule");
 const fetch = require("node-fetch");
+const opn = require('opn');
+
+const { URLSearchParams } = require('url');
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const clientId =
-  "e40f1e718008dcd3035e17f78ad7357d0d68f3c7057b96f6de6e79b7e50cb34b";
+  "86b38dbd471070664803a23c824d104e4cf97b95b1a0ffface3939cc94963c65";
 const clientSecret =
-  "d85630f1e3a7c4d80f562f056defb2105c86d91c9192af78957866eb5dc76ecc";
+  "6776912819a6ebf0d7d18bf3a5a97c7eebe0b544798a07e3d8f4e0fcae36a277";
 
-let lockAccessToken =
-  "10e9dbf60ca73a56643c1e6c447af5b6253abfb5751073ee5d928c597f276b69";
-let lockRefreshToken =
-  "b80430d1dfe7712e7a1b753444fdb121a2fe8e59743c7cbb8c0feaaf8da2099a";
+const lockCallbackUrl = "https://d8588e05.ngrok.io/api/lock/oauth_callback";
+let lockAccessToken;
+let lockRefreshToken;
+
 
 /////////////////////////////////// STRIPE
 
@@ -56,19 +60,56 @@ app.post("/api/pay/subscription", async function(req, res) {
 
 /////////////////////////////////// LOCK
 
-const generateToken = () => {};
+
+
+opn('https://smartconnectuk.devicewebmanager.com/oauth/authorize?client_id=' +
+    clientId +
+    '&response_type=code' +
+    '&redirect_uri=' +
+    lockCallbackUrl);
+
+
+app.get('/api/lock/oauth_callback', function (req, res) {
+
+  console.log(req.query);
+  res.send(req.query);
+
+  const params = new URLSearchParams();
+  params.append('code', req.query.code);
+  params.append('client_id', clientId);
+  params.append('client_secret', clientSecret);
+  params.append('redirect_uri', lockCallbackUrl);
+  params.append('grant_type', 'authorization_code');
+
+  fetch('https://smartconnectuk.devicewebmanager.com/oauth/token', {
+    method: 'post',
+    body: params,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  })
+    .then(res => res.json())
+    .then(json => {
+      console.log(json);
+      lockAccessToken = json.access_token;
+      lockRefreshToken = json.refresh_token;
+    }).then(() => schedule.scheduleJob('*/118 * * * * ', () => { refreshToken() }))
+    .catch(err => console.log(err));
+
+});
+
+
+
 
 const refreshToken = () => {
+
+  const params = new URLSearchParams();
+  params.append('refresh_token', lockRefreshToken);
+  params.append('client_id', clientId);
+  params.append('client_secret', clientSecret);
+  params.append('grant_type', 'refresh_token');
+
   fetch("https://smartconnectuk.devicewebmanager.com/oauth/token", {
     method: "post",
-    body:
-      "grant_type=refresh_token" +
-      "&client_id=" +
-      clientId +
-      "&client_secret=" +
-      clientSecret +
-      "&refresh_token=" +
-      lockRefreshToken,
+    body: params,
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
     .then(res => res.json())
@@ -80,17 +121,17 @@ const refreshToken = () => {
     .catch(err => console.log(err));
 };
 
-const schRefreshToken = schedule.scheduleJob("*/119 * * * * ", () => {
-  refreshToken();
-});
+
 
 const checkStatus = res => {
   if (res.status >= 200 && res.status < 300) {
     return res;
   } else if (res.status === 401) {
     refreshToken();
+    // res.send(500, "Please try again!")
+    throw "Error!"
   } else {
-    return null;
+    throw "Error!";
   }
 };
 
@@ -105,8 +146,7 @@ app.post("/api/lock/guest", async function(req, res) {
       }
     };
 
-    const grantLockAccess = fetch(
-      "https://api.remotelock.com/access_persons/" + id + "/accesses",
+    fetch("https://api.remotelock.com/access_persons/" + id + "/accesses",
       {
         method: "post",
         body: JSON.stringify(body),
@@ -134,7 +174,7 @@ app.post("/api/lock/guest", async function(req, res) {
     }
   };
 
-  const createGuest = fetch("https://api.remotelock.com/access_persons", {
+  fetch("https://api.remotelock.com/access_persons", {
     method: "post",
     body: JSON.stringify(body),
     headers: {
