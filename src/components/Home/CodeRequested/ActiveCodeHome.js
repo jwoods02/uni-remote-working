@@ -15,6 +15,7 @@ import {
 
 import firebase from "firebase";
 import MapViewItems from "../../Maps/MapComponents/MapViewItems";
+import axios from "axios";
 
 import Dialog from "react-native-dialog";
 
@@ -124,6 +125,9 @@ export default class ActiveCodeHome extends Component {
     this.setState({
       isLoading: true
     });
+
+    axios.delete("https://6f612781.ngrok.io/api/lock/guest/" + this.props.session.data().lockUser);
+
     firebase
       .firestore()
       .collection("sessions")

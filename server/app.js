@@ -18,7 +18,7 @@ const clientId =
 const clientSecret =
   "6776912819a6ebf0d7d18bf3a5a97c7eebe0b544798a07e3d8f4e0fcae36a277";
 
-const lockCallbackUrl = "https://c164a359.ngrok.io/api/lock/oauth_callback";
+const lockCallbackUrl = "https://6f612781.ngrok.io/api/lock/oauth_callback";
 let lockAccessToken;
 let lockRefreshToken;
 
@@ -192,5 +192,30 @@ app.post("/api/lock/guest", function(req, res) {
       res.status(500).send("Server error");
     });
 });
+
+
+
+app.delete("/api/lock/guest/:lockUserId", function(req, res) {
+
+  fetch("https://api.remotelock.com/access_persons/" + req.params.lockUserId, {
+    method: "delete",
+    headers: {
+      Accept: "application/vnd.lockstate+json; version=1",
+      Authorization: "Bearer " + lockAccessToken
+    }
+  })
+    .then(checkStatus)
+    .then(() => res.status(204).send())
+    .catch(err => {
+      console.error(err);
+      res.status(500).send("Server error");
+    });
+});
+
+
+
+
+
+
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

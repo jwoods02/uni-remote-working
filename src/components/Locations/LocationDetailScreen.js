@@ -126,7 +126,7 @@ class LocationDetailScreen extends Component {
       .doc(JSON.parse(navigation.getParam("locationkey")));
 
     const lockUser = await axios.post(
-      "https://c164a359.ngrok.io/api/lock/guest",
+      "https://6f612781.ngrok.io/api/lock/guest",
       {
         user: this.state.user,
         pin: Math.floor(100000 + Math.random() * 900000)
