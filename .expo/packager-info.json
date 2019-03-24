@@ -1,10 +1,10 @@
 {
-  "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://cz-rtv.anonymous.126-api-generate-code.exp.direct",
-  "packagerNgrokUrl": "https://packager.cz-rtv.anonymous.126-api-generate-code.exp.direct",
-  "ngrokPid": 34622,
+  "expoServerPort": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "devToolsPort": 19002,
-  "packagerPort": 19001,
-  "packagerPid": 34611,
+  "packagerPort": null,
+  "packagerPid": null,
   "webpackServerPort": null
 }

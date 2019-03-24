@@ -18,6 +18,7 @@ import { withUser } from "../Auth/Context/withUser";
 
 import firebase from "firebase";
 import Dialog from "react-native-dialog";
+import axios from "axios";
 
 const { height, width } = Dimensions.get("window");
 
@@ -85,15 +86,24 @@ class LocationDetailScreen extends Component {
       .collection("locations")
       .doc(JSON.parse(navigation.getParam("locationkey")));
 
+    const lockUser = await axios.post(
+      "https://c164a359.ngrok.io/api/lock/guest",
+      {
+        user: this.state.user,
+        pin: Math.floor(100000 + Math.random() * 900000)
+      }
+    );
+
     this.ref
       .add({
         access_code: {
-          code: Math.floor(1000 + Math.random() * 9000),
-          requested: firebase.firestore.FieldValue.serverTimestamp(),
-          expiry: firebase.firestore.FieldValue.serverTimestamp(),
+          code: lockUser.data.attributes.pin,
+          requested: lockUser.data.attributes.starts_at,
+          expiry: lockUser.data.attributes.ends_at,
           location: locationRef
         },
         user: userDocRef,
+        lockUser: lockUser.data.id,
         start: null,
         end: null,
         minutes: null
@@ -102,6 +112,8 @@ class LocationDetailScreen extends Component {
       .catch(error => {
         console.error("Error adding document: ", error);
       });
+
+    return lockUser;
   }
   showDialog = () => {
     this.setState({ dialogVisible: true });
@@ -111,11 +123,13 @@ class LocationDetailScreen extends Component {
     this.setState({ dialogVisible: false });
   };
 
-  handleRequest = () => {
-    this.handleRequestCode();
+  handleRequest = async () => {
     this.setState({ dialogVisible: false });
+
+    const lockUser = await this.handleRequestCode();
+
     this.props.navigation.navigate("Home", {
-      code: "1234",
+      code: lockUser.data.attributes.pin,
       docId: this.state.key,
       validFor: "24"
     });

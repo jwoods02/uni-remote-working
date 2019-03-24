@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const stripe = require("stripe")("sk_test_ik5ZUTExOZD1iCpd9Iey4bXy");
 const app = express();
 const port = 4000;
+
 const schedule = require("node-schedule");
 const fetch = require("node-fetch");
 const opn = require("opn");
@@ -17,7 +18,7 @@ const clientId =
 const clientSecret =
   "6776912819a6ebf0d7d18bf3a5a97c7eebe0b544798a07e3d8f4e0fcae36a277";
 
-const lockCallbackUrl = "https://d8588e05.ngrok.io/api/lock/oauth_callback";
+const lockCallbackUrl = "https://c164a359.ngrok.io/api/lock/oauth_callback";
 let lockAccessToken;
 let lockRefreshToken;
 
@@ -78,13 +79,14 @@ const refreshToken = () => {
     body: params,
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
+    .then(checkStatus)
     .then(res => res.json())
     .then(json => {
       console.log(json);
       lockAccessToken = json.access_token;
       lockRefreshToken = json.refresh_token;
     })
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 };
 
 const checkStatus = res => {
@@ -118,6 +120,7 @@ app.get("/api/lock/oauth_callback", function(req, res) {
     body: params,
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
   })
+    .then(checkStatus)
     .then(res => res.json())
     .then(json => {
       console.log(json);
@@ -135,7 +138,7 @@ app.get("/api/lock/oauth_callback", function(req, res) {
 app.post("/api/lock/guest", function(req, res) {
   console.log(req.body);
 
-  const guestAccessLock = id => {
+  const guestAccessLock = data => {
     const body = {
       attributes: {
         accessible_id: "28992f53-7f92-4101-b1b5-1bf1fca693dc",
@@ -144,7 +147,7 @@ app.post("/api/lock/guest", function(req, res) {
     };
 
     return fetch(
-      "https://api.remotelock.com/access_persons/" + id + "/accesses",
+      "https://api.remotelock.com/access_persons/" + data.id + "/accesses",
       {
         method: "post",
         body: JSON.stringify(body),
@@ -158,7 +161,7 @@ app.post("/api/lock/guest", function(req, res) {
       .then(checkStatus)
       .then(res => res.json())
       .then(json => console.log(json))
-      .then(() => id);
+      .then(() => data);
   };
 
   const body = {
@@ -166,7 +169,7 @@ app.post("/api/lock/guest", function(req, res) {
     attributes: {
       starts_at: new Date(),
       ends_at: new Date(new Date().getTime() + 60 * 60 * 24 * 1000),
-      name: req.body.name,
+      name: req.body.user,
       pin: req.body.pin
     }
   };
@@ -182,8 +185,8 @@ app.post("/api/lock/guest", function(req, res) {
   })
     .then(checkStatus)
     .then(res => res.json())
-    .then(json => guestAccessLock(json.data.id))
-    .then(id => res.status(200).json({ id: id }))
+    .then(json => guestAccessLock(json.data))
+    .then(data => res.status(200).json(data))
     .catch(err => {
       console.error(err);
       res.status(500).send("Server error");
