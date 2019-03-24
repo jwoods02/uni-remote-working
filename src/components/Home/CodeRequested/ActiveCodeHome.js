@@ -155,14 +155,20 @@ export default class ActiveCodeHome extends Component {
     return (
       <View style={styles.container}>
         <View
-          style={[styles.headerContainer, flex.column, justify.spaceBetween]}
+          style={[
+            styles.headerContainer,
+            flex.column,
+            justify.spaceBetween
+          ]}
         >
-          <View style={[justify.spaceBetween, flex.row, styles.firstInfoRow]}>
+          <View
+            style={[justify.spaceBetween, flex.row, styles.firstInfoRow]}
+          >
             <Text style={[styles.title, colours.textPurple]}>
               {this.state.markers[0].title}
             </Text>
             <Text style={styles.title}>
-              {this.props.session.data().access_code.code}
+              {this.props.session.data().access_code.code}#
             </Text>
           </View>
           <View
@@ -180,15 +186,22 @@ export default class ActiveCodeHome extends Component {
               color="#FF0000"
             />
             <Text style={{ fontSize: 12, paddingRight: 10 }}>
-              Expiry:
+              Expires
               {" " +
                 new Date(
-                  this.props.session.data().access_code.expiry.seconds * 1000
-                ).toLocaleTimeString("en-US") +
-                " on " +
+                  this.props.session.data().access_code.expiry
+                ).toLocaleTimeString("en-GB", {
+                  hour: "2-digit",
+                  minute: "2-digit"
+                }) +
+                " " +
                 new Date(
-                  this.props.session.data().access_code.expiry.seconds * 1000
-                ).toLocaleDateString("en-UK")}
+                  this.props.session.data().access_code.expiry
+                ).toLocaleDateString("en-GB", {
+                  // day: "2-digit",
+                  // month: "long"
+                })
+                }
             </Text>
           </View>
         </View>
