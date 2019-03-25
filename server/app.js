@@ -8,17 +8,15 @@ const schedule = require("node-schedule");
 const fetch = require("node-fetch");
 const opn = require("opn");
 
-const firebase = require('firebase');
-const firebaseApp = firebase.initializeApp({ 
-    apiKey: "AIzaSyB3eOEQaPomF624RwDBl3bmO97guiN-TRs",
-    authDomain: "remoteruralworking.firebaseapp.com",
-    databaseURL: "https://remoteruralworking.firebaseio.com",
-    projectId: "remoteruralworking",
-    storageBucket: "remoteruralworking.appspot.com",
-    messagingSenderId: "397948314964"
-  }
-);
-
+const firebase = require("firebase");
+const firebaseApp = firebase.initializeApp({
+  apiKey: "AIzaSyB3eOEQaPomF624RwDBl3bmO97guiN-TRs",
+  authDomain: "remoteruralworking.firebaseapp.com",
+  databaseURL: "https://remoteruralworking.firebaseio.com",
+  projectId: "remoteruralworking",
+  storageBucket: "remoteruralworking.appspot.com",
+  messagingSenderId: "397948314964"
+});
 
 const { URLSearchParams } = require("url");
 
@@ -205,11 +203,8 @@ app.post("/api/lock/guest", function(req, res) {
     });
 });
 
-
-
-app.delete("/api/lock/guest/:lockUserId", function(req, res) {
-
-  fetch("https://api.remotelock.com/access_persons/" + req.params.lockUserId, {
+app.delete("/api/lock/guest/:lockUser", function(req, res) {
+  fetch("https://api.remotelock.com/access_persons/" + req.params.lockUser, {
     method: "delete",
     headers: {
       Accept: "application/vnd.lockstate+json; version=1",
@@ -224,46 +219,44 @@ app.delete("/api/lock/guest/:lockUserId", function(req, res) {
     });
 });
 
-
-
-
 app.post("/api/lock/session", async function(req, res) {
-
   // if (!req.headers.includes("yA2h65DPEQMuRC1BIXSkCUeWqVdt8XJj")) {
   //   return res.status(500).send();
   // }
 
+  const lockUser = req.body.data.attributes.associated_resource_id;
 
-const lockUser = req.body.data.attributes.associated_resource_id;
+  res.status(200).send();
 
-res.status(200).send();
+  console.log(lockUser);
 
-console.log(lockUser);
+  const ref = firebase.firestore().collection("sessions");
 
-const ref = firebase.firestore().collection("sessions");
-
-const docId = await ref.where("lockUser", "==", lockUser)
-    //.doc("mIlyyJVGECkFvv7zHPWH")
+  const docId = await ref
+    .where("lockUser", "==", lockUser)
     .get()
     .then(querySnapshot => {
-      let docId;
-      querySnapshot.forEach((doc) => {
-        docId = doc.id
+      let id;
+      querySnapshot.forEach(doc => {
+        id = doc.id;
       });
-      return docId;
+      return id;
     })
-    .catch(function (error) {
+    .catch(function(error) {
       console.log("Error getting document:", error);
     });
 
+  ref.doc(docId).update({ start: new Date() });
 
-ref.doc(docId).update({ start : new Date() });
-
-
-
+  fetch("https://api.remotelock.com/access_persons/" + lockUser, {
+    method: "delete",
+    headers: {
+      Accept: "application/vnd.lockstate+json; version=1",
+      Authorization: "Bearer " + lockAccessToken
+    }
+  }).catch(err => {
+    console.error(err);
+  });
 });
-
-
-
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
