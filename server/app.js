@@ -28,7 +28,7 @@ const clientId =
 const clientSecret =
   "6776912819a6ebf0d7d18bf3a5a97c7eebe0b544798a07e3d8f4e0fcae36a277";
 
-const lockCallbackUrl = "https://81555c9d.ngrok.io/api/lock/oauth_callback";
+const lockCallbackUrl = "https://13cd1cea.ngrok.io/api/lock/oauth_callback";
 let lockAccessToken;
 let lockRefreshToken;
 
@@ -99,6 +99,18 @@ const refreshToken = () => {
     .catch(err => console.error(err));
 };
 
+const deleteLockUser = lockUser => {
+  fetch("https://api.remotelock.com/access_persons/" + lockUser, {
+    method: "delete",
+    headers: {
+      Accept: "application/vnd.lockstate+json; version=1",
+      Authorization: "Bearer " + lockAccessToken
+    }
+  }).catch(err => {
+    console.error(err);
+  });
+};
+
 const checkStatus = res => {
   if (res.status >= 200 && res.status < 300) {
     return res;
@@ -145,48 +157,20 @@ app.get("/api/lock/oauth_callback", function(req, res) {
     .catch(err => console.error(err));
 });
 
-app.post("/api/lock/guest", function(req, res) {
+app.post("/api/lock/guest", async function(req, res) {
   console.log(req.body);
 
-  const guestAccessLock = data => {
-    const body = {
-      attributes: {
-        accessible_id: "28992f53-7f92-4101-b1b5-1bf1fca693dc",
-        accessible_type: "lock"
-      }
-    };
-
-    return fetch(
-      "https://api.remotelock.com/access_persons/" + data.id + "/accesses",
-      {
-        method: "post",
-        body: JSON.stringify(body),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/vnd.lockstate+json; version=1",
-          Authorization: "Bearer " + lockAccessToken
-        }
-      }
-    )
-      .then(checkStatus)
-      .then(res => res.json())
-      .then(json => console.log(json))
-      .then(() => data);
-  };
-
-  const body = {
-    type: "access_guest",
-    attributes: {
-      starts_at: new Date(),
-      ends_at: new Date(new Date().getTime() + 60 * 60 * 24 * 1000),
-      name: req.body.user,
-      pin: req.body.pin
-    }
-  };
-
-  fetch("https://api.remotelock.com/access_persons", {
+  const user = await fetch("https://api.remotelock.com/access_persons", {
     method: "post",
-    body: JSON.stringify(body),
+    body: JSON.stringify({
+      type: "access_guest",
+      attributes: {
+        starts_at: new Date(),
+        ends_at: new Date(new Date().getTime() + 60 * 60 * 24 * 1000),
+        name: req.body.user,
+        pin: req.body.pin
+      }
+    }),
     headers: {
       "Content-Type": "application/json",
       Accept: "application/vnd.lockstate+json; version=1",
@@ -195,8 +179,32 @@ app.post("/api/lock/guest", function(req, res) {
   })
     .then(checkStatus)
     .then(res => res.json())
-    .then(json => guestAccessLock(json.data))
-    .then(data => res.status(200).json(data))
+    .catch(err => {
+      console.error(err);
+      res.status(500).send("Server error");
+    });
+
+  fetch(
+    "https://api.remotelock.com/access_persons/" + user.data.id + "/accesses",
+    {
+      method: "post",
+      body: JSON.stringify({
+        attributes: {
+          accessible_id: "28992f53-7f92-4101-b1b5-1bf1fca693dc",
+          accessible_type: "lock"
+        }
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/vnd.lockstate+json; version=1",
+        Authorization: "Bearer " + lockAccessToken
+      }
+    }
+  )
+    .then(checkStatus)
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .then(() => res.status(200).json(user.data))
     .catch(err => {
       console.error(err);
       res.status(500).send("Server error");
