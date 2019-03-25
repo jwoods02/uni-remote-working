@@ -47,6 +47,9 @@ app.post("/api/pay/subscription", async function(req, res) {
       items: [
         {
           plan: "plan_EZ1HJglPYy02ck"
+        },
+        {
+          plan: "plan_EkGpxQ1xXOelsh"
         }
       ]
     })
@@ -55,6 +58,23 @@ app.post("/api/pay/subscription", async function(req, res) {
     });
 
   res.send(subscription);
+});
+
+app.post("/api/pay/usage", async function(req, res) {
+  console.log(req.body);
+
+  const customer = await stripe.customers.retrieve(req.body.customer);
+
+  const plan = customer.subscriptions.data[0].items.data.find(
+    item => item.plan.id == "plan_EkGpxQ1xXOelsh"
+  );
+
+  await stripe.usageRecords.create(plan.id, {
+    quantity: req.body.minutes,
+    timestamp: Math.round(+new Date() / 1000)
+  });
+
+  res.send(customer);
 });
 
 /////////////////////////////////// LOCK
@@ -193,10 +213,7 @@ app.post("/api/lock/guest", function(req, res) {
     });
 });
 
-
-
 app.delete("/api/lock/guest/:lockUserId", function(req, res) {
-
   fetch("https://api.remotelock.com/access_persons/" + req.params.lockUserId, {
     method: "delete",
     headers: {
@@ -211,11 +228,5 @@ app.delete("/api/lock/guest/:lockUserId", function(req, res) {
       res.status(500).send("Server error");
     });
 });
-
-
-
-
-
-
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
