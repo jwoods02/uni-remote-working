@@ -94,6 +94,7 @@ class Home extends Component {
           <ActiveCodeHome
             navigation={this.props.navigation}
             session={this.state.session}
+            user={this.state.user}
           />
         );
       } else if (
@@ -104,7 +105,6 @@ class Home extends Component {
           <ActiveSession
             navigation={this.props.navigation}
             session={this.state.session}
-            user={this.state.user}
           />
         );
       } else {
