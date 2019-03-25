@@ -15,6 +15,7 @@ import {
 
 import firebase from "firebase";
 import MapViewItems from "../../Maps/MapComponents/MapViewItems";
+import axios from "axios";
 
 import Dialog from "react-native-dialog";
 
@@ -124,6 +125,10 @@ export default class ActiveCodeHome extends Component {
     this.setState({
       isLoading: true
     });
+
+
+    axios.delete("https://2037714b.ngrok.io/api/lock/guest/" + this.props.session.data().lockUser);
+
     firebase
       .firestore()
       .collection("sessions")
@@ -151,6 +156,8 @@ export default class ActiveCodeHome extends Component {
         </View>
       );
     }
+
+    const isToday = new Date(this.props.session.data().access_code.expiry).getDay() === new Date().getDay();
 
     return (
       <View style={styles.container}>
@@ -186,22 +193,19 @@ export default class ActiveCodeHome extends Component {
               color="#FF0000"
             />
             <Text style={{ fontSize: 12, paddingRight: 10 }}>
-              Expires
-              {" " +
+              {"Expires "}
+              {isToday ? "today" : "tomorrow"}
+              {" at "}
+              {
                 new Date(
                   this.props.session.data().access_code.expiry
                 ).toLocaleTimeString("en-GB", {
                   hour: "2-digit",
                   minute: "2-digit"
-                }) +
-                " " +
-                new Date(
-                  this.props.session.data().access_code.expiry
-                ).toLocaleDateString("en-GB", {
-                  // day: "2-digit",
-                  // month: "long"
                 })
-                }
+              }  
+
+                
             </Text>
           </View>
         </View>
