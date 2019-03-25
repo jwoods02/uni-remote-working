@@ -127,7 +127,7 @@ export default class ActiveCodeHome extends Component {
     });
 
 
-    axios.delete("https://2037714b.ngrok.io/api/lock/guest/" + this.props.session.data().lockUser);
+    axios.delete("https://81555c9d.ngrok.io/api/lock/guest/" + this.props.session.data().lockUser);
 
     firebase
       .firestore()

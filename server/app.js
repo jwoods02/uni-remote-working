@@ -8,6 +8,18 @@ const schedule = require("node-schedule");
 const fetch = require("node-fetch");
 const opn = require("opn");
 
+const firebase = require('firebase');
+const firebaseApp = firebase.initializeApp({ 
+    apiKey: "AIzaSyB3eOEQaPomF624RwDBl3bmO97guiN-TRs",
+    authDomain: "remoteruralworking.firebaseapp.com",
+    databaseURL: "https://remoteruralworking.firebaseio.com",
+    projectId: "remoteruralworking",
+    storageBucket: "remoteruralworking.appspot.com",
+    messagingSenderId: "397948314964"
+  }
+);
+
+
 const { URLSearchParams } = require("url");
 
 app.use(bodyParser.json());
@@ -18,7 +30,7 @@ const clientId =
 const clientSecret =
   "6776912819a6ebf0d7d18bf3a5a97c7eebe0b544798a07e3d8f4e0fcae36a277";
 
-const lockCallbackUrl = "https://2037714b.ngrok.io/api/lock/oauth_callback";
+const lockCallbackUrl = "https://81555c9d.ngrok.io/api/lock/oauth_callback";
 let lockAccessToken;
 let lockRefreshToken;
 
@@ -214,6 +226,42 @@ app.delete("/api/lock/guest/:lockUserId", function(req, res) {
 
 
 
+
+app.post("/api/lock/session", async function(req, res) {
+
+  // if (!req.headers.includes("yA2h65DPEQMuRC1BIXSkCUeWqVdt8XJj")) {
+  //   return res.status(500).send();
+  // }
+
+
+const lockUser = req.body.data.attributes.associated_resource_id;
+
+res.status(200).send();
+
+console.log(lockUser);
+
+const ref = firebase.firestore().collection("sessions");
+
+const docId = await ref.where("lockUser", "==", lockUser)
+    //.doc("mIlyyJVGECkFvv7zHPWH")
+    .get()
+    .then(querySnapshot => {
+      let docId;
+      querySnapshot.forEach((doc) => {
+        docId = doc.id
+      });
+      return docId;
+    })
+    .catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+
+ref.doc(docId).update({ start : new Date() });
+
+
+
+});
 
 
 
