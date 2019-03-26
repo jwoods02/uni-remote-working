@@ -28,7 +28,7 @@ const clientId =
 const clientSecret =
   "6776912819a6ebf0d7d18bf3a5a97c7eebe0b544798a07e3d8f4e0fcae36a277";
 
-const lockCallbackUrl = "https://13cd1cea.ngrok.io/api/lock/oauth_callback";
+const lockCallbackUrl = "https://683d5519.ngrok.io/api/lock/oauth_callback";
 let lockAccessToken;
 let lockRefreshToken;
 
