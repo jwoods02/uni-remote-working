@@ -8,13 +8,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const stripe = require("stripe")("sk_test_ik5ZUTExOZD1iCpd9Iey4bXy");
 const app = express();
-const port = 4000;
-
 const schedule = require("node-schedule");
-const opn = require("opn");
-
 const axios = require("axios");
-
 const firebase = require("firebase");
 
 firebase.initializeApp({
@@ -37,7 +32,7 @@ const clientSecret =
   "6776912819a6ebf0d7d18bf3a5a97c7eebe0b544798a07e3d8f4e0fcae36a277";
 
 const lockCallbackUrl =
-  "https://remoteruralworking.firebaseapp.com//api/lock/oauth_callback";
+  "https://remoteruralworking.firebaseapp.com/api/lock/oauth_callback";
 let lockAccessToken;
 let lockRefreshToken;
 let userJsonReq;
@@ -124,14 +119,6 @@ const setAccess = data => {
   });
 };
 
-opn(
-  "https://smartconnectuk.devicewebmanager.com/oauth/authorize?client_id=" +
-    clientId +
-    "&response_type=code" +
-    "&redirect_uri=" +
-    lockCallbackUrl
-);
-
 const refreshToken = async () => {
   try {
     const params = new URLSearchParams();
@@ -140,9 +127,9 @@ const refreshToken = async () => {
     params.append("client_secret", clientSecret);
     params.append("grant_type", "refresh_token");
 
+    // https://github.com/axios/axios/issues/1891
     const auth = await systemReq.post(
-      "https://smartconnectuk.devicewebmanager.com/oauth/token",
-      params
+      `https://smartconnectuk.devicewebmanager.com/oauth/token?${params.toString()}`
     );
 
     setAccess(auth.data);
@@ -175,9 +162,9 @@ app.get("/api/lock/oauth_callback", async function(req, res) {
     params.append("redirect_uri", lockCallbackUrl);
     params.append("grant_type", "authorization_code");
 
+    // https://github.com/axios/axios/issues/1891
     const auth = await systemReq.post(
-      "https://smartconnectuk.devicewebmanager.com/oauth/token",
-      params
+      `https://smartconnectuk.devicewebmanager.com/oauth/token?${params.toString()}`
     );
 
     setAccess(auth.data);

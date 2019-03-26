@@ -31,7 +31,7 @@ const clientSecret =
   "6776912819a6ebf0d7d18bf3a5a97c7eebe0b544798a07e3d8f4e0fcae36a277";
 
 const lockCallbackUrl =
-  "https://remoteruralworking.firebaseapp.com//api/lock/oauth_callback";
+  "https://remoteruralworking.firebaseapp.com/api/lock/oauth_callback";
 let lockAccessToken;
 let lockRefreshToken;
 let userJsonReq;

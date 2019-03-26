@@ -125,13 +125,10 @@ class LocationDetailScreen extends Component {
       .collection("locations")
       .doc(JSON.parse(navigation.getParam("locationkey")));
 
-    const lockUser = await axios.post(
-      "https://remoteruralworking.firebaseapp.com/api/lock/guest",
-      {
-        user: this.state.user,
-        pin: Math.floor(100000 + Math.random() * 900000)
-      }
-    );
+    const lockUser = await axios.post("api/lock/guest", {
+      user: this.state.user,
+      pin: Math.floor(100000 + Math.random() * 900000)
+    });
 
     this.ref
       .add({

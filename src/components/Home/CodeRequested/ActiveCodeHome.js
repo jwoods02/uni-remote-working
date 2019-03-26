@@ -126,10 +126,7 @@ export default class ActiveCodeHome extends Component {
       isLoading: true
     });
 
-    axios.delete(
-      "https://remoteruralworking.firebaseapp.com/api/lock/guest/" +
-        this.props.session.data().lockUser
-    );
+    axios.delete("/api/lock/guest/" + this.props.session.data().lockUser);
 
     firebase
       .firestore()
