@@ -97,10 +97,8 @@ app.post("/api/pay/usage", async function(req, res) {
 
 /////////////////////////////////// LOCK
 
-
 const setAccess = data => {
-
-  lockRefreshToken = data.refresh_token
+  lockRefreshToken = data.refresh_token;
 
   userJsonReq = axios.create({
     headers: {
@@ -116,8 +114,7 @@ const setAccess = data => {
       Authorization: "Bearer " + data.access_token
     }
   });
-
-}
+};
 
 opn(
   "https://smartconnectuk.devicewebmanager.com/oauth/authorize?client_id=" +
@@ -141,15 +138,15 @@ const refreshToken = async () => {
     );
 
     setAccess(auth.data);
-  
-
   } catch (error) {
     console.log(error);
   }
 };
 
 const deleteLockUser = lockUser => {
-  return userReq.delete("https://api.remotelock.com/access_persons/" + lockUser);
+  return userReq.delete(
+    "https://api.remotelock.com/access_persons/" + lockUser
+  );
 };
 
 const errorStatus = status => {
@@ -176,7 +173,6 @@ app.get("/api/lock/oauth_callback", async function(req, res) {
     );
 
     setAccess(auth.data);
-    
 
     schedule.scheduleJob("*/118 * * * *", () => {
       refreshToken();
@@ -231,7 +227,7 @@ app.post("/api/lock/guest", async function(req, res) {
 
 app.delete("/api/lock/guest/:lockUser", async function(req, res) {
   try {
-    response = await deleteLockUser(req.params.lockUser);
+    const response = await deleteLockUser(req.params.lockUser);
 
     res.status(204).send();
   } catch (error) {
