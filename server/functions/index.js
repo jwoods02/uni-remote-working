@@ -2,7 +2,7 @@ const functions = require("firebase-functions");
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
-//
+// https://smartconnectuk.devicewebmanager.com/oauth/authorize?client_id=86b38dbd471070664803a23c824d104e4cf97b95b1a0ffface3939cc94963c65&response_type=code&redirect_uri=https://remoteruralworking.firebaseapp.com/api/lock/oauth_callback
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -23,7 +23,8 @@ const clientId =
 const clientSecret =
   "6776912819a6ebf0d7d18bf3a5a97c7eebe0b544798a07e3d8f4e0fcae36a277";
 
-const lockCallbackUrl = "https://2037714b.ngrok.io/api/lock/oauth_callback";
+const lockCallbackUrl =
+  "https://remoteruralworking.firebaseapp.com/api/lock/oauth_callback";
 let lockAccessToken;
 let lockRefreshToken;
 
