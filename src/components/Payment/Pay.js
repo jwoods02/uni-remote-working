@@ -51,10 +51,10 @@ export default class Pay extends Component {
     return (
       <StripeCheckout
         publicKey="pk_test_bvxdsrvMxXGmtHi3UEDMw759"
-        amount={100000}
+        amount={2000}
         imageUrl="https://pbs.twimg.com/profile_images/778378996580888577/MFKh-pNn_400x400.jpg"
         storeName="Stripe Checkout"
-        description="Test"
+        description="Pay subscription"
         currency="GBP"
         allowRememberMe={false}
         prepopulatedEmail={this.state.email}

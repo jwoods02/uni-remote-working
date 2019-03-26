@@ -63,6 +63,7 @@ class StripeCheckout extends Component {
               key: '${publicKey}',
               image: '${imageUrl}',
               locale: 'auto',
+              panelLabel: 'Subscribe and pay {{amount}}',
               token: function(token) {
                 window.postMessage(token.id);
               },
