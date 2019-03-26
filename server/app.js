@@ -5,11 +5,13 @@ const app = express();
 const port = 4000;
 
 const schedule = require("node-schedule");
-const fetch = require("node-fetch");
 const opn = require("opn");
 
+const axios = require("axios");
+
 const firebase = require("firebase");
-const firebaseApp = firebase.initializeApp({
+
+firebase.initializeApp({
   apiKey: "AIzaSyB3eOEQaPomF624RwDBl3bmO97guiN-TRs",
   authDomain: "remoteruralworking.firebaseapp.com",
   databaseURL: "https://remoteruralworking.firebaseio.com",
@@ -29,8 +31,14 @@ const clientSecret =
   "6776912819a6ebf0d7d18bf3a5a97c7eebe0b544798a07e3d8f4e0fcae36a277";
 
 const lockCallbackUrl = "https://683d5519.ngrok.io/api/lock/oauth_callback";
-let lockAccessToken;
 let lockRefreshToken;
+let userJsonReq;
+let userReq;
+const systemReq = axios.create({
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded"
+  }
+});
 
 /////////////////////////////////// STRIPE
 
@@ -89,6 +97,28 @@ app.post("/api/pay/usage", async function(req, res) {
 
 /////////////////////////////////// LOCK
 
+
+const setAccess = data => {
+
+  lockRefreshToken = data.refresh_token
+
+  userJsonReq = axios.create({
+    headers: {
+      Accept: "application/vnd.lockstate+json; version=1",
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + data.access_token
+    }
+  });
+
+  userReq = axios.create({
+    headers: {
+      Accept: "application/vnd.lockstate+json; version=1",
+      Authorization: "Bearer " + data.access_token
+    }
+  });
+
+}
+
 opn(
   "https://smartconnectuk.devicewebmanager.com/oauth/authorize?client_id=" +
     clientId +
@@ -97,194 +127,143 @@ opn(
     lockCallbackUrl
 );
 
-const refreshToken = () => {
-  const params = new URLSearchParams();
-  params.append("refresh_token", lockRefreshToken);
-  params.append("client_id", clientId);
-  params.append("client_secret", clientSecret);
-  params.append("grant_type", "refresh_token");
+const refreshToken = async () => {
+  try {
+    const params = new URLSearchParams();
+    params.append("refresh_token", lockRefreshToken);
+    params.append("client_id", clientId);
+    params.append("client_secret", clientSecret);
+    params.append("grant_type", "refresh_token");
 
-  fetch("https://smartconnectuk.devicewebmanager.com/oauth/token", {
-    method: "post",
-    body: params,
-    headers: { "Content-Type": "application/x-www-form-urlencoded" }
-  })
-    .then(checkStatus)
-    .then(res => res.json())
-    .then(json => {
-      console.log(json);
-      lockAccessToken = json.access_token;
-      lockRefreshToken = json.refresh_token;
-    })
-    .catch(err => console.error(err));
-};
+    const auth = await systemReq.post(
+      "https://smartconnectuk.devicewebmanager.com/oauth/token",
+      params
+    );
 
-const deleteLockUser = lockUser => {
-  fetch("https://api.remotelock.com/access_persons/" + lockUser, {
-    method: "delete",
-    headers: {
-      Accept: "application/vnd.lockstate+json; version=1",
-      Authorization: "Bearer " + lockAccessToken
-    }
-  }).catch(err => {
-    console.error(err);
-  });
-};
+    setAccess(auth.data);
+  
 
-const checkStatus = res => {
-  if (res.status >= 200 && res.status < 300) {
-    return res;
-  } else if (res.status === 401) {
-    // Invalid auth
-    refreshToken();
-    throw "Error";
-  } else if (res.status === 402) {
-    // Pin already exists
-    throw "Error: " + res.statusText;
-  } else {
-    throw "Error: " + res.statusText;
+  } catch (error) {
+    console.log(error);
   }
 };
 
-app.get("/api/lock/oauth_callback", function(req, res) {
-  console.log(req.query);
-  res.send(req.query);
+const deleteLockUser = lockUser => {
+  return userReq.delete("https://api.remotelock.com/access_persons/" + lockUser);
+};
 
-  const params = new URLSearchParams();
-  params.append("code", req.query.code);
-  params.append("client_id", clientId);
-  params.append("client_secret", clientSecret);
-  params.append("redirect_uri", lockCallbackUrl);
-  params.append("grant_type", "authorization_code");
+const errorStatus = status => {
+  if (status === 401) {
+    refreshToken();
+  } else if (status === 402) {
+    // Pin aready exists
+  } else {
+  }
+};
 
-  fetch("https://smartconnectuk.devicewebmanager.com/oauth/token", {
-    method: "post",
-    body: params,
-    headers: { "Content-Type": "application/x-www-form-urlencoded" }
-  })
-    .then(checkStatus)
-    .then(res => res.json())
-    .then(json => {
-      console.log(json);
-      lockAccessToken = json.access_token;
-      lockRefreshToken = json.refresh_token;
-    })
-    .then(() =>
-      schedule.scheduleJob("*/118 * * * *", () => {
-        refreshToken();
-      })
-    )
-    .catch(err => console.error(err));
+app.get("/api/lock/oauth_callback", async function(req, res) {
+  try {
+    const params = new URLSearchParams();
+    params.append("code", req.query.code);
+    params.append("client_id", clientId);
+    params.append("client_secret", clientSecret);
+    params.append("redirect_uri", lockCallbackUrl);
+    params.append("grant_type", "authorization_code");
+
+    const auth = await systemReq.post(
+      "https://smartconnectuk.devicewebmanager.com/oauth/token",
+      params
+    );
+
+    setAccess(auth.data);
+    
+
+    schedule.scheduleJob("*/118 * * * *", () => {
+      refreshToken();
+    });
+
+    res.status(200).send(req.query);
+  } catch (error) {
+    if (error.response) {
+      errorStatus(error.response.status);
+    }
+    console.log(error);
+    res.status(500).send(error);
+  }
 });
 
 app.post("/api/lock/guest", async function(req, res) {
-  console.log(req.body);
-
-  const user = await fetch("https://api.remotelock.com/access_persons", {
-    method: "post",
-    body: JSON.stringify({
-      type: "access_guest",
-      attributes: {
-        starts_at: new Date(),
-        ends_at: new Date(new Date().getTime() + 60 * 60 * 24 * 1000),
-        name: req.body.user,
-        pin: req.body.pin
+  try {
+    const response = await userJsonReq.post(
+      "https://api.remotelock.com/access_persons",
+      {
+        type: "access_guest",
+        attributes: {
+          starts_at: new Date(),
+          ends_at: new Date(new Date().getTime() + 60 * 60 * 24 * 1000),
+          name: req.body.user,
+          pin: req.body.pin
+        }
       }
-    }),
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/vnd.lockstate+json; version=1",
-      Authorization: "Bearer " + lockAccessToken
-    }
-  })
-    .then(checkStatus)
-    .then(res => res.json())
-    .catch(err => {
-      console.error(err);
-      res.status(500).send("Server error");
-    });
+    );
 
-  fetch(
-    "https://api.remotelock.com/access_persons/" + user.data.id + "/accesses",
-    {
-      method: "post",
-      body: JSON.stringify({
+    const data = response.data.data;
+
+    userJsonReq.post(
+      "https://api.remotelock.com/access_persons/" + data.id + "/accesses",
+      {
         attributes: {
           accessible_id: "28992f53-7f92-4101-b1b5-1bf1fca693dc",
           accessible_type: "lock"
         }
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/vnd.lockstate+json; version=1",
-        Authorization: "Bearer " + lockAccessToken
       }
+    );
+
+    res.status(200).send(data);
+  } catch (error) {
+    if (error.response) {
+      errorStatus(error.response.status);
     }
-  )
-    .then(checkStatus)
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .then(() => res.status(200).json(user.data))
-    .catch(err => {
-      console.error(err);
-      res.status(500).send("Server error");
-    });
+    console.log(error);
+    res.status(500).send(error);
+  }
 });
 
-app.delete("/api/lock/guest/:lockUser", function(req, res) {
-  fetch("https://api.remotelock.com/access_persons/" + req.params.lockUser, {
-    method: "delete",
-    headers: {
-      Accept: "application/vnd.lockstate+json; version=1",
-      Authorization: "Bearer " + lockAccessToken
+app.delete("/api/lock/guest/:lockUser", async function(req, res) {
+  try {
+    response = await deleteLockUser(req.params.lockUser);
+
+    res.status(204).send();
+  } catch (error) {
+    if (error.response) {
+      errorStatus(error.response.status);
     }
-  })
-    .then(checkStatus)
-    .then(() => res.status(204).send())
-    .catch(err => {
-      console.error(err);
-      res.status(500).send("Server error");
-    });
+    console.log(error);
+    res.status(500).send(error);
+  }
 });
 
 app.post("/api/lock/session", async function(req, res) {
-  // if (!req.headers.includes("yA2h65DPEQMuRC1BIXSkCUeWqVdt8XJj")) {
-  //   return res.status(500).send();
-  // }
+  try {
+    const lockUser = req.body.data.attributes.associated_resource_id;
 
-  const lockUser = req.body.data.attributes.associated_resource_id;
+    const snapshot = await firebase
+      .firestore()
+      .collection("sessions")
+      .where("lockUser", "==", lockUser)
+      .get();
+    snapshot.docs[0].ref.update({ start: new Date() });
 
-  res.status(200).send();
+    const response = await deleteLockUser(lockUser);
 
-  console.log(lockUser);
-
-  const ref = firebase.firestore().collection("sessions");
-
-  const docId = await ref
-    .where("lockUser", "==", lockUser)
-    .get()
-    .then(querySnapshot => {
-      let id;
-      querySnapshot.forEach(doc => {
-        id = doc.id;
-      });
-      return id;
-    })
-    .catch(function(error) {
-      console.log("Error getting document:", error);
-    });
-
-  ref.doc(docId).update({ start: new Date() });
-
-  fetch("https://api.remotelock.com/access_persons/" + lockUser, {
-    method: "delete",
-    headers: {
-      Accept: "application/vnd.lockstate+json; version=1",
-      Authorization: "Bearer " + lockAccessToken
+    res.status(200).send(response);
+  } catch (error) {
+    if (error.response) {
+      errorStatus(error.response.status);
     }
-  }).catch(err => {
-    console.error(err);
-  });
+    console.log(error);
+    res.status(500).send(error);
+  }
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
