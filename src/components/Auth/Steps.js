@@ -67,6 +67,16 @@ export default class Steps extends React.Component {
           >
             {pageCounter > 0 && <CustomIcon name="check-circle-o" size={25} />}
           </Text>
+          <Text
+            style={[
+              {
+                fontSize: 15
+              },
+              pageCounter > 0 ? styles.complete : styles.active
+            ]}
+          >
+            Register with us to use our services
+          </Text>
         </View>
 
         <View style={styles.step}>
@@ -95,6 +105,21 @@ export default class Steps extends React.Component {
           >
             {pageCounter > 1 && <CustomIcon name="check-circle-o" size={25} />}
           </Text>
+          <Text
+            style={[
+              {
+                fontSize: 15
+              },
+              pageCounter === 1
+                ? styles.active
+                : pageCounter > 1
+                ? styles.complete
+                : styles.inactive
+            ]}
+          >
+            Setup your subscription. With this we will charge you seamlessly in
+            the background so that you don't need to think about it again
+          </Text>
         </View>
 
         <View style={styles.step}>
@@ -122,6 +147,20 @@ export default class Steps extends React.Component {
             ]}
           >
             {pageCounter > 2 && <CustomIcon name="check-circle-o" size={25} />}
+          </Text>
+          <Text
+            style={[
+              {
+                fontSize: 15
+              },
+              pageCounter === 2
+                ? styles.active
+                : pageCounter > 2
+                ? styles.complete
+                : styles.inactive
+            ]}
+          >
+            You're all done! Let's get to work
           </Text>
         </View>
 
