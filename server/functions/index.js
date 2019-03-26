@@ -101,6 +101,8 @@ app.post("/api/pay/usage", async function(req, res) {
 /////////////////////////////////// LOCK
 
 const setAccess = data => {
+
+  console.log("Authorisation: " + data);
   lockRefreshToken = data.refresh_token;
 
   userJsonReq = axios.create({
@@ -145,11 +147,12 @@ const deleteLockUser = lockUser => {
 };
 
 const errorStatus = status => {
-  if (status === 401) {
-    refreshToken();
-  } else if (status === 402) {
-    // Pin aready exists
-  } else {
+  switch (status) {
+    case 401: refreshToken();
+      break;
+    case 402: //pin already exists
+      break;
+    default: break;
   }
 };
 
