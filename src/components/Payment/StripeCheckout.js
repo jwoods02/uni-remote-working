@@ -2,7 +2,6 @@
 import React, { Component } from "react";
 import {
   WebView,
-  Platform,
   View,
   ViewPropTypes,
   StyleSheet,
@@ -11,7 +10,6 @@ import {
 import { PropTypes } from "prop-types";
 
 const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
 
 class StripeCheckout extends Component {
   render() {
@@ -24,7 +22,6 @@ class StripeCheckout extends Component {
       imageUrl,
       storeName,
       prepopulatedEmail,
-      style,
       onPaymentSuccess,
       onClose
     } = this.props;
