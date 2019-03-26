@@ -1,10 +1,10 @@
 {
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://cz-rtv.anonymous.remote-working.exp.direct",
-  "packagerNgrokUrl": "https://packager.cz-rtv.anonymous.remote-working.exp.direct",
-  "ngrokPid": 27249,
+  "expoServerNgrokUrl": "https://cz-rtv.anonymous.remote-working-dev.exp.direct",
+  "packagerNgrokUrl": "https://packager.cz-rtv.anonymous.remote-working-dev.exp.direct",
+  "ngrokPid": 79076,
   "devToolsPort": 19002,
   "packagerPort": 19001,
-  "packagerPid": 27229,
+  "packagerPid": 79058,
   "webpackServerPort": null
 }

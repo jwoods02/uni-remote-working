@@ -10,6 +10,7 @@ import { withUser } from "../Auth/Context/withUser";
 class Home extends Component {
   constructor(props) {
     super(props);
+    console.log("HOME USER CONTEXT: ", this.props.userContext.user);
     this.userRef = firebase
       .firestore()
       .collection("users")
@@ -93,6 +94,7 @@ class Home extends Component {
           <ActiveCodeHome
             navigation={this.props.navigation}
             session={this.state.session}
+            user={this.state.user}
           />
         );
       } else if (
@@ -103,7 +105,6 @@ class Home extends Component {
           <ActiveSession
             navigation={this.props.navigation}
             session={this.state.session}
-            user={this.state.user}
           />
         );
       } else {

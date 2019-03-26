@@ -30,7 +30,7 @@ import UserProvider from "./src/components/Auth/Context/UserProvider";
 import ManageSession from "./src/components/User/ManageSession";
 
 setupFirebase();
-axios.defaults.baseURL = "http://10.247.39.92:4000";
+axios.defaults.baseURL = "http://10.247.39.13:4000";
 
 const HomeStack = createStackNavigator(
   {
