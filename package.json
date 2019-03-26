@@ -7,7 +7,7 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "test": "node_modules/.bin/jest",
+    "test": "jest",
     "eject": "expo eject",
     "ci": "eslint src/**/*.js && jest",
     "server": "nodemon server/app.js"
@@ -27,6 +27,7 @@
     "expo": "^32.0.0",
     "firebase": "^5.8.6",
     "link": "^0.1.5",
+    "jest": "^24.5.0",
     "prop-types": "^15.6.0",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.1.tar.gz",
