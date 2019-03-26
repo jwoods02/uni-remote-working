@@ -102,7 +102,11 @@ app.post("/api/pay/usage", async function(req, res) {
 
 const setAccess = data => {
 
-  console.log("Authorisation: " + data);
+  console.log(
+    `AUTHORISATION\nAccess Token: ${data.access_token}\nRefresh Token: ${
+      data.refresh_token
+    }`
+  );
   lockRefreshToken = data.refresh_token;
 
   userJsonReq = axios.create({
