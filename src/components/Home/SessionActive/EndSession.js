@@ -13,6 +13,7 @@ import AwesomeButton from "react-native-really-awesome-button";
 
 import firebase from "firebase";
 import { withUser } from "../../Auth/Context/withUser";
+import axios from "axios";
 
 class EndSession extends Component {
   constructor(props) {
@@ -72,12 +73,38 @@ class EndSession extends Component {
     } else {
       let snapshot = querySnapshot.docs[0];
 
-      snapshot.ref.update({
-        end: firebase.firestore.FieldValue.serverTimestamp(),
-        minutes: parseInt(snapshot.end - snapshot.start)
+      await snapshot.ref.update({
+        end: firebase.firestore.FieldValue.serverTimestamp()
       });
+
+      snapshot = await snapshot.ref.get();
+
+      const minutes_used = this.diff_minutes(
+        snapshot.data().start.toDate(),
+        snapshot.data().end.toDate()
+      );
+
+      await snapshot.ref.update({
+        minutes: minutes_used
+      });
+
+      const user = await userDocRef.get();
+      const stripeCustomer = user.get("stripe_customer");
+
+      await axios.post("/api/pay/usage", {
+        customer: stripeCustomer,
+        minutes: minutes_used
+      });
+
       this.props.navigation.replace("Home");
     }
+  }
+
+  // https://www.w3resource.com/javascript-exercises/javascript-date-exercise-44.php
+  diff_minutes(dt2, dt1) {
+    var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+    diff /= 60;
+    return Math.abs(Math.round(diff));
   }
 
   render() {
