@@ -69,9 +69,7 @@ export default class Steps extends React.Component {
           </Text>
           <Text
             style={[
-              {
-                fontSize: 15
-              },
+              styles.description,
               pageCounter > 0 ? styles.complete : styles.active
             ]}
           >
@@ -107,9 +105,7 @@ export default class Steps extends React.Component {
           </Text>
           <Text
             style={[
-              {
-                fontSize: 15
-              },
+              styles.description,
               pageCounter === 1
                 ? styles.active
                 : pageCounter > 1
@@ -117,8 +113,8 @@ export default class Steps extends React.Component {
                 : styles.inactive
             ]}
           >
-            Setup your subscription. With this we will charge you seamlessly in
-            the background so that you don't need to think about it again
+            Pay us £20 now and we will automatically charge you for both your
+            usage and subscription every month
           </Text>
         </View>
 
@@ -150,9 +146,7 @@ export default class Steps extends React.Component {
           </Text>
           <Text
             style={[
-              {
-                fontSize: 15
-              },
+              styles.description,
               pageCounter === 2
                 ? styles.active
                 : pageCounter > 2

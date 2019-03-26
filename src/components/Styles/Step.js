@@ -36,6 +36,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 25,
     padding: 5
+  },
+  description: {
+    fontSize: 15,
+    opacity: 0.8
   }
 });
 
