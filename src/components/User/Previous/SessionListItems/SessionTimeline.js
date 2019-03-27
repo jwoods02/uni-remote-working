@@ -17,7 +17,6 @@ import moment from "moment";
 export default class SessionTimeline extends Component {
   constructor(props) {
     super(props);
-    console.log("REQUESTED: ", this.props.session.data().access_code.requested);
     this.data = [];
     this.data.push(
       {

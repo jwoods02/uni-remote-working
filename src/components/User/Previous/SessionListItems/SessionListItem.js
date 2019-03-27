@@ -31,11 +31,7 @@ export default class SessionListItem extends Component {
       .access_code.location.get(); //GETTING LOCATION NOT SESSION
 
     if (locationDoc.exists) {
-      console.log("location Doc exists");
-      console.log("Session prop end value: ", this.props.session.data().end);
-
       if (this.props.session.data().end == null) {
-        console.log("SESSION END IS NULL");
         this.setState({
           location: locationDoc.data(),
           active: true,
@@ -43,8 +39,6 @@ export default class SessionListItem extends Component {
           active: true
         });
       } else {
-        console.log("SESSION END IS NOT NULL");
-
         const duration = moment
           .duration(
             moment

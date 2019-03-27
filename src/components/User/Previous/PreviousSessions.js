@@ -14,7 +14,6 @@ import SessionListItem from "./SessionListItems/SessionListItem";
 export default class PreviousSessions extends Component {
   constructor(props) {
     super(props);
-    console.log("current user firebase auth", firebase.auth().currentUser.uid);
     this.userRef = firebase
       .firestore()
       .collection("users")
@@ -86,7 +85,6 @@ export default class PreviousSessions extends Component {
   }
 
   render() {
-    // console.log(this.state.previousSessions);
     if (this.state.loading) {
       return (
         <View style={styles.container}>
@@ -97,7 +95,6 @@ export default class PreviousSessions extends Component {
     } else if (this.state.hasPrevious) {
       allSessions = [];
       this.state.previousSessions.forEach(session => {
-        console.log("TOP TIER SESSION END: ", session.data().end);
         allSessions.push(<SessionListItem session={session} />);
       });
       return (
