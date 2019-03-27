@@ -34,13 +34,7 @@ const clientSecret =
 const lockCallbackUrl =
   "https://remoteruralworking.firebaseapp.com/api/lock/oauth_callback";
 let lockRefreshToken;
-let userJsonReq;
-let userReq;
-const systemReq = axios.create({
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded"
-  }
-});
+let lockAccessToken;
 
 /////////////////////////////////// STRIPE
 
@@ -100,30 +94,14 @@ app.post("/api/pay/usage", async function(req, res) {
 /////////////////////////////////// LOCK
 
 const setAccess = data => {
-
   console.log(
     `AUTHORISATION\nAccess Token: ${data.access_token}\nRefresh Token: ${
       data.refresh_token
     }`
   );
+  lockAccessToken = data.access_token;
   lockRefreshToken = data.refresh_token;
-
-  userJsonReq = axios.create({
-    headers: {
-      Accept: "application/vnd.lockstate+json; version=1",
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + data.access_token
-    }
-  });
-
-  userReq = axios.create({
-    headers: {
-      Accept: "application/vnd.lockstate+json; version=1",
-      Authorization: "Bearer " + data.access_token
-    }
-  });
 };
-
 
 const refreshToken = async () => {
   try {
@@ -134,8 +112,13 @@ const refreshToken = async () => {
     params.append("grant_type", "refresh_token");
 
     // https://github.com/axios/axios/issues/1891
-    const auth = await systemReq.post(
-      `https://smartconnectuk.devicewebmanager.com/oauth/token?${params.toString()}`
+    const auth = await axios.post(
+      `https://smartconnectuk.devicewebmanager.com/oauth/token?${params.toString()}`,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      }
     );
 
     setAccess(auth.data);
@@ -145,18 +128,23 @@ const refreshToken = async () => {
 };
 
 const deleteLockUser = lockUser => {
-  return userReq.delete(
-    "https://api.remotelock.com/access_persons/" + lockUser
-  );
+  return axios.delete("https://api.remotelock.com/access_persons/" + lockUser, {
+    headers: {
+      Accept: "application/vnd.lockstate+json; version=1",
+      Authorization: "Bearer " + lockAccessToken
+    }
+  });
 };
 
 const errorStatus = status => {
   switch (status) {
-    case 401: refreshToken();
+    case 401:
+      refreshToken();
       break;
     case 402: //pin already exists
       break;
-    default: break;
+    default:
+      break;
   }
 };
 
@@ -170,8 +158,13 @@ app.get("/api/lock/oauth_callback", async function(req, res) {
     params.append("grant_type", "authorization_code");
 
     // https://github.com/axios/axios/issues/1891
-    const auth = await systemReq.post(
-      `https://smartconnectuk.devicewebmanager.com/oauth/token?${params.toString()}`
+    const auth = await axios.post(
+      `https://smartconnectuk.devicewebmanager.com/oauth/token?${params.toString()}`,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      }
     );
 
     setAccess(auth.data);
@@ -192,7 +185,7 @@ app.get("/api/lock/oauth_callback", async function(req, res) {
 
 app.post("/api/lock/guest", async function(req, res) {
   try {
-    const response = await userJsonReq.post(
+    const response = await axios.post(
       "https://api.remotelock.com/access_persons",
       {
         type: "access_guest",
@@ -202,17 +195,31 @@ app.post("/api/lock/guest", async function(req, res) {
           name: req.body.user,
           pin: req.body.pin
         }
+      },
+      {
+        headers: {
+          Accept: "application/vnd.lockstate+json; version=1",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + lockAccessToken
+        }
       }
     );
 
     const data = response.data.data;
 
-    userJsonReq.post(
+    axios.post(
       "https://api.remotelock.com/access_persons/" + data.id + "/accesses",
       {
         attributes: {
           accessible_id: "28992f53-7f92-4101-b1b5-1bf1fca693dc",
           accessible_type: "lock"
+        }
+      },
+      {
+        headers: {
+          Accept: "application/vnd.lockstate+json; version=1",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + lockAccessToken
         }
       }
     );
@@ -243,24 +250,21 @@ app.delete("/api/lock/guest/:lockUser", async function(req, res) {
 
 app.post("/api/lock/session", async function(req, res) {
   try {
-
     if (req.body.data.attributes.associated_resource_type === "access_guest") {
-
       console.log("Guest unlocked door");
       console.log(req.body.data);
 
-    const lockUser = req.body.data.attributes.associated_resource_id;
+      const lockUser = req.body.data.attributes.associated_resource_id;
 
-    const snapshot = await firebase
-      .firestore()
-      .collection("sessions")
-      .where("lockUser", "==", lockUser)
-      .where("start", "==", null)
-      .get();
-    snapshot.docs[0].ref.update({ start: new Date() });
+      const snapshot = await firebase
+        .firestore()
+        .collection("sessions")
+        .where("lockUser", "==", lockUser)
+        .where("start", "==", null)
+        .get();
+      snapshot.docs[0].ref.update({ start: new Date() });
 
-    await deleteLockUser(lockUser);
-
+      await deleteLockUser(lockUser);
     } else {
       console.log(req.body.data);
       console.log("Administrator unlocked door");
