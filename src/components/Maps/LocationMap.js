@@ -17,7 +17,6 @@ import firebase from "firebase";
 import ScrollViewItems from "./MapComponents/ScrollViewItems";
 import MapSearch from "./MapComponents/MapSearch";
 import MapViewItems from "./MapComponents/MapViewItems";
-import { withUser } from "../Auth/Context/withUser";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
@@ -32,7 +31,7 @@ export const getCurrentLocation = () => {
   });
 };
 
-class LocationMap extends Component {
+export default class LocationMap extends Component {
   constructor() {
     super();
     this.updateRegionFromSearch = this.updateRegionFromSearch.bind(this);
@@ -181,4 +180,3 @@ const styles = StyleSheet.create({
     paddingRight: width - CARD_WIDTH
   }
 });
-export default withUser(LocationMap);

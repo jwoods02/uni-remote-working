@@ -10,9 +10,8 @@ import { Font } from "expo";
 import { ListItem, Button, Icon } from "react-native-elements";
 import { FontAwesome } from "@expo/vector-icons";
 import firebase from "firebase";
-import { withUser } from "../Auth/Context/withUser";
 
-class ManageSession extends Component {
+export default class ManageSession extends Component {
   constructor(props) {
     super(props);
     this.ref = firebase.firestore().collection("session");
@@ -114,5 +113,3 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
-
-export default withUser(ManageSession);
