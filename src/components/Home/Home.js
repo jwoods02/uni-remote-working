@@ -44,9 +44,35 @@ class Home extends Component {
       this.setState({
         user: userQuerySnapshot.docs[0].id
       });
+
+
+      const sessionQuery = await firebase
+      .firestore()
+      .collection("sessions")
+      .where("user", "==", userQuerySnapshot.docs[0].ref)
+      .get();
+
+    if (!sessionQuery.empty) {
+
+      const foo = await sessionQuery.docs[0].id;
+
+      await firebase.firestore().collection("sessions").doc(foo).onSnapshot({
+        includeMetadataChanges: true
+    }, doc => {
+      this.handleRender();
+      console.log("THIS SHOULD UPDATE!!");
+    });
+    } 
+
+
+
+
     } catch (err) {
       console.log(err);
     }
+
+
+
 
     await this.handleRender();
   };
