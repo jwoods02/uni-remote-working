@@ -149,11 +149,11 @@ class ActiveSession extends Component {
               Session Start Time :
               {" " +
                 new Date(
-                  this.props.session.data().access_code.expiry.seconds * 1000
+                  this.props.session.data().start.seconds * 1000
                 ).toLocaleTimeString("en-UK") +
                 " on " +
                 new Date(
-                  this.props.session.data().access_code.expiry.seconds * 1000
+                  this.props.session.data().start.seconds * 1000
                 ).toLocaleDateString("en-UK")}{" "}
             </Text>
             <EndSession navigation={this.props.navigation} />
