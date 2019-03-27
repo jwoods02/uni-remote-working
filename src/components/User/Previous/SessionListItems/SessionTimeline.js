@@ -17,11 +17,12 @@ import moment from "moment";
 export default class SessionTimeline extends Component {
   constructor(props) {
     super(props);
+    console.log("REQUESTED: ", this.props.session.data().access_code.requested);
     this.data = [];
     this.data.push(
       {
         time: new Date(
-          this.props.session.data().access_code.requested.seconds * 1000
+          this.props.session.data().access_code.requested
         ).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" }),
         title: "Code Requested",
         description: "You requested a code for this venue"

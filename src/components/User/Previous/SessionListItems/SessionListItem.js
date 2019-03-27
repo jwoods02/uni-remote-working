@@ -68,7 +68,7 @@ export default class SessionListItem extends Component {
     var sessionDetails;
     if (this.state.active) {
       sessionDetails = (
-        <Text style={{ fontWeight: "100", marginTop: 10 }}>
+        <Text style={{ fontWeight: "300", marginTop: 10 }}>
           Code still active!
         </Text>
       );
@@ -107,8 +107,8 @@ export default class SessionListItem extends Component {
           </Text>
           <Text style={{ color: "grey", fontSize: 14, fontWeight: "300" }}>
             {new Date(
-              this.props.session.data().access_code.requested.seconds * 1000
-            ).toLocaleDateString("en-UK")}{" "}
+              this.props.session.data().access_code.requested
+            ).toLocaleDateString("en-UK")}
           </Text>
 
           <View style={{ width: width - 40, height: 100, marginTop: 20 }}>

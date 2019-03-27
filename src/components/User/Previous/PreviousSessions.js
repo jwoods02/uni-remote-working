@@ -66,6 +66,7 @@ export default class PreviousSessions extends Component {
       .firestore()
       .collection("sessions")
       .where("user", "==", userDocRef)
+      // .orderByChild("end", "desc")
       .get();
 
     if (sessionQuerySnapshot.empty) {
@@ -75,7 +76,7 @@ export default class PreviousSessions extends Component {
         loading: false
       });
     } else {
-      const previousSessions = sessionQuerySnapshot.docs;
+      const previousSessions = sessionQuerySnapshot.docs.reverse();
       this.setState({
         previousSessions,
         hasCode: true,
