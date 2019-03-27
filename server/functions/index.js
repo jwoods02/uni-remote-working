@@ -33,7 +33,6 @@ const clientSecret =
 
 const lockCallbackUrl =
   "https://remoteruralworking.firebaseapp.com/api/lock/oauth_callback";
-let lockAccessToken;
 let lockRefreshToken;
 let userJsonReq;
 let userReq;
@@ -125,6 +124,7 @@ const setAccess = data => {
   });
 };
 
+
 const refreshToken = async () => {
   try {
     const params = new URLSearchParams();
@@ -186,7 +186,7 @@ app.get("/api/lock/oauth_callback", async function(req, res) {
       errorStatus(error.response.status);
     }
     console.log(error);
-    res.status(500).send(error);
+    res.status(500).send("Server error!");
   }
 });
 
@@ -223,7 +223,7 @@ app.post("/api/lock/guest", async function(req, res) {
       errorStatus(error.response.status);
     }
     console.log(error);
-    res.status(500).send(error);
+    res.status(500).send("Server error!");
   }
 });
 
@@ -237,7 +237,7 @@ app.delete("/api/lock/guest/:lockUser", async function(req, res) {
       errorStatus(error.response.status);
     }
     console.log(error);
-    res.status(500).send(error);
+    res.status(500).send("Server error!");
   }
 });
 
@@ -260,7 +260,7 @@ app.post("/api/lock/session", async function(req, res) {
       errorStatus(error.response.status);
     }
     console.log(error);
-    res.status(500).send(error);
+    res.status(500).send("Server error!");
   }
 });
 
