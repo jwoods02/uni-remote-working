@@ -10,11 +10,11 @@ import { withUser } from "../Auth/Context/withUser";
 class Home extends Component {
   constructor(props) {
     super(props);
-    console.log("USER ID FROM HOME USING CONTEXT", this.props.userContext.user);
+    console.log("USER ID FROM HOME USING Firebase Auth", firebase.auth().currentUser.uid);
     this.userRef = firebase
       .firestore()
       .collection("users")
-      .where("auth", "==", this.props.userContext.user);
+      .where("auth", "==", firebase.auth().currentUser.uid);
     this.state = {
       user: null,
       hasCode: false,

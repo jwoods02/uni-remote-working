@@ -22,7 +22,7 @@ class EndSession extends Component {
     this.userRef = firebase
       .firestore()
       .collection("users")
-      .where("auth", "==", this.props.userContext.user);
+      .where("auth", "==", firebase.auth().currentUser.uid);
 
     this.state = {
       user: {},
