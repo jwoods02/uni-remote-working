@@ -27,6 +27,7 @@ import ActiveSession from "./src/components/Home/SessionActive/ActiveSession";
 import LandingPage from "./src/components/Auth/LandingPage";
 import UserProvider from "./src/components/Auth/Context/UserProvider";
 import ManageSession from "./src/components/User/ManageSession";
+import PreviousSessions from "./src/components/User/Previous/PreviousSessions";
 
 setupFirebase();
 axios.defaults.baseURL = "https://remoteruralworking.firebaseapp.com";
@@ -75,7 +76,8 @@ const MapStack = createStackNavigator(
 const SettingsStack = createStackNavigator(
   {
     Settings: Settings,
-    ManageSession: ManageSession
+    ManageSession: ManageSession,
+    PreviousSessions: PreviousSessions
   },
   {
     defaultNavigationOptions: {
