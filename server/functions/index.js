@@ -231,7 +231,7 @@ app.delete("/api/lock/guest/:lockUser", async function(req, res) {
   try {
     const response = await deleteLockUser(req.params.lockUser);
 
-    res.status(204).send();
+    res.status(204).end();
   } catch (error) {
     if (error.response) {
       errorStatus(error.response.status);
@@ -243,24 +243,36 @@ app.delete("/api/lock/guest/:lockUser", async function(req, res) {
 
 app.post("/api/lock/session", async function(req, res) {
   try {
+
+    if (req.body.data.attributes.associated_resource_type === "access_guest") {
+
+      console.log("Guest unlocked door");
+      console.log(req.body.data);
+
     const lockUser = req.body.data.attributes.associated_resource_id;
 
     const snapshot = await firebase
       .firestore()
       .collection("sessions")
       .where("lockUser", "==", lockUser)
+      .where("start", "==", null)
       .get();
     snapshot.docs[0].ref.update({ start: new Date() });
 
-    const response = await deleteLockUser(lockUser);
+    await deleteLockUser(lockUser);
 
-    res.status(200).send(response);
+    } else {
+      console.log(req.body.data);
+      console.log("Administrator unlocked door");
+    }
+
+    res.status(204).end();
   } catch (error) {
     if (error.response) {
       errorStatus(error.response.status);
     }
     console.log(error);
-    res.status(500).send("Server error!");
+    res.status(500).end();
   }
 });
 
