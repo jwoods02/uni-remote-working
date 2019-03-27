@@ -65,7 +65,7 @@ export default class PreviousSessions extends Component {
       .firestore()
       .collection("sessions")
       .where("user", "==", userDocRef)
-      // .orderByChild("end", "desc")
+      .orderBy("end", "asc")
       .get();
 
     if (sessionQuerySnapshot.empty) {
