@@ -22,7 +22,7 @@ export default class PreviousSessions extends Component {
 
     this.state = {
       user: null,
-      hasCode: false,
+      hasPrevious: false,
       loading: true
     };
   }
@@ -72,14 +72,14 @@ export default class PreviousSessions extends Component {
     if (sessionQuerySnapshot.empty) {
       console.log("no documents found");
       this.setState({
-        hasCode: false,
+        hasPrevious: false,
         loading: false
       });
     } else {
       const previousSessions = sessionQuerySnapshot.docs.reverse();
       this.setState({
         previousSessions,
-        hasCode: true,
+        hasPrevious: true,
         loading: false
       });
     }
@@ -94,7 +94,7 @@ export default class PreviousSessions extends Component {
           <ActivityIndicator size="large" color="rgba(130,4,150, 0.4)" />
         </View>
       );
-    } else {
+    } else if (this.state.hasPrevious) {
       allSessions = [];
       this.state.previousSessions.forEach(session => {
         console.log("TOP TIER SESSION END: ", session.data().end);
@@ -112,6 +112,12 @@ export default class PreviousSessions extends Component {
             </ScrollView>
           </View>
         </SafeAreaView>
+      );
+    } else {
+      return (
+        <View style={styles.container}>
+          <Text>You don't have any previous sessions!</Text>
+        </View>
       );
     }
   }
