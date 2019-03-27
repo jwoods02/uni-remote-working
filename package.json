@@ -50,6 +50,7 @@
     "react-native-timeline-listview": "^0.2.3",
     "react-navigation": "^3.0.9",
     "react-navigation-material-bottom-tabs": "^1.0.0",
+    "stripe": "^6.25.1",
     "react-test-renderer": "^16.8.4"
   },
   "devDependencies": {
