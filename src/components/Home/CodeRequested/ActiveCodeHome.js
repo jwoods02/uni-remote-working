@@ -126,8 +126,7 @@ export default class ActiveCodeHome extends Component {
       isLoading: true
     });
 
-
-    axios.delete("https://683d5519.ngrok.io/api/lock/guest/" + this.props.session.data().lockUser);
+    axios.delete("/api/lock/guest/" + this.props.session.data().lockUser);
 
     firebase
       .firestore()
@@ -157,20 +156,16 @@ export default class ActiveCodeHome extends Component {
       );
     }
 
-    const isToday = new Date(this.props.session.data().access_code.expiry).getDay() === new Date().getDay();
+    const isToday =
+      new Date(this.props.session.data().access_code.expiry).getDay() ===
+      new Date().getDay();
 
     return (
       <View style={styles.container}>
         <View
-          style={[
-            styles.headerContainer,
-            flex.column,
-            justify.spaceBetween
-          ]}
+          style={[styles.headerContainer, flex.column, justify.spaceBetween]}
         >
-          <View
-            style={[justify.spaceBetween, flex.row, styles.firstInfoRow]}
-          >
+          <View style={[justify.spaceBetween, flex.row, styles.firstInfoRow]}>
             <Text style={[styles.title, colours.textPurple]}>
               {this.state.markers[0].title}
             </Text>
@@ -196,16 +191,12 @@ export default class ActiveCodeHome extends Component {
               {"Expires "}
               {isToday ? "today" : "tomorrow"}
               {" at "}
-              {
-                new Date(
-                  this.props.session.data().access_code.expiry
-                ).toLocaleTimeString("en-GB", {
-                  hour: "2-digit",
-                  minute: "2-digit"
-                })
-              }  
-
-                
+              {new Date(
+                this.props.session.data().access_code.expiry
+              ).toLocaleTimeString("en-GB", {
+                hour: "2-digit",
+                minute: "2-digit"
+              })}
             </Text>
           </View>
         </View>

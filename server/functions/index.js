@@ -1,14 +1,15 @@
+const functions = require("firebase-functions");
+
+// // Create and Deploy Your First Cloud Functions
+// // https://firebase.google.com/docs/functions/write-firebase-functions
+// https://smartconnectuk.devicewebmanager.com/oauth/authorize?client_id=86b38dbd471070664803a23c824d104e4cf97b95b1a0ffface3939cc94963c65&response_type=code&redirect_uri=https://remoteruralworking.firebaseapp.com/api/lock/oauth_callback
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const stripe = require("stripe")("sk_test_ik5ZUTExOZD1iCpd9Iey4bXy");
 const app = express();
-const port = 4000;
-
 const schedule = require("node-schedule");
-const opn = require("opn");
-
 const axios = require("axios");
-
 const firebase = require("firebase");
 
 firebase.initializeApp({
@@ -32,7 +33,6 @@ const clientSecret =
 
 const lockCallbackUrl =
   "https://remoteruralworking.firebaseapp.com/api/lock/oauth_callback";
-let lockAccessToken;
 let lockRefreshToken;
 let userJsonReq;
 let userReq;
@@ -100,6 +100,12 @@ app.post("/api/pay/usage", async function(req, res) {
 /////////////////////////////////// LOCK
 
 const setAccess = data => {
+
+  console.log(
+    `AUTHORISATION\nAccess Token: ${data.access_token}\nRefresh Token: ${
+      data.refresh_token
+    }`
+  );
   lockRefreshToken = data.refresh_token;
 
   userJsonReq = axios.create({
@@ -118,13 +124,6 @@ const setAccess = data => {
   });
 };
 
-opn(
-  "https://smartconnectuk.devicewebmanager.com/oauth/authorize?client_id=" +
-    clientId +
-    "&response_type=code" +
-    "&redirect_uri=" +
-    lockCallbackUrl
-);
 
 const refreshToken = async () => {
   try {
@@ -134,9 +133,9 @@ const refreshToken = async () => {
     params.append("client_secret", clientSecret);
     params.append("grant_type", "refresh_token");
 
+    // https://github.com/axios/axios/issues/1891
     const auth = await systemReq.post(
-      "https://smartconnectuk.devicewebmanager.com/oauth/token",
-      params
+      `https://smartconnectuk.devicewebmanager.com/oauth/token?${params.toString()}`
     );
 
     setAccess(auth.data);
@@ -152,11 +151,12 @@ const deleteLockUser = lockUser => {
 };
 
 const errorStatus = status => {
-  if (status === 401) {
-    refreshToken();
-  } else if (status === 402) {
-    // Pin aready exists
-  } else {
+  switch (status) {
+    case 401: refreshToken();
+      break;
+    case 402: //pin already exists
+      break;
+    default: break;
   }
 };
 
@@ -169,9 +169,9 @@ app.get("/api/lock/oauth_callback", async function(req, res) {
     params.append("redirect_uri", lockCallbackUrl);
     params.append("grant_type", "authorization_code");
 
+    // https://github.com/axios/axios/issues/1891
     const auth = await systemReq.post(
-      "https://smartconnectuk.devicewebmanager.com/oauth/token",
-      params
+      `https://smartconnectuk.devicewebmanager.com/oauth/token?${params.toString()}`
     );
 
     setAccess(auth.data);
@@ -186,7 +186,7 @@ app.get("/api/lock/oauth_callback", async function(req, res) {
       errorStatus(error.response.status);
     }
     console.log(error);
-    res.status(500).send(error);
+    res.status(500).send("Server error!");
   }
 });
 
@@ -223,7 +223,7 @@ app.post("/api/lock/guest", async function(req, res) {
       errorStatus(error.response.status);
     }
     console.log(error);
-    res.status(500).send(error);
+    res.status(500).send("Server error!");
   }
 });
 
@@ -231,37 +231,49 @@ app.delete("/api/lock/guest/:lockUser", async function(req, res) {
   try {
     const response = await deleteLockUser(req.params.lockUser);
 
-    res.status(204).send();
+    res.status(204).end();
   } catch (error) {
     if (error.response) {
       errorStatus(error.response.status);
     }
     console.log(error);
-    res.status(500).send(error);
+    res.status(500).send("Server error!");
   }
 });
 
 app.post("/api/lock/session", async function(req, res) {
   try {
+
+    if (req.body.data.attributes.associated_resource_type === "access_guest") {
+
+      console.log("Guest unlocked door");
+      console.log(req.body.data);
+
     const lockUser = req.body.data.attributes.associated_resource_id;
 
     const snapshot = await firebase
       .firestore()
       .collection("sessions")
       .where("lockUser", "==", lockUser)
+      .where("start", "==", null)
       .get();
     snapshot.docs[0].ref.update({ start: new Date() });
 
-    const response = await deleteLockUser(lockUser);
+    await deleteLockUser(lockUser);
 
-    res.status(200).send(response);
+    } else {
+      console.log(req.body.data);
+      console.log("Administrator unlocked door");
+    }
+
+    res.status(204).end();
   } catch (error) {
     if (error.response) {
       errorStatus(error.response.status);
     }
     console.log(error);
-    res.status(500).send(error);
+    res.status(500).end();
   }
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+exports.api = functions.https.onRequest(app);
