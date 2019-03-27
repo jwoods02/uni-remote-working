@@ -5,16 +5,18 @@ import ActiveCodeHome from "./CodeRequested/ActiveCodeHome";
 import ActiveSession from "./SessionActive/ActiveSession";
 
 import DefaultHome from "./Default/DefaultHome";
-import { withUser } from "../Auth/Context/withUser";
 
-class Home extends Component {
+export default class Home extends Component {
   constructor(props) {
     super(props);
-    console.log("USER ID FROM HOME USING CONTEXT", this.props.userContext.user);
+    console.log(
+      "USER ID FROM HOME USING Firebase Auth",
+      firebase.auth().currentUser.uid
+    );
     this.userRef = firebase
       .firestore()
       .collection("users")
-      .where("auth", "==", this.props.userContext.user);
+      .where("auth", "==", firebase.auth().currentUser.uid);
     this.state = {
       user: null,
       hasCode: false,
@@ -46,20 +48,22 @@ class Home extends Component {
       });
 
       const sessionQuerySnapshot = await firebase
-      .firestore()
-      .collection("sessions")
-      .where("user", "==", userQuerySnapshot.docs[0].ref)
-      .where("end", "==", null)
-      .get();
+        .firestore()
+        .collection("sessions")
+        .where("user", "==", userQuerySnapshot.docs[0].ref)
+        .where("end", "==", null)
+        .get();
 
-    if (!sessionQuerySnapshot.empty) {
-      sessionQuerySnapshot.docs[0].ref.onSnapshot({
-        includeMetadataChanges: true
-      }, async () => {
-        await this.handleRender();
-      });
-    } 
-
+      if (!sessionQuerySnapshot.empty) {
+        sessionQuerySnapshot.docs[0].ref.onSnapshot(
+          {
+            includeMetadataChanges: true
+          },
+          async () => {
+            await this.handleRender();
+          }
+        );
+      }
     } catch (err) {
       console.log(err);
     }
@@ -129,8 +133,6 @@ class Home extends Component {
     }
   }
 }
-
-export default withUser(Home);
 
 const styles = StyleSheet.create({
   container: {

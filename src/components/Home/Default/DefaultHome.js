@@ -16,11 +16,10 @@ import {
 import Icon from "@expo/vector-icons/Ionicons";
 import FavouritesCarousel from "./FavouritesCarousel";
 import firebase from "firebase";
-import { withUser } from "../../Auth/Context/withUser";
 
 const { width } = Dimensions.get("window");
 
-class DefaultHome extends Component {
+export default class DefaultHome extends Component {
   constructor() {
     super();
     this.ref = firebase.firestore().collection("locations");
@@ -171,7 +170,6 @@ class DefaultHome extends Component {
     );
   }
 }
-export default withUser(DefaultHome);
 
 const styles = StyleSheet.create({
   container: {
