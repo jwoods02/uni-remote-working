@@ -82,4 +82,4 @@ Web/npm-debug.log*
 Webyarn-debug.log*
 Webyarn-error.log*
 
-node_modules
+node_modules/
