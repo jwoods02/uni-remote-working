@@ -21,7 +21,7 @@ export default class SessionListItem extends Component {
     this.state = {
       isLoading: true,
       location: {},
-      active: false
+      active: true
     };
   }
 
@@ -39,7 +39,8 @@ export default class SessionListItem extends Component {
         this.setState({
           location: locationDoc.data(),
           active: true,
-          isLoading: false
+          isLoading: false,
+          active: true
         });
       } else {
         console.log("SESSION END IS NOT NULL");
@@ -64,6 +65,31 @@ export default class SessionListItem extends Component {
   }
 
   render() {
+    var sessionDetails;
+    if (this.state.active) {
+      sessionDetails = (
+        <Text style={{ fontWeight: "100", marginTop: 10 }}>
+          Code still active!
+        </Text>
+      );
+    } else {
+      sessionDetails = (
+        <View>
+          <SessionTimeline session={this.props.session} />
+
+          <Text
+            style={{
+              color: "grey",
+              fontSize: 14,
+              fontWeight: "300",
+              marginTop: 10
+            }}
+          >
+            Duration: {this.state.duration}
+          </Text>
+        </View>
+      );
+    }
     if (this.state.loading) {
       return (
         <View style={styles.container}>
@@ -99,27 +125,7 @@ export default class SessionListItem extends Component {
               source={{ uri: this.state.location.image }}
             />
           </View>
-          {this.state.active && (
-            <Text style={{ fontWeight: "100", marginTop: 10 }}>
-              Code still active!
-            </Text>
-          )}
-          {!this.state.active && (
-            <View>
-              <SessionTimeline session={this.props.session} />
-
-              <Text
-                style={{
-                  color: "grey",
-                  fontSize: 14,
-                  fontWeight: "300",
-                  marginTop: 10
-                }}
-              >
-                Duration: {this.state.duration}
-              </Text>
-            </View>
-          )}
+          {sessionDetails}
         </View>
       );
     }
