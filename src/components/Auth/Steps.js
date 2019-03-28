@@ -160,7 +160,7 @@ export default class Steps extends React.Component {
 
         <View style={styles.btnContainer}>
           <AwesomeButton
-            backgroundColor={"#42a7f4"}
+            backgroundColor={"#edeeef"}
             width={150}
             onPress={this._navigateTo}
           >

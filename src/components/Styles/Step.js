@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     fontSize: 30
   },
   active: {
-    color: "#111"
+    color: "#8A54A2"
   },
   inactive: {
     color: "#dddddd"
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   btnTxt: {
-    color: "#fff",
+    color: "#8A54A2",
     fontSize: 25,
     padding: 5
   },
