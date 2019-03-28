@@ -160,17 +160,6 @@ const deleteLockUser = lockUser => {
   });
 };
 
-const errorStatus = status => {
-  switch (status) {
-    case 401:
-      //updateTokens();
-      break;
-    case 402: //pin already exists
-      break;
-    default:
-      break;
-  }
-};
 
 app.get("/api/lock/oauth_callback", async function(req, res) {
   try {
@@ -195,9 +184,6 @@ app.get("/api/lock/oauth_callback", async function(req, res) {
 
     res.status(200).send(req.query);
   } catch (error) {
-    if (error.response) {
-      errorStatus(error.response.status);
-    }
     console.log(error);
     res.status(500).send("Server error!");
   }
@@ -246,9 +232,6 @@ app.post("/api/lock/guest", async function(req, res) {
 
     res.status(200).send(data);
   } catch (error) {
-    if (error.response) {
-      errorStatus(error.response.status);
-    }
     console.log(error);
     res.status(500).send("Server error!");
   }
@@ -259,9 +242,6 @@ app.delete("/api/lock/guest/:lockUser", async function(req, res) {
     await deleteLockUser(req.params.lockUser);
     res.status(204).end();
   } catch (error) {
-    if (error.response) {
-      errorStatus(error.response.status);
-    }
     console.log(error);
     res.status(500).send("Server error!");
   }
@@ -291,11 +271,8 @@ app.post("/api/lock/session", async function(req, res) {
       console.log(req.body.data);
     }
   } catch (error) {
-    if (error.response) {
-      errorStatus(error.response.status);
-    }
     console.log(error);
-    //204 prevents request being scheduled for re-send.
+    //204 prevents request being scheduled for re-send
     res.status(204).end();
   }
 });
