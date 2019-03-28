@@ -118,14 +118,21 @@ const AppStack = createBottomTabNavigator(
   }
 );
 
-const AuthStack = createStackNavigator({
-  Loading: Loading,
-  LandingPage: LandingPage,
-  Steps: Steps,
-  Login: Login,
-  SignUp: SignUp,
-  Pay: Pay
-});
+const AuthStack = createStackNavigator(
+  {
+    Loading: Loading,
+    LandingPage: LandingPage,
+    Steps: Steps,
+    Login: Login,
+    SignUp: SignUp,
+    Pay: Pay
+  },
+  {
+    defaultNavigationOptions: {
+      gesturesEnabled: false
+    }
+  }
+);
 
 const RootStack = createSwitchNavigator({
   Auth: AuthStack,
