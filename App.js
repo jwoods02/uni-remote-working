@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import { Button, Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import {
@@ -10,40 +9,37 @@ import {
   createSwitchNavigator
 } from "react-navigation";
 
-import BoardScreen from "./src/components/CRUD/BoardScreen";
-import BoardDetailScreen from "./src/components/CRUD/BoardDetailScreen";
-import AddBoardScreen from "./src/components/CRUD/AddBoardScreen";
-import EditBoardScreen from "./src/components/CRUD/EditBoardScreen";
 import Loading from "./src/components/Auth/Loading";
 import SignUp from "./src/components/Auth/SignUp";
 import Login from "./src/components/Auth/Login";
 import Main from "./src/components/Auth/Main";
+import Steps from "./src/components/Auth/Steps";
 import Settings from "./src/components/User/Settings";
 
 import setupFirebase from "./Firebase";
 import Pay from "./src/components/Payment/Pay";
 import LocationMap from "./src/components/Maps/LocationMap";
 import LocationDetailScreen from "./src/components/Locations/LocationDetailScreen";
-import ActiveCodeHome from "./src/components/Home/ActiveCodeHome";
-import DefaultHome from "./src/components/Home/DefaultHome";
+import ActiveCodeHome from "./src/components/Home/CodeRequested/ActiveCodeHome";
+import DefaultHome from "./src/components/Home/Default/DefaultHome";
 import Home from "./src/components/Home/Home";
+import ActiveSession from "./src/components/Home/SessionActive/ActiveSession";
 
 import LandingPage from "./src/components/Auth/LandingPage";
-import UserProvider from "./src/components/Auth/Context/UserProvider";
 import ManageSession from "./src/components/User/ManageSession";
+import PreviousSessions from "./src/components/User/Previous/PreviousSessions";
 
 setupFirebase();
-axios.defaults.baseURL = "http://10.247.39.92:4000";
+axios.defaults.baseURL = "https://remoteruralworking.firebaseapp.com";
 
 const HomeStack = createStackNavigator(
   {
     Home: Home,
     ActiveCodeHome: ActiveCodeHome,
     DefaultHome: DefaultHome,
+    ActiveSession: ActiveSession,
     Main: Main,
     Loading: Loading,
-    SignUp: SignUp,
-    Login: Login,
     LocationMap: LocationMap,
     LocationDetailScreen: LocationDetailScreen
   },
@@ -64,8 +60,6 @@ const MapStack = createStackNavigator(
 
     Main: Main,
     Loading: Loading,
-    SignUp: SignUp,
-    Login: Login,
     LocationDetailScreen: LocationDetailScreen
   },
   {
@@ -82,7 +76,8 @@ const MapStack = createStackNavigator(
 const SettingsStack = createStackNavigator(
   {
     Settings: Settings,
-    ManageSession: ManageSession
+    ManageSession: ManageSession,
+    PreviousSessions: PreviousSessions
   },
   {
     defaultNavigationOptions: {
@@ -124,13 +119,21 @@ const AppStack = createBottomTabNavigator(
   }
 );
 
-const AuthStack = createStackNavigator({
-  Loading: Loading,
-  LandingPage: LandingPage,
-  Login: Login,
-  SignUp: SignUp,
-  Pay: Pay
-});
+const AuthStack = createStackNavigator(
+  {
+    Loading: Loading,
+    LandingPage: LandingPage,
+    Steps: Steps,
+    Login: Login,
+    SignUp: SignUp,
+    Pay: Pay
+  },
+  {
+    defaultNavigationOptions: {
+      gesturesEnabled: false
+    }
+  }
+);
 
 const RootStack = createSwitchNavigator({
   Auth: AuthStack,
@@ -140,10 +143,6 @@ const RootStack = createSwitchNavigator({
 let AppContainer = createAppContainer(RootStack);
 export default class App extends React.Component {
   render() {
-    return (
-      <UserProvider>
-        <AppContainer />
-      </UserProvider>
-    );
+    return <AppContainer />;
   }
 }

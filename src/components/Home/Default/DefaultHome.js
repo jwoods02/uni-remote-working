@@ -16,11 +16,10 @@ import {
 import Icon from "@expo/vector-icons/Ionicons";
 import FavouritesCarousel from "./FavouritesCarousel";
 import firebase from "firebase";
-import { withUser } from "../Auth/Context/withUser";
 
-const { height, width } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
-class DefaultHome extends Component {
+export default class DefaultHome extends Component {
   constructor() {
     super();
     this.ref = firebase.firestore().collection("locations");
@@ -37,7 +36,9 @@ class DefaultHome extends Component {
     }
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.ref.onSnapshot(this.onCollectionUpdate);
+  }
 
   onCollectionUpdate = querySnapshot => {
     const locations = [];
@@ -148,7 +149,7 @@ class DefaultHome extends Component {
                       borderWidth: 1,
                       borderColor: "#dddddd"
                     }}
-                    source={require("../../../assets/locationD.jpg")}
+                    source={require("../../../../assets/locationD.jpg")}
                   />
                 </View>
               </View>
@@ -169,7 +170,6 @@ class DefaultHome extends Component {
     );
   }
 }
-export default withUser(DefaultHome);
 
 const styles = StyleSheet.create({
   container: {

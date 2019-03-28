@@ -3,22 +3,18 @@
 
 import React, { Component } from "react";
 import {
-  AppRegistry,
   Text,
   View,
   Animated,
   ActivityIndicator,
-  Button,
-  Alert,
   ScrollView
 } from "react-native";
 
-import firebase from "firebase";
-import MapViewItems from "../Maps/MapComponents/MapViewItems";
-import Dialog from "react-native-dialog";
+import MapViewItems from "../../Maps/MapComponents/MapViewItems";
 
-import { styles } from "../Styles/ActiveCodeHome";
-import { colours, flex, justify } from "../Styles/Global";
+import { styles } from "../../Styles/ActiveCodeHome";
+import { colours, flex, justify } from "../../Styles/Global";
+import EndSession from "./EndSession";
 
 export const getCurrentLocation = () => {
   return new Promise((resolve, reject) => {
@@ -29,19 +25,19 @@ export const getCurrentLocation = () => {
   });
 };
 
-export default class ActiveCodeHome extends Component {
-  static navigationOptions = { title: "Home", headerLeft: null };
+export default class ActiveSession extends Component {
+  static navigationOptions = { title: "Your Code", headerLeft: null };
 
   constructor(props) {
     super(props);
-    this.ref = firebase
-      .firestore()
-      .collection("locations")
-      .doc(props.navigation.state.params.docId);
+
     this.unsubscribe = null;
+
     this.state = {
       isLoading: true,
       markers: [],
+      location: {},
+      user: {},
       region: {
         //just a default incase snapshot fails - Cardiff
         latitude: 51.481583,
@@ -58,10 +54,20 @@ export default class ActiveCodeHome extends Component {
     this.animation = new Animated.Value(0);
   }
 
-  componentDidMount() {
-    this.state = this.unsubscribe = this.ref.onSnapshot(
-      this.onCollectionUpdate
-    );
+  async componentDidMount() {
+    this.state = this.unsubscribe = this.props.session
+      .data()
+      .access_code.location.onSnapshot(this.onCollectionUpdate);
+
+    const doc = await this.props.session.data().access_code.location.get();
+
+    if (doc.exists) {
+      this.setState({
+        location: doc.data()
+      });
+    } else {
+      console.log("No such document!");
+    }
 
     getCurrentLocation().then(position => {
       if (position) {
@@ -96,25 +102,6 @@ export default class ActiveCodeHome extends Component {
     });
   };
 
-  _howTo() {
-    Alert.alert(
-      "The code in the top right of the screen is used to enter the building. When you enter the building, you will begin to be charged."
-    );
-  }
-
-  _removeCode = () => {
-    this.setState({ dialogVisible: true });
-  };
-
-  handleCancel = () => {
-    this.setState({ dialogVisible: false });
-  };
-
-  handleRemove = () => {
-    this.setState({ dialogVisible: false });
-    this.props.navigation.navigate("Home");
-  };
-
   render() {
     if (this.state.isLoading) {
       return (
@@ -126,20 +113,14 @@ export default class ActiveCodeHome extends Component {
 
     return (
       <View style={styles.container}>
-        {/* Header */}
         <View
           style={[styles.headerContainer, flex.column, justify.spaceBetween]}
         >
-          {/* First row of header */}
           <View style={[justify.spaceBetween, flex.row, styles.firstInfoRow]}>
             <Text style={[styles.title, colours.textPurple]}>
-              {this.state.markers[0].title}
-            </Text>
-            <Text style={styles.title}>
-              {this.props.navigation.state.params.code}
+              Your current session
             </Text>
           </View>
-          {/* Second row of header */}
           <View
             style={[
               justify.spaceBetween,
@@ -148,20 +129,9 @@ export default class ActiveCodeHome extends Component {
                 alignItems: "center"
               }
             ]}
-          >
-            <Button
-              onPress={this._removeCode}
-              title="X Remove code"
-              color="#FF0000"
-            />
-            <Text style={{ fontSize: 20, paddingRight: 10 }}>
-              Valid for: {this.props.navigation.state.params.validFor}hrs
-            </Text>
-          </View>
+          />
         </View>
-        {/* Start of body */}
         <ScrollView style={[styles.scrollContainer, flex.column]}>
-          <Button onPress={this._howTo} title="How do I use this code?" />
           <View style={styles.mapContainer}>
             <MapViewItems //the map
               region={this.state.region}
@@ -170,46 +140,25 @@ export default class ActiveCodeHome extends Component {
               navigation={this.props.navigation}
             />
           </View>
-          {/* Information below map container */}
           <View style={{ padding: 8 }}>
             <Text style={[styles.infoTitle, colours.textPurple]}>
               {this.state.markers[0].title}
             </Text>
             <Text style={styles.description}>
-              {this.state.markers[0].description}
+              Session Start Time :
+              {" " +
+                new Date(
+                  this.props.session.data().start.seconds * 1000
+                ).toLocaleTimeString("en-UK") +
+                " on " +
+                new Date(
+                  this.props.session.data().start.seconds * 1000
+                ).toLocaleDateString("en-UK")}{" "}
             </Text>
-            <View style={[styles.infoContainer, flex.row, justify.center]}>
-              <View style={styles.infoBorderRight}>
-                <Text>{this.state.markers[0].desks} desks</Text>
-              </View>
-              <View
-                style={[
-                  styles.infoBorderRight,
-                  {
-                    paddingLeft: 5
-                  }
-                ]}
-              >
-                <Text>24 / 7 Access</Text>
-              </View>
-              <View style={{ paddingLeft: 5 }}>
-                <Text>Kitchen Area</Text>
-              </View>
-            </View>
-            <Text>{this.state.markers[0].info}</Text>
+            <EndSession navigation={this.props.navigation} />
           </View>
-          {/* Dialog box that shows when remove code btn is pressed */}
-          <Dialog.Container visible={this.state.dialogVisible}>
-            <Dialog.Description>
-              Are you sure you want to remove your access code?
-            </Dialog.Description>
-            <Dialog.Button label="Cancel" onPress={this.handleCancel} />
-            <Dialog.Button label="Remove" onPress={this.handleRemove} />
-          </Dialog.Container>
         </ScrollView>
       </View>
     );
   }
 }
-
-AppRegistry.registerComponent("ActiveCodeHome", () => ActiveCodeHome);

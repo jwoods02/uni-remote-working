@@ -14,26 +14,27 @@ import {
   Alert
 } from "react-native";
 import Icon from "@expo/vector-icons/Ionicons";
-import { withUser } from "../Auth/Context/withUser";
 
 import firebase from "firebase";
 import Dialog from "react-native-dialog";
+import axios from "axios";
 
 const { height, width } = Dimensions.get("window");
 
-class LocationDetailScreen extends Component {
+export default class LocationDetailScreen extends Component {
   constructor(props) {
     super(props);
     this.ref = firebase.firestore().collection("sessions");
     this.userRef = firebase
       .firestore()
       .collection("users")
-      .where("auth", "==", this.props.userContext.user);
+      .where("auth", "==", firebase.auth().currentUser.uid);
     this.state = {
       isLoading: true,
       location: {},
       key: "",
       user: "",
+      session: {},
       dialogVisible: false
     };
   }
@@ -45,7 +46,8 @@ class LocationDetailScreen extends Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    await this.getSession();
     const { navigation } = this.props;
     const ref = firebase
       .firestore()
@@ -64,6 +66,43 @@ class LocationDetailScreen extends Component {
     });
   }
 
+  async getSession() {
+    try {
+      const userQuerySnapshot = await this.userRef.get();
+      this.setState({
+        user: userQuerySnapshot.docs[0].id
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    const userDocRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(this.state.user);
+
+    const sessionQuerySnapshot = await firebase
+      .firestore()
+      .collection("sessions")
+      .where("user", "==", userDocRef)
+      .where("end", "==", null)
+      .get();
+
+    if (sessionQuerySnapshot.empty) {
+      console.log("no documents found");
+      this.setState({
+        hasCode: false
+      });
+    } else {
+      console.log("Session already requested");
+
+      const session = sessionQuerySnapshot.docs[0];
+      this.setState({
+        session,
+        hasCode: true
+      });
+    }
+  }
+
   async handleRequestCode() {
     const { navigation } = this.props;
 
@@ -74,7 +113,6 @@ class LocationDetailScreen extends Component {
         user: doc.id
       });
     });
-    console.log(this.state.user);
 
     let userDocRef = firebase
       .firestore()
@@ -86,15 +124,21 @@ class LocationDetailScreen extends Component {
       .collection("locations")
       .doc(JSON.parse(navigation.getParam("locationkey")));
 
+    const lockUser = await axios.post("api/lock/guest", {
+      user: this.state.user,
+      pin: Math.floor(100000 + Math.random() * 900000)
+    });
+
     this.ref
       .add({
         access_code: {
-          code: 1234,
-          requested: firebase.firestore.FieldValue.serverTimestamp(),
-          expiry: null,
+          code: lockUser.data.attributes.pin,
+          requested: lockUser.data.attributes.starts_at,
+          expiry: lockUser.data.attributes.ends_at,
           location: locationRef
         },
         user: userDocRef,
+        lockUser: lockUser.data.id,
         start: null,
         end: null,
         minutes: null
@@ -103,6 +147,8 @@ class LocationDetailScreen extends Component {
       .catch(error => {
         console.error("Error adding document: ", error);
       });
+
+    return lockUser;
   }
   showDialog = () => {
     this.setState({ dialogVisible: true });
@@ -112,11 +158,13 @@ class LocationDetailScreen extends Component {
     this.setState({ dialogVisible: false });
   };
 
-  handleRequest = () => {
-    this.handleRequestCode();
+  handleRequest = async () => {
     this.setState({ dialogVisible: false });
-    this.props.navigation.navigate("ActiveCodeHome", {
-      code: "1234",
+
+    const lockUser = await this.handleRequestCode();
+
+    this.props.navigation.navigate("Home", {
+      code: lockUser.data.attributes.pin,
       docId: this.state.key,
       validFor: "24"
     });
@@ -148,11 +196,15 @@ class LocationDetailScreen extends Component {
                     }}
                     source={{ uri: this.state.location.image }}
                   />
-                  <Button
-                    onPress={this.showDialog}
-                    title="Request Code"
-                    type="outline"
-                  />
+                  {!this.state.hasCode && (
+                    <Button
+                      onPress={this.showDialog}
+                      title="Request Code"
+                      type="outline"
+                      visisble={this.state.hasCode}
+                    />
+                  )}
+
                   <Dialog.Container visible={this.state.dialogVisible}>
                     <Dialog.Description>
                       Are you sure you want to get access to this building?
@@ -178,7 +230,6 @@ class LocationDetailScreen extends Component {
     );
   }
 }
-export default withUser(LocationDetailScreen);
 
 const styles = StyleSheet.create({
   container: {

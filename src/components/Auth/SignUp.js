@@ -1,7 +1,10 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Button } from "react-native";
-import { Input } from "react-native-elements";
+import { Text, TextInput, View, Button, Image } from "react-native";
 import firebase from "firebase";
+import { styles } from "../Styles/Register";
+import { colours } from "../Styles/Global";
+import AwesomeButton from "react-native-really-awesome-button";
+
 export default class SignUp extends React.Component {
   constructor() {
     super();
@@ -42,7 +45,7 @@ export default class SignUp extends React.Component {
           lastName: lastName
         });
 
-        this.props.navigation.navigate("Pay", { email });
+        this.props.navigation.navigate("Steps", { email: email, page: 1 });
       } catch (error) {
         this.setState({ errorMessage: error.message });
       }
@@ -51,62 +54,69 @@ export default class SignUp extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Sign Up</Text>
+      <View style={[styles.container, colours.backgroundPurple]}>
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
         )}
-        <Input
+        <Image
+          style={{ marginBottom: 20 }}
+          source={require("../../../assets/airbnb.png")}
+        />
+        <TextInput
           placeholder="Email"
           autoCapitalize="none"
           style={styles.textInput}
           onChangeText={email => this.setState({ email })}
           value={this.state.email}
         />
-        <Input
+        <TextInput
           placeholder="First Name"
           autoCapitalize="none"
           style={styles.textInput}
           onChangeText={firstName => this.setState({ firstName })}
           value={this.state.firstName}
         />
-        <Input
+        <TextInput
           placeholder="Last Name"
           autoCapitalize="none"
           style={styles.textInput}
           onChangeText={lastName => this.setState({ lastName })}
           value={this.state.lastName}
         />
-        <Input
+        <TextInput
           secureTextEntry
+          style={styles.textInput}
           placeholder="Password"
           autoCapitalize="none"
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <Input
+        <TextInput
           secureTextEntry
           placeholder="Confirm Password"
           autoCapitalize="none"
-          style={styles.textInput}
+          style={[styles.textInput, { marginBottom: 10 }]}
           onChangeText={confirmPassword => this.setState({ confirmPassword })}
           value={this.state.confirmPassword}
         />
-        <Button title="Sign Up" onPress={this.handleSignUp} />
-        <Button
-          title="Already have an account? Login"
-          onPress={() => this.props.navigation.navigate("Login")}
-        />
+        <View style={styles.buttonContainer}>
+          <AwesomeButton
+            backgroundColor={"#edeeef"}
+            textColor={"#8A54A2"}
+            width={100}
+            onPress={this.handleSignUp}
+          >
+            Sign Up
+          </AwesomeButton>
+        </View>
+        <View style={styles.bottomLink}>
+          <Button
+            title="Already have an account? Login"
+            color="#edeeef"
+            onPress={() => this.props.navigation.navigate("Login")}
+          />
+        </View>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  textInput: {}
-});

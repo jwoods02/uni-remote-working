@@ -59,16 +59,20 @@ export default class LandingPage extends React.Component {
         </View>
         <View style={styles.registerBtn}>
           <AwesomeButton
-            backgroundColor={"#42a7f4"}
+            backgroundColor={"#8A54A2"}
+            textColor={"#edeeef"}
             width={100}
-            onPress={() => this.props.navigation.navigate("SignUp")}
+            onPress={() =>
+              this.props.navigation.navigate("Steps", { reset: true })
+            }
           >
             Get Started
           </AwesomeButton>
         </View>
         <View style={styles.loginBtn}>
           <AwesomeButton
-            backgroundColor={"#42a7f4"}
+            backgroundColor={"#8A54A2"}
+            textColor={"#edeeef"}
             width={100}
             onPress={() => this.props.navigation.navigate("Login")}
           >

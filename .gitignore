@@ -64,6 +64,7 @@ buck-out/
 
 #dependencies
 Web/node_modules/**/*
+node_modules/
 
 # testing
 Web/coverage
@@ -81,4 +82,5 @@ Web/.env.production.local
 Web/npm-debug.log*
 Webyarn-debug.log*
 Webyarn-error.log*
+
 
