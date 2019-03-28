@@ -5,6 +5,8 @@ import firebase from "firebase";
 import { View, ActivityIndicator, StyleSheet, Text } from "react-native";
 
 export default class Pay extends Component {
+  static navigationOptions = { headerLeft: null };
+
   constructor(props) {
     super(props);
 
@@ -44,7 +46,7 @@ export default class Pay extends Component {
       console.log(err);
     }
 
-    this.props.navigation.navigate("Home");
+    this.props.navigation.navigate("Steps", { page: 2 });
   };
 
   onClose = () => {};
@@ -60,10 +62,10 @@ export default class Pay extends Component {
     return (
       <StripeCheckout
         publicKey="pk_test_bvxdsrvMxXGmtHi3UEDMw759"
-        amount={100000}
+        amount={2000}
         imageUrl="https://pbs.twimg.com/profile_images/778378996580888577/MFKh-pNn_400x400.jpg"
         storeName="Stripe Checkout"
-        description="Test"
+        description="Pay subscription"
         currency="GBP"
         allowRememberMe={false}
         prepopulatedEmail={this.state.email}

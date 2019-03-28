@@ -45,7 +45,7 @@ export default class SignUp extends React.Component {
           lastName: lastName
         });
 
-        this.props.navigation.navigate("Pay", { email });
+        this.props.navigation.navigate("Steps", { email: email, page: 1 });
       } catch (error) {
         this.setState({ errorMessage: error.message });
       }
