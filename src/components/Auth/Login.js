@@ -1,12 +1,11 @@
 import React from "react";
 import { Text, TextInput, View, Button, Image } from "react-native";
 import firebase from "firebase";
-import { withUser } from "../Auth/Context/withUser";
 import { styles } from "../Styles/Register";
 import { colours } from "../Styles/Global";
 import AwesomeButton from "react-native-really-awesome-button";
 
-class Login extends React.Component {
+export default class Login extends React.Component {
   static navigationOptions = { header: null };
 
   state = { email: "", password: "", errorMessage: null };
@@ -68,5 +67,3 @@ class Login extends React.Component {
     );
   }
 }
-
-export default withUser(Login);

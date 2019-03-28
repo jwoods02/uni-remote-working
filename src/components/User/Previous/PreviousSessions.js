@@ -1,25 +1,27 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  ActivityIndicator,
+  ScrollView
+} from "react-native";
+
 import firebase from "firebase";
-import ActiveCodeHome from "./CodeRequested/ActiveCodeHome";
-import ActiveSession from "./SessionActive/ActiveSession";
+import SessionListItem from "./SessionListItems/SessionListItem";
 
-import DefaultHome from "./Default/DefaultHome";
-
-export default class Home extends Component {
+export default class PreviousSessions extends Component {
   constructor(props) {
     super(props);
-    console.log(
-      "USER ID FROM HOME USING Firebase Auth",
-      firebase.auth().currentUser.uid
-    );
     this.userRef = firebase
       .firestore()
       .collection("users")
       .where("auth", "==", firebase.auth().currentUser.uid);
+
     this.state = {
       user: null,
-      hasCode: false,
+      hasPrevious: false,
       loading: true
     };
   }
@@ -46,24 +48,6 @@ export default class Home extends Component {
       this.setState({
         user: userQuerySnapshot.docs[0].id
       });
-
-      const sessionQuerySnapshot = await firebase
-        .firestore()
-        .collection("sessions")
-        .where("user", "==", userQuerySnapshot.docs[0].ref)
-        .where("end", "==", null)
-        .get();
-
-      if (!sessionQuerySnapshot.empty) {
-        sessionQuerySnapshot.docs[0].ref.onSnapshot(
-          {
-            includeMetadataChanges: true
-          },
-          async () => {
-            await this.handleRender();
-          }
-        );
-      }
     } catch (err) {
       console.log(err);
     }
@@ -81,20 +65,20 @@ export default class Home extends Component {
       .firestore()
       .collection("sessions")
       .where("user", "==", userDocRef)
-      .where("end", "==", null)
+      .orderBy("end", "asc")
       .get();
 
     if (sessionQuerySnapshot.empty) {
       console.log("no documents found");
       this.setState({
-        hasCode: false,
+        hasPrevious: false,
         loading: false
       });
     } else {
-      const session = sessionQuerySnapshot.docs[0];
+      const previousSessions = sessionQuerySnapshot.docs.reverse();
       this.setState({
-        session,
-        hasCode: true,
+        previousSessions,
+        hasPrevious: true,
         loading: false
       });
     }
@@ -108,28 +92,30 @@ export default class Home extends Component {
           <ActivityIndicator size="large" color="rgba(130,4,150, 0.4)" />
         </View>
       );
+    } else if (this.state.hasPrevious) {
+      allSessions = [];
+      this.state.previousSessions.forEach(session => {
+        allSessions.push(<SessionListItem session={session} />);
+      });
+      return (
+        <SafeAreaView style={{ flex: 1 }}>
+          <View style={{ flex: 1 }}>
+            <ScrollView scrollEventThrottle={16}>
+              <View
+                style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}
+              >
+                {allSessions}
+              </View>
+            </ScrollView>
+          </View>
+        </SafeAreaView>
+      );
     } else {
-      if (this.state.hasCode && this.state.session.data().start === null) {
-        return (
-          <ActiveCodeHome
-            navigation={this.props.navigation}
-            session={this.state.session}
-            user={this.state.user}
-          />
-        );
-      } else if (
-        this.state.hasCode &&
-        this.state.session.data().start != null
-      ) {
-        return (
-          <ActiveSession
-            navigation={this.props.navigation}
-            session={this.state.session}
-          />
-        );
-      } else {
-        return <DefaultHome navigation={this.props.navigation} />;
-      }
+      return (
+        <View style={styles.container}>
+          <Text>You don't have any previous sessions!</Text>
+        </View>
+      );
     }
   }
 }

@@ -14,7 +14,6 @@ import {
   Alert
 } from "react-native";
 import Icon from "@expo/vector-icons/Ionicons";
-import { withUser } from "../Auth/Context/withUser";
 
 import firebase from "firebase";
 import Dialog from "react-native-dialog";
@@ -22,14 +21,14 @@ import axios from "axios";
 
 const { height, width } = Dimensions.get("window");
 
-class LocationDetailScreen extends Component {
+export default class LocationDetailScreen extends Component {
   constructor(props) {
     super(props);
     this.ref = firebase.firestore().collection("sessions");
     this.userRef = firebase
       .firestore()
       .collection("users")
-      .where("auth", "==", this.props.userContext.user);
+      .where("auth", "==", firebase.auth().currentUser.uid);
     this.state = {
       isLoading: true,
       location: {},
@@ -125,13 +124,10 @@ class LocationDetailScreen extends Component {
       .collection("locations")
       .doc(JSON.parse(navigation.getParam("locationkey")));
 
-    const lockUser = await axios.post(
-      "https://2037714b.ngrok.io/api/lock/guest",
-      {
-        user: this.state.user,
-        pin: Math.floor(100000 + Math.random() * 900000)
-      }
-    );
+    const lockUser = await axios.post("api/lock/guest", {
+      user: this.state.user,
+      pin: Math.floor(100000 + Math.random() * 900000)
+    });
 
     this.ref
       .add({
@@ -234,7 +230,6 @@ class LocationDetailScreen extends Component {
     );
   }
 }
-export default withUser(LocationDetailScreen);
 
 const styles = StyleSheet.create({
   container: {

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import StripeCheckout from "./StripeCheckout";
 import axios from "axios";
 import firebase from "firebase";
+import { View, ActivityIndicator, StyleSheet, Text } from "react-native";
 
 export default class Pay extends Component {
   static navigationOptions = { headerLeft: null };
@@ -12,10 +13,12 @@ export default class Pay extends Component {
     const { navigation } = this.props;
     const email = navigation.getParam("email", "");
 
-    this.state = { email };
+    this.state = { email, isLoading: false };
   }
 
   onPaymentSuccess = async token => {
+    this.setState({ isLoading: true });
+
     try {
       const newCustomer = await axios.post("/api/pay/customer", {
         token,
@@ -48,6 +51,14 @@ export default class Pay extends Component {
 
   onClose = () => {};
   render() {
+    if (this.state.isLoading) {
+      return (
+        <View style={styles.container}>
+          <Text>Setting up your account...</Text>
+          <ActivityIndicator size="large" color="rgba(130,4,150, 0.4)" />
+        </View>
+      );
+    }
     return (
       <StripeCheckout
         publicKey="pk_test_bvxdsrvMxXGmtHi3UEDMw759"
@@ -64,3 +75,11 @@ export default class Pay extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  }
+});

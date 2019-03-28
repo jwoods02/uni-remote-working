@@ -26,11 +26,11 @@ import Home from "./src/components/Home/Home";
 import ActiveSession from "./src/components/Home/SessionActive/ActiveSession";
 
 import LandingPage from "./src/components/Auth/LandingPage";
-import UserProvider from "./src/components/Auth/Context/UserProvider";
 import ManageSession from "./src/components/User/ManageSession";
+import PreviousSessions from "./src/components/User/Previous/PreviousSessions";
 
 setupFirebase();
-axios.defaults.baseURL = "http://10.247.39.13:4000";
+axios.defaults.baseURL = "https://remoteruralworking.firebaseapp.com";
 
 const HomeStack = createStackNavigator(
   {
@@ -76,7 +76,8 @@ const MapStack = createStackNavigator(
 const SettingsStack = createStackNavigator(
   {
     Settings: Settings,
-    ManageSession: ManageSession
+    ManageSession: ManageSession,
+    PreviousSessions: PreviousSessions
   },
   {
     defaultNavigationOptions: {
@@ -142,10 +143,6 @@ const RootStack = createSwitchNavigator({
 let AppContainer = createAppContainer(RootStack);
 export default class App extends React.Component {
   render() {
-    return (
-      <UserProvider>
-        <AppContainer />
-      </UserProvider>
-    );
+    return <AppContainer />;
   }
 }

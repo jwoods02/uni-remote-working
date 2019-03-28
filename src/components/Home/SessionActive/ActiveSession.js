@@ -11,7 +11,6 @@ import {
 } from "react-native";
 
 import MapViewItems from "../../Maps/MapComponents/MapViewItems";
-import { withUser } from "../../Auth/Context/withUser";
 
 import { styles } from "../../Styles/ActiveCodeHome";
 import { colours, flex, justify } from "../../Styles/Global";
@@ -26,7 +25,7 @@ export const getCurrentLocation = () => {
   });
 };
 
-class ActiveSession extends Component {
+export default class ActiveSession extends Component {
   static navigationOptions = { title: "Your Code", headerLeft: null };
 
   constructor(props) {
@@ -149,11 +148,11 @@ class ActiveSession extends Component {
               Session Start Time :
               {" " +
                 new Date(
-                  this.props.session.data().access_code.expiry.seconds * 1000
+                  this.props.session.data().start.seconds * 1000
                 ).toLocaleTimeString("en-UK") +
                 " on " +
                 new Date(
-                  this.props.session.data().access_code.expiry.seconds * 1000
+                  this.props.session.data().start.seconds * 1000
                 ).toLocaleDateString("en-UK")}{" "}
             </Text>
             <EndSession navigation={this.props.navigation} />
@@ -163,5 +162,3 @@ class ActiveSession extends Component {
     );
   }
 }
-
-export default withUser(ActiveSession);

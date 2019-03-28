@@ -12,17 +12,16 @@ import { flex, justify, align } from "../../Styles/Global";
 import AwesomeButton from "react-native-really-awesome-button";
 
 import firebase from "firebase";
-import { withUser } from "../../Auth/Context/withUser";
 import axios from "axios";
 
-class EndSession extends Component {
+export default class EndSession extends Component {
   constructor(props) {
     super(props);
     this.ref = firebase.firestore().collection("session");
     this.userRef = firebase
       .firestore()
       .collection("users")
-      .where("auth", "==", this.props.userContext.user);
+      .where("auth", "==", firebase.auth().currentUser.uid);
 
     this.state = {
       user: {},
@@ -161,5 +160,3 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
-
-export default withUser(EndSession);

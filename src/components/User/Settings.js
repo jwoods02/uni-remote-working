@@ -3,9 +3,8 @@ import { StyleSheet, ScrollView, ActivityIndicator, View } from "react-native";
 import { Font } from "expo";
 import { ListItem } from "react-native-elements";
 import firebase from "firebase";
-import { withUser } from "../Auth/Context/withUser";
 
-class Settings extends Component {
+export default class Settings extends Component {
   constructor() {
     super();
     this.unsubscribe = null;
@@ -49,6 +48,12 @@ class Settings extends Component {
         />
 
         <ListItem
+          title="Previous Sessions"
+          leftIcon={{ name: "history", type: "font-awesome", color: "purple" }}
+          onPress={() => this.props.navigation.navigate("PreviousSessions")}
+        />
+
+        <ListItem
           title="Log Out"
           leftIcon={{ name: "sign-out", type: "font-awesome", color: "red" }}
           onPress={() => this.signOutUser()}
@@ -78,5 +83,3 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
-
-export default withUser(Settings);
