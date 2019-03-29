@@ -22,6 +22,9 @@ const styles = StyleSheet.create({
   bottomLink: {
     position: "absolute",
     bottom: 15
+  },
+  image: {
+    color: "white"
   }
 });
 
