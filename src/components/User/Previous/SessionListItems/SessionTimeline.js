@@ -10,9 +10,9 @@ import {
   Button
 } from "react-native";
 import Timeline from "react-native-timeline-listview";
+import moment from "moment";
 
 const { width } = Dimensions.get("window");
-import moment from "moment";
 
 export default class SessionTimeline extends Component {
   constructor(props) {
