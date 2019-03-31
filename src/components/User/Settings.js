@@ -32,7 +32,7 @@ export default class Settings extends Component {
 
   async componentDidMount() {
     const userSnapshot = await this.userRef.get();
-    let price = userSnapshot.docs[0].data().price;
+    let price = userSnapshot.docs[0].data().sub_price;
     price = convertToPounds(price);
 
     this.setState({
