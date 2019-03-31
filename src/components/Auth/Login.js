@@ -1,9 +1,10 @@
 import React from "react";
-import { Text, TextInput, View, Button, Image } from "react-native";
+import { Text, TextInput, View, Button } from "react-native";
 import firebase from "firebase";
 import { styles } from "../Styles/Register";
 import { colours } from "../Styles/Global";
 import AwesomeButton from "react-native-really-awesome-button";
+import CustomIcon from "../../../assets/fonts/CustomIcon";
 
 export default class Login extends React.Component {
   static navigationOptions = { header: null };
@@ -27,10 +28,7 @@ export default class Login extends React.Component {
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
         )}
-        <Image
-          style={{ marginBottom: 20 }}
-          source={require("../../../assets/airbnb.png")}
-        />
+        <CustomIcon name="briefcase" size={80} style={styles.image} />
         <TextInput
           style={styles.textInput}
           autoCapitalize="none"
