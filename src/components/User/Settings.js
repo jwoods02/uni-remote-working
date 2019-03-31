@@ -3,13 +3,19 @@ import { StyleSheet, ScrollView, ActivityIndicator, View } from "react-native";
 import { Font } from "expo";
 import { ListItem } from "react-native-elements";
 import firebase from "firebase";
+import convertToPounds from "../../lib/Currency";
 
 export default class Settings extends Component {
   constructor() {
     super();
     this.unsubscribe = null;
+    this.userRef = firebase
+      .firestore()
+      .collection("users")
+      .where("auth", "==", firebase.auth().currentUser.uid);
     this.state = {
-      isLoading: true
+      isLoading: true,
+      price: 0
     };
   }
 
@@ -22,6 +28,16 @@ export default class Settings extends Component {
     });
 
     this.setState({ isLoading: false });
+  }
+
+  async componentDidMount() {
+    const userSnapshot = await this.userRef.get();
+    let price = userSnapshot.docs[0].data().price;
+    price = convertToPounds(price);
+
+    this.setState({
+      price
+    });
   }
   signOutUser = async () => {
     try {
@@ -41,6 +57,11 @@ export default class Settings extends Component {
     }
     return (
       <ScrollView style={styles.container}>
+        <ListItem
+          title="Subscription Active"
+          rightTitle={this.state.price}
+          bottomDivider={true}
+        />
         <ListItem
           title="Manage Session"
           leftIcon={{ name: "tasks", type: "font-awesome", color: "grey" }}
