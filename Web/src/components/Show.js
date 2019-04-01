@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import firebase from "../Firebase";
 import { Link } from "react-router-dom";
+import axios from "axios";
 var cardImageStyle = {
   width: "100%",
   height: "50vh",
@@ -11,7 +12,8 @@ class Show extends Component {
     super(props);
     this.state = {
       location: {},
-      key: ""
+      key: "",
+
     };
   }
 
@@ -32,6 +34,17 @@ class Show extends Component {
         console.log("No such document!");
       }
     });
+
+
+    this.getLock("28992f53-7f92-4101-b1b5-1bf1fca693dc").then( data => {
+      this.setState({
+        lockBattery: data.power_level,
+        lockSignal: data.signal_quality,
+        lockState: data.state
+      })
+    })
+
+
   }
 
   delete(id) {
@@ -47,6 +60,11 @@ class Show extends Component {
       .catch(error => {
         console.error("Error removing document: ", error);
       });
+  }
+
+  getLock = async lockId => {
+    const foo = await axios.get("https://remoteruralworking.firebaseapp.com/api/lock/" + lockId);
+    return foo.data.data.attributes;
   }
 
   render() {
@@ -75,6 +93,12 @@ class Show extends Component {
               <hr />
               <p class="lead">Image URL: {this.state.location.image}</p>
               <hr />
+              <p class="lead">Lock status: {this.state.lockState}</p>
+              <hr />
+              <p class="lead">Lock battery level: {this.state.lockBattery}%</p>
+              <hr />
+              <p class="lead">Lock Wi-Fi signal: {parseInt(this.state.lockSignal) * 25}%</p>
+              <hr />
             </div>
           </div>
           <Link to={`/edit/${this.state.key}`} className="btn btn-success">
@@ -87,6 +111,10 @@ class Show extends Component {
           >
             Delete
           </button>
+
+        
+          <div>
+          </div>
         </div>
         <hr />
 
