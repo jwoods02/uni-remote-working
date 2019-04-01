@@ -93,7 +93,7 @@ export default class PreviousSessions extends Component {
         </View>
       );
     } else if (this.state.hasPrevious) {
-      allSessions = [];
+      let allSessions = [];
       this.state.previousSessions.forEach(session => {
         allSessions.push(<SessionListItem session={session} />);
       });

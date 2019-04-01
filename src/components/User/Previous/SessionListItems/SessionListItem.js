@@ -9,11 +9,11 @@ import {
   Dimensions,
   Button
 } from "react-native";
-
-const { width } = Dimensions.get("window");
 import moment from "moment";
 import SessionTimeline from "./SessionTimeline";
+import convertToPounds from "../../../../lib/Currency";
 
+const { width } = Dimensions.get("window");
 export default class SessionListItem extends Component {
   constructor(props) {
     super(props);
@@ -21,11 +21,15 @@ export default class SessionListItem extends Component {
     this.state = {
       isLoading: true,
       location: {},
-      active: true
+      active: true,
+      price: 0
     };
   }
 
   async componentDidMount() {
+    this.setState({
+      price: convertToPounds(this.props.session.data().price)
+    });
     const locationDoc = await this.props.session
       .data()
       .access_code.location.get(); //GETTING LOCATION NOT SESSION
@@ -35,8 +39,7 @@ export default class SessionListItem extends Component {
         this.setState({
           location: locationDoc.data(),
           active: true,
-          isLoading: false,
-          active: true
+          isLoading: false
         });
       } else {
         const duration = moment
@@ -88,17 +91,42 @@ export default class SessionListItem extends Component {
       return (
         <View style={styles.container}>
           <Text>Loading</Text>
-          <ActivityIndicator size="large" color="rgba(130,4,150, 0.4)" />
         </View>
       );
     } else {
       return (
         <View
-          style={{ marginTop: 10, paddingHorizontal: 20, paddingBottom: 30 }}
+          style={{
+            marginTop: 10,
+            paddingHorizontal: 20,
+            paddingBottom: 30
+          }}
         >
-          <Text style={{ color: "#8A54A2", fontSize: 24, fontWeight: "700" }}>
-            {this.state.location.title}
-          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between"
+            }}
+          >
+            <Text
+              style={{
+                color: "#8A54A2",
+                fontSize: 24,
+                fontWeight: "700"
+              }}
+            >
+              {this.state.location.title}
+            </Text>
+            <Text
+              style={{
+                color: "#8A54A2",
+                fontSize: 24,
+                fontWeight: "700"
+              }}
+            >
+              {this.state.price}
+            </Text>
+          </View>
           <Text style={{ color: "grey", fontSize: 14, fontWeight: "300" }}>
             {new Date(
               this.props.session.data().access_code.requested

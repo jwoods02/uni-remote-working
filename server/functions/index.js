@@ -36,9 +36,24 @@ let lockAccessToken;
 
 /////////////////////////////////// STRIPE
 
+const getSubscriptionPrice = async function(customer) {
+  console.log("Customer subs", customer.subscriptions.data);
+  const item = await customer.subscriptions.data[0].items.data.find(
+    item => item.plan.id == "plan_EZ1HJglPYy02ck"
+  );
+  return item.plan.amount;
+};
+
+const getUsagePrice = async function(customer) {
+  const item = await customer.subscriptions.data[0].items.data.find(
+    item => item.plan.id == "plan_EkGpxQ1xXOelsh"
+  );
+  return item.plan.amount;
+};
+
 app.post("/api/pay/token", function(req, res) {
   console.log(req.body.token);
-  res.send(req.body.token);
+  res.status(200).send(req.body.token);
 });
 
 app.post("/api/pay/customer", async function(req, res) {
@@ -47,7 +62,7 @@ app.post("/api/pay/customer", async function(req, res) {
     email: req.body.email,
     source: req.body.token
   });
-  res.send(customer);
+  res.status(200).send(customer);
 });
 
 app.post("/api/pay/subscription", async function(req, res) {
@@ -69,7 +84,10 @@ app.post("/api/pay/subscription", async function(req, res) {
       console.log(err);
     });
 
-  res.send(subscription);
+  const customer = await stripe.customers.retrieve(req.body.customer);
+  const price = await getSubscriptionPrice(customer);
+
+  res.status(200).send({ price });
 });
 
 app.post("/api/pay/usage", async function(req, res) {
@@ -86,7 +104,10 @@ app.post("/api/pay/usage", async function(req, res) {
     timestamp: Math.round(+new Date() / 1000)
   });
 
-  res.send(customer);
+  const unit_price = await getUsagePrice(customer);
+  const price = unit_price * req.body.minutes;
+
+  res.status(200).send({ price });
 });
 
 /////////////////////////////////// LOCK
@@ -159,7 +180,6 @@ const deleteLockUser = lockUser => {
     }
   });
 };
-
 
 app.get("/api/lock/oauth_callback", async function(req, res) {
   try {
