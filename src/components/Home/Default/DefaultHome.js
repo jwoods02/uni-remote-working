@@ -154,16 +154,6 @@ export default class DefaultHome extends Component {
                 </View>
               </View>
             </View>
-            <Button
-              style={{ top: 50, left: 0, right: 0, bottom: 0 }}
-              title="View All Locations"
-              onPress={() => this.props.navigation.navigate("LocationMap")}
-            />
-
-            <Button
-              title="Update User context"
-              onPress={() => this.props.userContext.setUser("red")}
-            />
           </ScrollView>
         </View>
       </SafeAreaView>

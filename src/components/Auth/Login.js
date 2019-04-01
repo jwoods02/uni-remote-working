@@ -28,7 +28,7 @@ export default class Login extends React.Component {
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
         )}
-        <CustomIcon name="briefcase" size={80} style={styles.image} />
+        <CustomIcon name="briefcase" size={60} style={styles.image} />
         <TextInput
           style={styles.textInput}
           autoCapitalize="none"

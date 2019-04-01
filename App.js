@@ -104,7 +104,7 @@ const AppStack = createBottomTabNavigator(
         let iconName;
         if (routeName === "Home") {
           iconName = `ios-home`;
-        } else if (routeName === "Settings") {
+        } else if (routeName === "Account") {
           iconName = `ios-person`;
         } else if (routeName === "Map") {
           iconName = `md-map`;
