@@ -72,15 +72,14 @@ export default class EndSession extends Component {
     } else {
       let snapshot = querySnapshot.docs[0];
 
+      const endDate = new Date();
+
       await snapshot.ref.update({
-        end: firebase.firestore.FieldValue.serverTimestamp()
+        end: endDate
       });
-
-      snapshot = await snapshot.ref.get();
-
       const minutes_used = this.diff_minutes(
         snapshot.data().start.toDate(),
-        snapshot.data().end.toDate()
+        endDate
       );
 
       await snapshot.ref.update({
@@ -90,9 +89,15 @@ export default class EndSession extends Component {
       const user = await userDocRef.get();
       const stripeCustomer = user.get("stripe_customer");
 
-      await axios.post("/api/pay/usage", {
+      const usage = await axios.post("/api/pay/usage", {
         customer: stripeCustomer,
         minutes: minutes_used
+      });
+      const price = usage.data.price;
+
+      await snapshot.ref.update({
+        minutes: minutes_used,
+        price: price
       });
 
       this.props.navigation.replace("Home");

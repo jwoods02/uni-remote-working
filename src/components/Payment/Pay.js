@@ -25,10 +25,11 @@ export default class Pay extends Component {
         email: this.state.email
       });
 
-      await axios.post("api/pay/subscription", {
+      const subscription = await axios.post("api/pay/subscription", {
         customer: newCustomer.data.id
       });
 
+      const price = subscription.data.price;
       const querySnapshot = await firebase
         .firestore()
         .collection("users")
@@ -40,7 +41,10 @@ export default class Pay extends Component {
           .firestore()
           .collection("users")
           .doc(doc.id)
-          .update({ stripe_customer: newCustomer.data.id });
+          .update({
+            stripe_customer: newCustomer.data.id,
+            sub_price: price
+          });
       });
     } catch (err) {
       console.log(err);
