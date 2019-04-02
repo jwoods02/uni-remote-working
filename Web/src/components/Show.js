@@ -12,8 +12,7 @@ class Show extends Component {
     super(props);
     this.state = {
       location: {},
-      key: "",
-
+      key: ""
     };
   }
 
@@ -35,16 +34,15 @@ class Show extends Component {
       }
     });
 
-
-    this.getLock("28992f53-7f92-4101-b1b5-1bf1fca693dc").then( data => {
-      this.setState({
-        lockBattery: data.power_level,
-        lockSignal: data.signal_quality,
-        lockState: data.state
-      })
-    })
-
-
+    this.getLockAttributes("28992f53-7f92-4101-b1b5-1bf1fca693dc").then(
+      data => {
+        this.setState({
+          lockBattery: data.power_level,
+          lockSignal: data.signal_quality,
+          lockState: data.state
+        });
+      }
+    );
   }
 
   delete(id) {
@@ -62,10 +60,12 @@ class Show extends Component {
       });
   }
 
-  getLock = async lockId => {
-    const foo = await axios.get("https://remoteruralworking.firebaseapp.com/api/lock/" + lockId);
-    return foo.data.data.attributes;
-  }
+  getLockAttributes = async lockId => {
+    const lockAttributes = await axios.get(
+      "https://remoteruralworking.firebaseapp.com/api/lock/" + lockId
+    );
+    return lockAttributes.data.data.attributes;
+  };
 
   render() {
     return (
@@ -97,7 +97,9 @@ class Show extends Component {
               <hr />
               <p class="lead">Lock battery level: {this.state.lockBattery}%</p>
               <hr />
-              <p class="lead">Lock Wi-Fi signal: {parseInt(this.state.lockSignal) * 25}%</p>
+              <p class="lead">
+                Lock Wi-Fi signal: {parseInt(this.state.lockSignal) * 25}%
+              </p>
               <hr />
             </div>
           </div>
@@ -111,10 +113,7 @@ class Show extends Component {
           >
             Delete
           </button>
-
-        
-          <div>
-          </div>
+          <div />
         </div>
         <hr />
 

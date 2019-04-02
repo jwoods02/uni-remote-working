@@ -94,7 +94,7 @@ const AppStack = createBottomTabNavigator(
   {
     Home: { screen: HomeStack },
     Map: { screen: MapStack },
-    Settings: { screen: SettingsStack }
+    Account: { screen: SettingsStack }
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
