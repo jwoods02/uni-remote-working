@@ -10,6 +10,10 @@ const stripe = require("stripe")("sk_test_ik5ZUTExOZD1iCpd9Iey4bXy");
 const app = express();
 const axios = require("axios");
 const firebase = require("firebase");
+const cors = require('cors');
+
+app.use(cors());
+
 
 firebase.initializeApp({
   apiKey: "AIzaSyB3eOEQaPomF624RwDBl3bmO97guiN-TRs",
@@ -295,6 +299,23 @@ app.post("/api/lock/session", async function(req, res) {
     //204 prevents request being scheduled for re-send
     res.status(204).end();
   }
+});
+
+app.get("/api/lock/:lockId", async function(req, res) {
+  try {
+  const lock = await axios.get("https://api.remotelock.com/devices/" + req.params.lockId, {
+    headers: {
+      Accept: "application/vnd.lockstate+json; version=1",
+      Authorization: "Bearer " + lockAccessToken
+    }
+  });
+
+  res.status(200).send(lock.data);
+
+} catch (error) {
+  console.log(error);
+  res.status(500).send("Server error!");
+}
 });
 
 exports.api = functions.https.onRequest(app);
