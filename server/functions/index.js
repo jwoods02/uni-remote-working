@@ -10,10 +10,9 @@ const stripe = require("stripe")("sk_test_ik5ZUTExOZD1iCpd9Iey4bXy");
 const app = express();
 const axios = require("axios");
 const firebase = require("firebase");
-const cors = require('cors');
+const cors = require("cors");
 
 app.use(cors());
-
 
 firebase.initializeApp({
   apiKey: "AIzaSyB3eOEQaPomF624RwDBl3bmO97guiN-TRs",
@@ -215,6 +214,10 @@ app.get("/api/lock/oauth_callback", async function(req, res) {
 
 app.post("/api/lock/guest", async function(req, res) {
   try {
+    if (!req.body.hasOwnProperty("lock_id")) {
+      throw "Lock id is required";
+    }
+
     const response = await axios.post(
       "https://api.remotelock.com/access_persons",
       {
@@ -303,19 +306,21 @@ app.post("/api/lock/session", async function(req, res) {
 
 app.get("/api/lock/:lockId", async function(req, res) {
   try {
-  const lock = await axios.get("https://api.remotelock.com/devices/" + req.params.lockId, {
-    headers: {
-      Accept: "application/vnd.lockstate+json; version=1",
-      Authorization: "Bearer " + lockAccessToken
-    }
-  });
+    const lock = await axios.get(
+      "https://api.remotelock.com/devices/" + req.params.lockId,
+      {
+        headers: {
+          Accept: "application/vnd.lockstate+json; version=1",
+          Authorization: "Bearer " + lockAccessToken
+        }
+      }
+    );
 
-  res.status(200).send(lock.data);
-
-} catch (error) {
-  console.log(error);
-  res.status(500).send("Server error!");
-}
+    res.status(200).send(lock.data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Server error!");
+  }
 });
 
 exports.api = functions.https.onRequest(app);
