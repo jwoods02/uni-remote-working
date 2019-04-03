@@ -241,7 +241,7 @@ app.post("/api/lock/guest", async function(req, res) {
       "https://api.remotelock.com/access_persons/" + data.id + "/accesses",
       {
         attributes: {
-          accessible_id: "28992f53-7f92-4101-b1b5-1bf1fca693dc",
+          accessible_id: req.body.lock_id,
           accessible_type: "lock"
         }
       },

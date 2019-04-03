@@ -21,28 +21,28 @@ class Show extends Component {
       .firestore()
       .collection("locations")
       .doc(this.props.match.params.id);
-    ref.get().then(doc => {
-      if (doc.exists) {
-        this.setState({
-          location: doc.data(),
-          key: doc.id,
-          isLoading: false
-        });
-        console.log(doc.data());
-      } else {
-        console.log("No such document!");
-      }
-    });
-
-    this.getLockAttributes("28992f53-7f92-4101-b1b5-1bf1fca693dc").then(
-      data => {
+    ref
+      .get()
+      .then(doc => {
+        if (doc.exists) {
+          this.setState({
+            location: doc.data(),
+            key: doc.id,
+            isLoading: false
+          });
+          console.log(doc.data());
+        } else {
+          console.log("No such document!");
+        }
+      })
+      .then(() => this.getLockAttributes(this.state.location.lock_id))
+      .then(data => {
         this.setState({
           lockBattery: data.power_level,
           lockSignal: data.signal_quality,
           lockState: data.state
         });
-      }
-    );
+      });
   }
 
   delete(id) {
@@ -93,14 +93,22 @@ class Show extends Component {
               <hr />
               <p class="lead">Image URL: {this.state.location.image}</p>
               <hr />
-              <p class="lead">Lock status: {this.state.lockState}</p>
+              <p class="lead">Lock ID: {this.state.location.lock_id}</p>
               <hr />
-              <p class="lead">Lock battery level: {this.state.lockBattery}%</p>
-              <hr />
-              <p class="lead">
-                Lock Wi-Fi signal: {parseInt(this.state.lockSignal) * 25}%
-              </p>
-              <hr />
+              {!this.state.lockState ? null : (
+                <span>
+                  <p class="lead">Lock status: {this.state.lockState}</p>
+                  <hr />
+                  <p class="lead">
+                    Lock battery level: {this.state.lockBattery}%
+                  </p>
+                  <hr />
+                  <p class="lead">
+                    Lock Wi-Fi signal: {parseInt(this.state.lockSignal) * 25}%
+                  </p>
+                  <hr />
+                </span>
+              )}
             </div>
           </div>
           <Link to={`/edit/${this.state.key}`} className="btn btn-success">

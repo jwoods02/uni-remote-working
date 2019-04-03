@@ -126,7 +126,8 @@ export default class LocationDetailScreen extends Component {
 
     const lockUser = await axios.post("api/lock/guest", {
       user: this.state.user,
-      pin: Math.floor(100000 + Math.random() * 900000)
+      pin: Math.floor(100000 + Math.random() * 900000),
+      lock_id: this.state.location.lock_id
     });
 
     this.ref

@@ -12,7 +12,8 @@ class Edit extends Component {
       description: "",
       image: "",
       long: "",
-      lat: ""
+      lat: "",
+      lock_id: ""
     };
   }
 
@@ -32,7 +33,8 @@ class Edit extends Component {
           desks: location.desks,
           info: location.info,
           long: location.coordinate.longitude,
-          lat: location.coordinate.latitude
+          lat: location.coordinate.latitude,
+          lock_id: location.lock_id
         });
       } else {
         console.log("No such document!");
@@ -49,7 +51,7 @@ class Edit extends Component {
   onSubmit = e => {
     e.preventDefault();
 
-    const { title, description, image, desks, info, long, lat } = this.state;
+    const { title, description, image, desks, info, long, lat, lock_id } = this.state;
     let coordinate = {
       latitude: parseFloat(this.state.lat),
       longitude: parseFloat(this.state.long)
@@ -66,7 +68,8 @@ class Edit extends Component {
         image,
         coordinate,
         desks,
-        info
+        info,
+        lock_id
       })
       .then(docRef => {
         this.setState({
@@ -76,7 +79,8 @@ class Edit extends Component {
           desks: "",
           info: "",
           long: "",
-          lat: ""
+          lat: "",
+          lock_id: ""
         });
         this.props.history.push("/");
       })
@@ -181,6 +185,18 @@ class Edit extends Component {
                   value={this.state.lat}
                   onChange={this.onChange}
                   placeholder="lat"
+                />
+              </div>
+              <div className="form-group">
+                <label for="image">Lock ID:</label>
+                <input
+                  type="text"
+                  step="any"
+                  className="form-control"
+                  name="lock_id"
+                  value={this.state.lock_id}
+                  onChange={this.onChange}
+                  placeholder="Lock ID"
                 />
               </div>
 
