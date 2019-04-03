@@ -38,6 +38,7 @@ class Show extends Component {
       .then(() => this.getLockAttributes(this.state.location.lock_id))
       .then(data => {
         this.setState({
+          isLockConnected: data.connected,
           lockBattery: data.power_level,
           lockSignal: data.signal_quality,
           lockState: data.state
@@ -95,7 +96,12 @@ class Show extends Component {
               <hr />
               <p class="lead">Lock ID: {this.state.location.lock_id}</p>
               <hr />
-              {!this.state.lockState ? null : (
+              {!this.state.isLockConnected ? (
+                <span>
+                  <p class="lead">Lock is disconnected</p>
+                  <hr />
+                </span>
+              ) : (
                 <span>
                   <p class="lead">Lock status: {this.state.lockState}</p>
                   <hr />
