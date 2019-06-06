@@ -78,6 +78,13 @@ $ cd remote-working/server
 
 5. Provide authorisation for the middle tier to connect to the lock API by copying line 5 of server/functions/index.js into a web browser and following the instructions to log in.
 
+## Packaging as an app 
+
+The app could be packaged and published with the concole command expo build:ios or expo build:android and following the instructions (although this is untested). 
+More explaination on this is at https://docs.expo.io/versions/latest/distribution/building-standalone-apps/#3-start-the-build
+
+'Thanks to James for this'
+
 ## Contributing
 
 Please refer to CONTRIBUTING.MD
