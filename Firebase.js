@@ -5,12 +5,12 @@ export default function setupFirebase() {
   const settings = { timestampsInSnapshots: true };
 
   const config = {
-    apiKey: "AIzaSyB3eOEQaPomF624RwDBl3bmO97guiN-TRs",
+    apiKey: "",
     authDomain: "remoteruralworking.firebaseapp.com",
     databaseURL: "https://remoteruralworking.firebaseio.com",
     projectId: "remoteruralworking",
     storageBucket: "remoteruralworking.appspot.com",
-    messagingSenderId: "397948314964"
+    messagingSenderId: ""
   };
   firebase.initializeApp(config);
 
